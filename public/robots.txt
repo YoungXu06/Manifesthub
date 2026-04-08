@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow crawler access to user-specific content
+Disallow: /visionboard/edit/
+Disallow: /visionboard/*/*
+Disallow: /dashboard/
+
+# Sitemap location
+Sitemap: https://manifest-hub.com/sitemap.xml 

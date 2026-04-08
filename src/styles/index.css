@@ -1,0 +1,318 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 主题颜色 */
+  --color-primary-rgb: 79, 70, 229; /* indigo-600 */
+  --color-secondary-rgb: 139, 92, 246; /* violet-500 */
+  --color-success-rgb: 16, 185, 129; /* emerald-500 */
+  --color-danger-rgb: 239, 68, 68; /* red-500 */
+  --color-warning-rgb: 245, 158, 11; /* amber-500 */
+
+  /* 灰度 */
+  --color-gray-50-rgb: 249, 250, 251;
+  --color-gray-100-rgb: 243, 244, 246;
+  --color-gray-200-rgb: 229, 231, 235;
+  --color-gray-300-rgb: 209, 213, 219;
+  --color-gray-400-rgb: 156, 163, 175;
+  --color-gray-500-rgb: 107, 114, 128;
+  --color-gray-600-rgb: 75, 85, 99;
+  --color-gray-700-rgb: 55, 65, 81;
+  --color-gray-800-rgb: 31, 41, 55;
+  --color-gray-900-rgb: 17, 24, 39;
+}
+
+.dark {
+  --color-primary-rgb: 129, 140, 248; /* indigo-400 */
+  --color-gray-700-rgb: 75, 85, 99;
+  --color-gray-800-rgb: 55, 65, 81;
+  --color-gray-900-rgb: 31, 41, 55;
+}
+
+@layer base {
+  body {
+    @apply bg-gray-50 dark:bg-dark text-gray-800 dark:text-gray-200 transition-colors duration-200 ease-in-out;
+    font-feature-settings: "kern", "liga", "calt";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-600;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 select-none;
+  }
+
+  .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white focus:ring-indigo-500 shadow-sm hover:shadow-md hover:shadow-indigo-500/25;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 active:bg-gray-300 text-gray-700 focus:ring-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-500 dark:text-gray-200;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 active:bg-red-800 text-white focus:ring-red-500;
+  }
+
+  .btn-outline {
+    @apply border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus:ring-gray-400;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm rounded-md;
+  }
+
+  .btn-xs {
+    @apply px-2.5 py-1 text-xs rounded-md;
+  }
+
+  .btn-disabled {
+    @apply opacity-50 cursor-not-allowed pointer-events-none;
+  }
+
+  .card {
+    @apply bg-white dark:bg-dark-light rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50 overflow-hidden transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply hover:shadow-md hover:-translate-y-0.5 cursor-pointer;
+  }
+
+  .input {
+    @apply px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800/80 dark:border-gray-700 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-colors duration-150;
+  }
+
+  /* Stats card */
+  .stat-card {
+    @apply bg-white dark:bg-dark-light rounded-xl shadow-sm border border-gray-100 dark:border-gray-800/50 p-4 flex items-center gap-3;
+  }
+
+  /* Section header */
+  .section-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-purple { @apply bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300; }
+  .badge-green { @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300; }
+  .badge-yellow { @apply bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300; }
+  .badge-red { @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300; }
+  .badge-blue { @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300; }
+}
+
+/* Rich Text Editor Styles */
+.rich-text-editor-container,
+.quill-editor-wrapper {
+  position: relative;
+}
+
+/* Ensure only one toolbar exists */
+.rich-text-editor-container .ql-toolbar + .ql-toolbar,
+.quill-editor-wrapper .ql-toolbar + .ql-toolbar {
+  display: none !important;
+}
+
+/* Hide duplicate toolbars more aggressively */
+.rich-text-editor-container .ql-toolbar:nth-of-type(n+2),
+.quill-editor-wrapper .ql-toolbar:nth-of-type(n+2) {
+  display: none !important;
+}
+
+.rich-text-editor-container .ql-container,
+.quill-editor-wrapper .ql-container {
+  @apply border border-gray-300 dark:border-gray-700 border-t-0 rounded-b-md min-h-[200px] dark:bg-dark-light dark:text-gray-200;
+}
+
+.rich-text-editor-container .ql-toolbar,
+.quill-editor-wrapper .ql-toolbar {
+  @apply border border-gray-300 dark:border-gray-700 rounded-t-md dark:bg-dark-light;
+}
+
+.rich-text-editor-container .ql-editor,
+.quill-editor-wrapper .ql-editor {
+  @apply min-h-[200px]; 
+}
+
+/* Quill's native placeholder styles - properly displayed and hidden */
+.rich-text-editor-container .ql-editor.ql-blank::before {
+  @apply text-gray-400 dark:text-gray-500 pointer-events-none font-normal not-italic;
+  position: absolute;
+  content: attr(data-placeholder);
+  opacity: 0.6;
+  left: 15px;
+  right: 15px;
+  transition: opacity 0.15s ease;
+}
+
+/* Style placeholder when editor is focused */
+.rich-text-editor-container .ql-editor.ql-blank:focus::before {
+  opacity: 0.4;
+}
+
+/* Remove custom placeholder styles that may conflict */
+.rich-text-editor-container .ql-editor[data-placeholder]:empty::before,
+.rich-text-editor-container .ql-editor[data-placeholder]:not(:focus):empty::before {
+  content: none !important;
+  display: none !important;
+}
+
+.rich-text-editor-container .ql-toolbar button,
+.rich-text-editor-container .ql-toolbar .ql-picker-label {
+  @apply dark:text-gray-300 dark:hover:text-white;
+}
+
+.rich-text-editor-container .ql-toolbar .ql-picker-options {
+  @apply dark:bg-dark-light dark:border-gray-700;
+}
+
+.rich-text-editor-container .ql-toolbar .ql-picker-item {
+  @apply dark:text-gray-300;
+}
+
+.rich-text-editor-container .ql-snow.ql-toolbar button:hover,
+.rich-text-editor-container .ql-snow .ql-toolbar button:hover,
+.rich-text-editor-container .ql-snow.ql-toolbar button:focus,
+.rich-text-editor-container .ql-snow .ql-toolbar button:focus,
+.rich-text-editor-container .ql-snow.ql-toolbar button.ql-active,
+.rich-text-editor-container .ql-snow .ql-toolbar button.ql-active,
+.rich-text-editor-container .ql-snow.ql-toolbar .ql-picker-label:hover,
+.rich-text-editor-container .ql-snow .ql-toolbar .ql-picker-label:hover,
+.rich-text-editor-container .ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.rich-text-editor-container .ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.rich-text-editor-container .ql-snow.ql-toolbar .ql-picker-item:hover,
+.rich-text-editor-container .ql-snow .ql-toolbar .ql-picker-item:hover,
+.rich-text-editor-container .ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.rich-text-editor-container .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  @apply text-primary dark:text-primary-light;
+}
+
+.rich-text-editor-container .ql-snow.ql-toolbar button:hover .ql-stroke,
+.rich-text-editor-container .ql-snow .ql-toolbar button:hover .ql-stroke,
+.rich-text-editor-container .ql-snow.ql-toolbar button:focus .ql-stroke,
+.rich-text-editor-container .ql-snow .ql-toolbar button:focus .ql-stroke,
+.rich-text-editor-container .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.rich-text-editor-container .ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.rich-text-editor-container .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.rich-text-editor-container .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.rich-text-editor-container .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.rich-text-editor-container .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke {
+  @apply stroke-primary dark:stroke-primary-light;
+}
+
+/* Customize card appearance */
+.prose img {
+  @apply rounded-lg;
+}
+
+.prose p {
+  @apply my-2;
+}
+
+/* ─────────────────────────────────
+   Animation utilities
+───────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounceIn {
+  0%   { opacity: 0; transform: scale(0.7); }
+  60%  { opacity: 1; transform: scale(1.04); }
+  80%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Celebrate confetti pulse */
+@keyframes celebratePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  50%       { box-shadow: 0 0 0 12px rgba(99, 102, 241, 0); }
+}
+
+.animate-celebrate {
+  animation: celebratePulse 1s ease-out 3;
+}
+
+/* Page transition */
+.page-enter {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Skeleton loading */
+.skeleton {
+  @apply bg-gray-200 dark:bg-gray-700 rounded animate-pulse;
+}
+
+/* Progress bar shine */
+.progress-shine {
+  position: relative;
+  overflow: hidden;
+}
+.progress-shine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  animation: progressShine 1.8s infinite;
+}
+@keyframes progressShine {
+  0%   { left: -60%; }
+  100% { left: 120%; }
+}
+
+/* Tooltip */
+.tooltip {
+  @apply relative;
+}
+.tooltip::after {
+  content: attr(data-tooltip);
+  @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none transition-opacity;
+}
+.tooltip:hover::after {
+  @apply opacity-100;
+}

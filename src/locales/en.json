@@ -1,0 +1,148 @@
+{
+  "app": {
+    "name": "Manifest Hub",
+    "tagline": "Visualize Your Dreams, Manifest Your Reality"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "goals": "Goals",
+    "visionboard": "Visionboard",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}!",
+    "manifestationJourney": "Your manifestation journey is unfolding beautifully.",
+    "todayGoals": "Today's Goals",
+    "affirmation": "Daily Affirmation",
+    "todayAffirmation": "Today's Affirmation",
+    "visualizationPrompt": "Visualization Prompt",
+    "visionOverview": "Vision Overview",
+    "yourVisionBoardDescription": "Create, visualize and manifest your dreams with your personal vision board.",
+    "gratitudeJournal": "Gratitude Journal",
+    "todayIAmGratefulFor": "Today I am grateful for...",
+    "iAmGratefulFor": "I am grateful for...",
+    "enterGratitude": "Enter what you're grateful for today...",
+    "enterGratitudeForDate": "Enter what you're grateful for on this date...",
+    "saveGratitude": "Save Gratitude",
+    "updateGratitude": "Update Gratitude",
+    "saving": "Saving",
+    "checkingIn": "Checking In",
+    "recentGratitude": "Recent Gratitude",
+    "calendarAndProgress": "Daily Track",
+    "dailyCheckIn": "Daily Check-in",
+    "checkedInToday": "Checked in today!",
+    "checkInNow": "Check In Now",
+    "currentStreak": "Current Streak",
+    "days": "days",
+    "createVisionCard": "Create Vision Card",
+    "viewAll": "View All",
+    "noVisionItems": "No vision items yet. Start creating your vision board.",
+    "totalGoals": "Total Goals",
+    "inProgress": "In Progress",
+    "visionItems": "Vision Items",
+    "completed": "Completed",
+    "stats": "Your Stats",
+    "savedAt": "Saved at",
+    "keepUpGoodWork": "Keep up the good work! See you tomorrow.",
+    "shareGratitudePrompt": "Share what you're thankful for today",
+    "noEntryForDate": "No gratitude entry for this date",
+    "checkInStatus": "Check-in status",
+    "checkedInOnDate": "Checked in on this date",
+    "noCheckInOnDate": "No check-in on this date",
+    "checkInSuccess": "Check-in successful! Keep up the good work!",
+    "checkInFailed": "Check-in failed. Please try again.",
+    "checkInError": "Network error during check-in. Please try again.",
+    "gratitudeSaved": "Gratitude saved successfully!",
+    "gratitudeUpdated": "Gratitude updated successfully!",
+    "gratitudeSaveFailed": "Failed to save gratitude. Please try again.",
+    "gratitudeSaveError": "Network error while saving gratitude. Please try again."
+  },
+  "goals": {
+    "myGoals": "My Goals",
+    "addNew": "Add New Goal",
+    "categories": {
+      "all": "All Goals",
+      "career": "Career",
+      "finance": "Finance",
+      "health": "Health",
+      "relationships": "Relationships",
+      "personal": "Personal",
+      "other": "Other"
+    },
+    "form": {
+      "title": "Goal Title",
+      "category": "Category",
+      "description": "Description",
+      "targetDate": "Target Date",
+      "tags": "Tags",
+      "addTag": "Add Tag",
+      "save": "Save Goal",
+      "cancel": "Cancel"
+    }
+  },
+  "visionBoard": {
+    "title": "Vision Board",
+    "addCard": "Add Card",
+    "editMode": "Edit Mode",
+    "viewMode": "View Mode",
+    "cardTypes": {
+      "image": "Image",
+      "text": "Text",
+      "quote": "Quote",
+      "affirmation": "Affirmation"
+    }
+  },
+  "profile": {
+    "personalInfo": "Personal Information",
+    "name": "Name",
+    "email": "Email",
+    "changePassword": "Change Password",
+    "preferences": "Preferences",
+    "language": "Language",
+    "theme": "Theme",
+    "notifications": "Notifications",
+    "saveChanges": "Save Changes"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filters": "Filters",
+    "sortBy": "Sort By",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "dismiss": "Dismiss"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文"
+  },
+  "indexNotification": {
+    "title": "Database Index Required",
+    "needsIndex": "The system needs to create an index for {{collection}} to display complete data",
+    "createNow": "Create Index Now"
+  }
+}

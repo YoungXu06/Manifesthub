@@ -1,0 +1,245 @@
+/* 时间轴瀑布流样式 */
+.timeline-container {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-center-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, 
+    rgba(79, 70, 229, 0.2),
+    rgba(79, 70, 229, 0.8),
+    rgba(79, 70, 229, 0.2)
+  );
+  transform: translateX(-50%);
+  z-index: 1;
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(79, 70, 229, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 15px rgba(79, 70, 229, 0.6);
+  }
+}
+
+.dark .timeline-center-line {
+  background: linear-gradient(to bottom, 
+    rgba(129, 140, 248, 0.2),
+    rgba(129, 140, 248, 0.8),
+    rgba(129, 140, 248, 0.2)
+  );
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 70px;
+  animation: fadeInUp 0.6s ease-out both;
+  padding-top: 30px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 让每个项目依次延迟出现 */
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+.timeline-item:nth-child(6) { animation-delay: 0.6s; }
+.timeline-item:nth-child(7) { animation-delay: 0.7s; }
+.timeline-item:nth-child(8) { animation-delay: 0.8s; }
+
+.timeline-connector {
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(79, 70, 229, 0.6));
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.dark .timeline-connector {
+  background: linear-gradient(to right, transparent, rgba(129, 140, 248, 0.6));
+}
+
+.timeline-item.left .timeline-connector {
+  right: -60px;
+  background: linear-gradient(to right, rgba(79, 70, 229, 0.6), transparent);
+}
+
+.dark .timeline-item.left .timeline-connector {
+  background: linear-gradient(to right, rgba(129, 140, 248, 0.6), transparent);
+}
+
+.timeline-item.right .timeline-connector {
+  left: -60px;
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgb(79, 70, 229);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2),
+    0 0 0 8px rgba(79, 70, 229, 0.1);
+  transform: translateY(-50%);
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+.dark .timeline-dot {
+  background-color: rgb(129, 140, 248);
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.2),
+    0 0 0 8px rgba(129, 140, 248, 0.1);
+}
+
+.timeline-item.left .timeline-dot {
+  right: -66px;
+}
+
+.timeline-item.right .timeline-dot {
+  left: -66px;
+}
+
+/* 修改时间日期的样式，保证在节点上方统一显示 */
+.timeline-date {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -30px;
+  font-size: 14px;
+  color: rgb(107, 114, 128);
+  transition: all 0.3s ease;
+  opacity: 0.8;
+  z-index: 4;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  padding: 4px 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.dark .timeline-date {
+  color: rgb(156, 163, 175);
+  background-color: rgba(30, 41, 59, 0.9);
+}
+
+.timeline-content {
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.timeline-item.left .timeline-content {
+  margin-right: 70px;
+  position: relative;
+}
+
+.timeline-item.right .timeline-content {
+  margin-left: 70px;
+  position: relative;
+}
+
+/* 悬浮效果 */
+.timeline-item:hover .timeline-connector {
+  background: linear-gradient(to right, transparent, rgba(79, 70, 229, 1));
+  width: 70px;
+}
+
+.dark .timeline-item:hover .timeline-connector {
+  background: linear-gradient(to right, transparent, rgba(129, 140, 248, 1));
+}
+
+.timeline-item.left:hover .timeline-connector {
+  background: linear-gradient(to right, rgba(79, 70, 229, 1), transparent);
+}
+
+.dark .timeline-item.left:hover .timeline-connector {
+  background: linear-gradient(to right, rgba(129, 140, 248, 1), transparent);
+}
+
+.timeline-item:hover .timeline-dot {
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.4),
+    0 0 0 8px rgba(79, 70, 229, 0.2),
+    0 0 20px rgba(79, 70, 229, 0.6);
+  transform: translateY(-50%) scale(1.2);
+}
+
+.dark .timeline-item:hover .timeline-dot {
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.4),
+    0 0 0 8px rgba(129, 140, 248, 0.2),
+    0 0 20px rgba(129, 140, 248, 0.6);
+}
+
+.timeline-item:hover .timeline-date {
+  opacity: 1;
+  font-weight: 500;
+  z-index: 5;
+  transform: translateX(-50%) scale(1.05);
+}
+
+.timeline-item:hover .timeline-content {
+  transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .timeline-center-line {
+    left: 20px;
+  }
+  
+  .timeline-item.left,
+  .timeline-item.right {
+    margin-left: 50px;
+  }
+  
+  .timeline-item.left .timeline-connector,
+  .timeline-item.right .timeline-connector {
+    left: -30px;
+    width: 30px;
+    background: linear-gradient(to right, transparent, rgba(79, 70, 229, 0.6));
+  }
+  
+  .dark .timeline-item.left .timeline-connector,
+  .dark .timeline-item.right .timeline-connector {
+    background: linear-gradient(to right, transparent, rgba(129, 140, 248, 0.6));
+  }
+  
+  .timeline-item.left .timeline-dot,
+  .timeline-item.right .timeline-dot {
+    left: -36px;
+  }
+  
+  .timeline-date {
+    left: 20px;
+    transform: translateX(-50%);
+    top: -25px;
+  }
+  
+  .timeline-item:hover .timeline-date {
+    transform: translateX(-50%) scale(1.05);
+  }
+  
+  .timeline-item.left .timeline-content,
+  .timeline-item.right .timeline-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+} 
