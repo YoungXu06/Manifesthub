@@ -340,18 +340,6 @@ const UnifiedVisionBoard = () => {
     return sortOrder === 'asc' ? (aV > bV ? 1 : -1) : (aV < bV ? 1 : -1);
   });
 
-  /* Timeline columns */
-  const leftColumn = visibleItems.filter((_, i) => i % 2 === 0);
-  const rightColumn = visibleItems.filter((_, i) => i % 2 !== 0);
-
-  const handleSort = col => {
-    if (sortBy === col) setSortOrder(o => o === 'asc' ? 'desc' : 'asc');
-    else { setSortBy(col); setSortOrder('asc'); }
-  };
-  const getSortIcon = col => sortBy !== col ? null : sortOrder === 'asc'
-    ? <FiChevronUp className="w-3 h-3" />
-    : <FiChevronDown className="w-3 h-3" />;
-
   const hasFilters = !!(searchTerm || filterCategory !== 'all' || filterStatus !== 'all');
 
   /* summary stats */
@@ -363,6 +351,18 @@ const UnifiedVisionBoard = () => {
   // Sliced list for rendering — only show visibleCount items
   const visibleItems = filteredItems.slice(0, visibleCount);
   const hasMore = visibleCount < filteredItems.length;
+
+  /* Timeline columns — must come after visibleItems is declared */
+  const leftColumn = visibleItems.filter((_, i) => i % 2 === 0);
+  const rightColumn = visibleItems.filter((_, i) => i % 2 !== 0);
+
+  const handleSort = col => {
+    if (sortBy === col) setSortOrder(o => o === 'asc' ? 'desc' : 'asc');
+    else { setSortBy(col); setSortOrder('asc'); }
+  };
+  const getSortIcon = col => sortBy !== col ? null : sortOrder === 'asc'
+    ? <FiChevronUp className="w-3 h-3" />
+    : <FiChevronDown className="w-3 h-3" />;
 
   return (
     <div className="animate-fade-in max-w-7xl mx-auto">
