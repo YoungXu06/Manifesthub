@@ -361,8 +361,8 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
           {showGoalFields && (
             <div className="px-4 py-4 space-y-4 border-t border-gray-200 dark:border-gray-700">
 
-              {/* Due date + Priority side-by-side */}
-              <div className="grid grid-cols-2 gap-3">
+              {/* Due date + Priority — stacked on mobile, side-by-side on sm+ */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
                     {t('visionboard.form.dueDate', { defaultValue: 'Due Date' })}
