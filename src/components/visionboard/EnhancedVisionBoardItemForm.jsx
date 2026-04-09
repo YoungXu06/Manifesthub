@@ -59,7 +59,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
   const [error, setError] = useState('');
-  const [showGoalFields, setShowGoalFields] = useState(!!itemToEdit?.dueDate || !!(itemToEdit?.steps?.length));
+  const [showGoalFields, setShowGoalFields] = useState(true);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
       priority: itemToEdit?.priority || 1,
       steps: itemToEdit?.steps || [],
     });
-    setShowGoalFields(!!itemToEdit?.dueDate || !!(itemToEdit?.steps?.length));
+    setShowGoalFields(true);
     setImagePreview(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
   }, [itemToEdit]);
 

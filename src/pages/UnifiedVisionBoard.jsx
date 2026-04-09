@@ -637,17 +637,17 @@ const UnifiedVisionBoard = () => {
         </div>
       )}
 
-      {/* ── Form Drawer ── */}
+      {/* ── Form Modal (centered) ── */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* backdrop */}
           <div
-            className="flex-1 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={handleFormClose}
           />
-          {/* drawer panel */}
-          <div className="relative w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl flex flex-col animate-slide-in-right">
-            {/* Drawer header */}
+          {/* centered modal panel */}
+          <div className="relative w-full max-w-lg bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col max-h-[90vh] animate-slide-up">
+            {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700/50 shrink-0">
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">
