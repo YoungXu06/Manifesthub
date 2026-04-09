@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { getLangMeta, SUPPORTED_LANGUAGES } from '../../i18n';
 
-const BASE_URL = 'https://manifesthub.app';
+const BASE_URL = 'https://manifest-hub.com';
 
 const SeoHead = ({
   title,
