@@ -267,8 +267,6 @@ const Dashboard = () => {
     </div>
   );
 
-  const aff = AFFIRMATIONS[affirmIdx];
-
   return (
     <div className="animate-fade-in max-w-7xl mx-auto">
       <ToastContainer toasts={toasts} removeToast={removeToast} />

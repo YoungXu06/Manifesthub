@@ -1358,24 +1358,28 @@ const useStore = create(
         const { user } = get();
         if (!user) return { logs: {} };
         try {
-          const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
-          const endDate   = new Date(year, month, 0, 23, 59, 59, 999);
+          // Build prefix strings for the target month, e.g. "2026-04-"
+          const monthStr = `${year}-${String(month).padStart(2, '0')}-`;
+
+          // Query only by userId — avoids a composite index requirement.
+          // Then filter client-side by dateStr prefix for the month.
           const q = query(
             collection(db, 'dailyLogs'),
-            where('userId', '==', user.uid),
-            where('date', '>=', Timestamp.fromDate(startDate)),
-            where('date', '<=', Timestamp.fromDate(endDate))
+            where('userId', '==', user.uid)
           );
           const snap = await getDocs(q);
           const logs = {};
           snap.forEach(d => {
             const data = d.data();
-            logs[data.dateStr] = {
-              mood: data.mood || null,
-              intention: data.intention || null,
-              gratitude: data.gratitude || null,
-              checkIn: data.checkIn || false,
-            };
+            // Only include days that belong to the requested month
+            if (data.dateStr && data.dateStr.startsWith(monthStr)) {
+              logs[data.dateStr] = {
+                mood: data.mood || null,
+                intention: data.intention || null,
+                gratitude: data.gratitude || null,
+                checkIn: data.checkIn || false,
+              };
+            }
           });
           return { logs };
         } catch (error) {
