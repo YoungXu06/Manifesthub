@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FiEdit2, FiTrash2, FiCalendar, FiTarget, FiStar, FiDollarSign,
          FiHome, FiUsers, FiBook, FiAward, FiGlobe, FiActivity, FiSun,
          FiImage, FiSmile } from 'react-icons/fi';
@@ -7,6 +8,7 @@ import useStore from '../../store';
 import { useNavigate } from 'react-router-dom';
 
 const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning }) => {
+  const { t } = useTranslation();
   const { deleteVisionBoardItem, updateVisionBoardItem } = useStore();
   const navigate = useNavigate();
   
@@ -19,7 +21,7 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
   
   const handleDelete = async (e) => {
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this vision item?')) {
+    if (window.confirm(t('visionboard.deleteConfirm'))) {
       try {
         const isGoal = item.id.toString().startsWith('goal-');
         
@@ -28,23 +30,23 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
           const result = await useStore.getState().deleteGoal(goalId);
           
           if (result.success) {
-            showSuccess?.('Vision item deleted successfully!', 3000);
+            showSuccess?.(t('visionboard.visionDeleted'), 3000);
           } else {
-            showError?.(result.error || 'Failed to delete vision item');
+            showError?.(result.error || t('visionboard.failedDelete'));
           }
         } else {
           const idToDelete = item.id;
           const result = await deleteVisionBoardItem(idToDelete);
           
           if (result.success) {
-            showSuccess?.('Vision item deleted successfully!', 3000);
+            showSuccess?.(t('visionboard.visionDeleted'), 3000);
           } else {
-            showError?.(result.error || 'Failed to delete vision item');
+            showError?.(result.error || t('visionboard.failedDelete'));
           }
         }
       } catch (error) {
         console.error('Error deleting item:', error);
-        showError?.('Delete failed. Please try again.');
+        showError?.(t('visionboard.deleteError'));
       }
     }
   };
@@ -71,12 +73,12 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
         
         if (result.success) {
           if (completed) {
-            showSuccess?.('🎉 Congratulations! Goal completed!', 4000);
+            showSuccess?.(t('visionboard.goalCompleted'), 4000);
           } else {
-            showSuccess?.(`Progress updated to ${newProgress}%`, 2000);
+            showSuccess?.(t('visionboard.progressUpdated', {pct: newProgress}), 2000);
           }
         } else {
-          showError?.(result.error || 'Failed to update progress');
+          showError?.(result.error || t('visionboard.failedUpdateProgress'));
         }
       } else {
         const idToUpdate = item.id;
@@ -87,17 +89,17 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
         
         if (result.success) {
           if (completed) {
-            showSuccess?.('🎉 Congratulations! Vision achieved!', 4000);
+            showSuccess?.(t('visionboard.visionAchieved'), 4000);
           } else {
-            showSuccess?.(`Progress updated to ${newProgress}%`, 2000);
+            showSuccess?.(t('visionboard.progressUpdated', {pct: newProgress}), 2000);
           }
         } else {
-          showError?.(result.error || 'Failed to update progress');
+          showError?.(result.error || t('visionboard.failedUpdateProgress'));
         }
       }
     } catch (error) {
       console.error('Failed to update progress:', error);
-      showError?.('Failed to update progress. Please try again.');
+      showError?.(t('visionboard.failedUpdateProgressMsg'));
     }
   };
 
@@ -239,7 +241,7 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
                   ? 'bg-amber-50 text-amber-500 dark:bg-amber-900/20 dark:text-amber-400'
                   : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400'
               }`}>
-                {getPriorityValue() === 3 ? 'High' : getPriorityValue() === 2 ? 'Med' : 'Low'}
+                {getPriorityValue() === 3 ? t('visionboard.highPriority') : getPriorityValue() === 2 ? t('visionboard.mediumPriority') : t('visionboard.lowPriority')}
               </span>
             ) : (
               <span className="text-xs text-gray-300 dark:text-gray-600">—</span>
@@ -357,7 +359,7 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
                       ${getPriorityValue() === 2 ? 'text-yellow-500' : ''}
                       ${getPriorityValue() === 1 ? 'text-green-500' : ''}
                     `}>
-                      {getPriorityValue() === 3 ? 'High' : getPriorityValue() === 2 ? 'Med' : 'Low'}
+                      {getPriorityValue() === 3 ? t('visionboard.highPriority') : getPriorityValue() === 2 ? t('visionboard.mediumPriority') : t('visionboard.lowPriority')}
                     </span>
                   </>
                 )}

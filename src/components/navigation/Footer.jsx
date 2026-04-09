@@ -17,13 +17,13 @@ const Footer = () => {
         </p>
         <div className="flex items-center gap-4">
           <Link to="/privacy" className="text-xs text-gray-400 dark:text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
-            Privacy Policy
+            {t('footer.privacyPolicy')}
           </Link>
           <Link to="/terms" className="text-xs text-gray-400 dark:text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
-            Terms of Service
+            {t('footer.termsOfService')}
           </Link>
           <Link to="/contact" className="text-xs text-gray-400 dark:text-gray-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
-            Contact
+            {t('footer.contact')}
           </Link>
         </div>
       </div>

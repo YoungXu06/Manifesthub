@@ -27,13 +27,13 @@ const Register = () => {
     setLocalError('');
     const { displayName, email, password, confirmPassword } = formData;
     if (!displayName || !email || !password || !confirmPassword) {
-      setLocalError('Please fill in all fields'); return;
+      setLocalError(t('auth.fillAllFields')); return;
     }
     if (password !== confirmPassword) {
-      setLocalError('Passwords do not match'); return;
+      setLocalError(t('auth.passwordMismatch')); return;
     }
     if (password.length < 6) {
-      setLocalError('Password must be at least 6 characters'); return;
+      setLocalError(t('auth.passwordTooShort')); return;
     }
     const result = await register(email, password, displayName);
     if (result.success) navigate('/dashboard');
@@ -55,10 +55,10 @@ const Register = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1.5">
-          Begin your journey 🌟
+          {t('auth.beginJourney')}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Create your free account and start manifesting today
+          {t('auth.signUpSubtitle')}
         </p>
       </div>
 
@@ -78,8 +78,8 @@ const Register = () => {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {[
-          { id: 'displayName', label: 'Your name', icon: <FiUser />, type: 'text', placeholder: 'Alex Johnson', autoComplete: 'name' },
-          { id: 'email', label: 'Email address', icon: <FiMail />, type: 'email', placeholder: 'you@example.com', autoComplete: 'email' },
+          { id: 'displayName', label: t('auth.yourName'), icon: <FiUser />, type: 'text', placeholder: t('auth.namePlaceholder'), autoComplete: 'name' },
+          { id: 'email', label: t('auth.email'), icon: <FiMail />, type: 'email', placeholder: t('auth.emailPlaceholder'), autoComplete: 'email' },
         ].map(field => (
           <div key={field.id}>
             <label htmlFor={field.id} className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
@@ -107,7 +107,7 @@ const Register = () => {
         {/* Password */}
         <div>
           <label htmlFor="password" className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
-            Password
+            {t('auth.password')}
           </label>
           <div className="relative">
             <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -118,7 +118,7 @@ const Register = () => {
               autoComplete="new-password"
               required
               className="input pl-9 w-full text-sm"
-              placeholder="Min 6 characters"
+              placeholder={t('auth.passwordMinHint')}
               value={formData.password}
               onChange={handleChange}
             />
@@ -137,7 +137,7 @@ const Register = () => {
                 />
               ))}
               <span className="text-xs ml-1 text-gray-400">
-                {passwordStrength === 1 ? 'Weak' : passwordStrength === 2 ? 'Good' : 'Strong'}
+                {passwordStrength === 1 ? t('auth.weak') : passwordStrength === 2 ? t('auth.good') : t('auth.strong')}
               </span>
             </div>
           )}
@@ -146,7 +146,7 @@ const Register = () => {
         {/* Confirm password */}
         <div>
           <label htmlFor="confirmPassword" className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
-            Confirm password
+            {t('auth.confirmPassword')}
           </label>
           <div className="relative">
             <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -157,7 +157,7 @@ const Register = () => {
               autoComplete="new-password"
               required
               className="input pl-9 w-full text-sm"
-              placeholder="Repeat your password"
+              placeholder={t('auth.repeatPassword')}
               value={formData.confirmPassword}
               onChange={handleChange}
             />
@@ -181,7 +181,7 @@ const Register = () => {
           {authLoading
             ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             : null}
-          Create Free Account
+          {t('auth.createFreeAccount')}
           {!authLoading && <FiArrowRight className="w-4 h-4" />}
         </button>
       </form>
@@ -189,7 +189,7 @@ const Register = () => {
       {/* Divider */}
       <div className="my-6 flex items-center gap-3">
         <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-        <span className="text-xs text-gray-400 font-medium">or continue with</span>
+        <span className="text-xs text-gray-400 font-medium">{t('auth.orContinueWith')}</span>
         <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
       </div>
 
@@ -201,12 +201,12 @@ const Register = () => {
         className="w-full flex items-center justify-center gap-2.5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700/80 hover:border-gray-300 dark:hover:border-gray-600 transition-all shadow-sm"
       >
         <FcGoogle className="h-5 w-5 flex-shrink-0" />
-        Sign up with Google
+        {t('auth.signUpWithGoogle')}
       </button>
 
       {/* Terms */}
       <p className="mt-4 text-center text-xs text-gray-400 leading-relaxed">
-        By signing up, you agree to our Terms of Service and Privacy Policy.
+        {t('auth.bySigningUp')}
       </p>
 
       {/* Login link */}

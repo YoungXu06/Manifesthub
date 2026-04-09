@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   const handlePasswordReset = async () => {
-    if (!formData.email) { setLocalError('Please enter your email address'); return; }
+    if (!formData.email) { setLocalError(t('auth.fillAllFields')); return; }
     const result = await resetPassword(formData.email);
     if (result.success) setResetSent(true);
   };
@@ -59,12 +59,12 @@ const Login = () => {
           />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1.5">
-          {isResetMode ? 'Reset your password' : 'Welcome back ✨'}
+          {isResetMode ? t('auth.forgotPassword') : t('auth.welcomeBack')}
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           {isResetMode
-            ? "Enter your email and we'll send a reset link"
-            : "Sign in to continue your manifestation journey"}
+            ? t('auth.resetPasswordSubtitle')
+            : t('auth.signInSubtitle')}
         </p>
       </div>
 
@@ -85,7 +85,7 @@ const Login = () => {
       {resetSent && (
         <div className="mb-5 p-3.5 bg-emerald-50 dark:bg-emerald-900/15 border border-emerald-100 dark:border-emerald-900/30 rounded-xl">
           <p className="text-sm text-emerald-600 dark:text-emerald-400">
-            ✅ Reset link sent! Please check your email inbox.
+            {t('auth.resetLinkSent')}
           </p>
         </div>
       )}
@@ -94,7 +94,7 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email" className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
-            Email address
+            {t('auth.email')}
           </label>
           <div className="relative">
             <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -105,7 +105,7 @@ const Login = () => {
               autoComplete="email"
               required
               className="input pl-9 w-full text-sm"
-              placeholder="you@example.com"
+              placeholder={t('auth.emailPlaceholder')}
               value={formData.email}
               onChange={handleChange}
             />
@@ -116,7 +116,7 @@ const Login = () => {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label htmlFor="password" className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                Password
+                {t('auth.password')}
               </label>
               <button
                 type="button"
@@ -135,7 +135,7 @@ const Login = () => {
                 autoComplete="current-password"
                 required
                 className="input pl-9 w-full text-sm"
-                placeholder="Enter your password"
+                placeholder={t('auth.passwordPlaceholder')}
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -155,7 +155,7 @@ const Login = () => {
           {authLoading ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           ) : null}
-          {isResetMode ? 'Send Reset Link' : 'Sign In'}
+          {isResetMode ? t('auth.sendResetLink') : t('auth.signIn')}
           {!authLoading && !isResetMode && <FiArrowRight className="w-4 h-4" />}
         </button>
       </form>
@@ -165,14 +165,14 @@ const Login = () => {
           onClick={toggleResetMode}
           className="mt-4 w-full text-center text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
         >
-          ← Back to sign in
+          {t('auth.backToSignIn')}
         </button>
       ) : (
         <>
           {/* Divider */}
           <div className="my-6 flex items-center gap-3">
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-            <span className="text-xs text-gray-400 font-medium">or continue with</span>
+            <span className="text-xs text-gray-400 font-medium">{t('auth.orContinueWith')}</span>
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
           </div>
 
@@ -184,7 +184,7 @@ const Login = () => {
             className="w-full flex items-center justify-center gap-2.5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700/80 hover:border-gray-300 dark:hover:border-gray-600 transition-all shadow-sm"
           >
             <FcGoogle className="h-5 w-5 flex-shrink-0" />
-            Continue with Google
+            {t('auth.signInWithGoogle')}
           </button>
 
           {/* Register link */}

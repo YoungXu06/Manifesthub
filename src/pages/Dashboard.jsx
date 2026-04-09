@@ -11,21 +11,16 @@ import IndexNotification from '../components/IndexNotification';
 import { ToastContainer } from '../components/Toast';
 import useToast from '../hooks/useToast';
 
-/* ─── Affirmations ─── */
-const AFFIRMATIONS = [
-  { text: "I am worthy of my dreams and goals.", visualization: "Imagine yourself achieving your biggest dream. How does it feel?", emoji: "✨" },
-  { text: "Every day, I am moving closer to my goals.", visualization: "See yourself taking small, meaningful actions today.", emoji: "🎯" },
-  { text: "I have the power to create change in my life.", visualization: "Visualize the positive changes you want to create.", emoji: "⚡" },
-  { text: "I attract success and abundance into my life.", visualization: "Imagine abundance flowing effortlessly into your life.", emoji: "🌟" },
-  { text: "My potential is unlimited, and I can achieve anything.", visualization: "See yourself easily overcoming any obstacle.", emoji: "🦋" },
-];
+/* ─── Affirmation emojis (text/visualization come from i18n) ─── */
+const AFF_EMOJIS = ['✨','🎯','⚡','🌟','🦋'];
+const AFF_COUNT = 5;
 
-/* ─── Moods ─── */
-const MOODS = [
-  { icon: '😊', label: 'Great', color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800' },
-  { icon: '😌', label: 'Good',  color: 'text-blue-500 dark:text-blue-400',    bg: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' },
-  { icon: '😐', label: 'Okay',  color: 'text-amber-500 dark:text-amber-400',  bg: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' },
-  { icon: '😔', label: 'Low',   color: 'text-purple-500 dark:text-purple-400',bg: 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800' },
+/* ─── Moods (static colors/icons, labels resolved in component) ─── */
+const MOOD_DEFS = [
+  { icon: '😊', key: 'great', color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800' },
+  { icon: '😌', key: 'good',  color: 'text-blue-500 dark:text-blue-400',    bg: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' },
+  { icon: '😐', key: 'okay',  color: 'text-amber-500 dark:text-amber-400',  bg: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' },
+  { icon: '😔', key: 'low',   color: 'text-purple-500 dark:text-purple-400',bg: 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800' },
 ];
 
 /* ─── Helpers ─── */
@@ -34,11 +29,8 @@ function toDateStr(date) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 function isSameDay(a, b) { return toDateStr(a) === toDateStr(b); }
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return { text: 'Good morning', icon: <FiSun className="text-amber-400" /> };
-  if (h < 17) return { text: 'Good afternoon', icon: <FiCloud className="text-blue-400" /> };
-  return { text: 'Good evening', icon: <FiMoon className="text-indigo-400" /> };
+function getGreetingHour() {
+  return new Date().getHours();
 }
 
 /* ─── Stat Card ─── */
@@ -83,7 +75,12 @@ const Dashboard = () => {
   } = useStore();
 
   const { toasts, removeToast, showSuccess, showError } = useToast();
-  const greeting = getGreeting();
+  const greetingHour = getGreetingHour();
+  const greeting = greetingHour < 12
+    ? { text: t('dashboard.goodMorning'), icon: <FiSun className="text-amber-400" /> }
+    : greetingHour < 17
+    ? { text: t('dashboard.goodAfternoon'), icon: <FiCloud className="text-blue-400" /> }
+    : { text: t('dashboard.goodEvening'), icon: <FiMoon className="text-indigo-400" /> };
 
   /* ── calendar state ── */
   const [currentDate, setCurrentDate]   = useState(new Date());
@@ -125,7 +122,7 @@ const Dashboard = () => {
     };
     load();
 
-    affirmTimer.current = setInterval(() => setAffirmIdx(p => (p + 1) % AFFIRMATIONS.length), 5500);
+    affirmTimer.current = setInterval(() => setAffirmIdx(p => (p + 1) % AFF_COUNT), 5500);
     return () => clearInterval(affirmTimer.current);
   }, []);
 
@@ -209,7 +206,7 @@ const Dashboard = () => {
     setDayLog(updated);
     setMonthLogs(prev => ({ ...prev, [selectedStr]: updated }));
     await saveDailyLog(selectedDate, { mood: moodLabel });
-    showSuccess('Mood saved ✨', 1500);
+    showSuccess(t('dashboard.moodSaved'), 1500);
   };
 
   const handleSaveIntention = async () => {
@@ -221,8 +218,8 @@ const Dashboard = () => {
     setShowIntentionInput(false);
     const result = await saveDailyLog(selectedDate, { intention: intentionDraft.trim() });
     setSavingIntention(false);
-    if (result.success) showSuccess("Intention set 🎯", 1800);
-    else showError('Failed to save intention');
+    if (result.success) showSuccess(t('dashboard.intentionSaved'), 1800);
+    else showError(t('dashboard.failedSaveIntention'));
   };
 
   const handleSaveGratitude = async () => {
@@ -308,17 +305,17 @@ const Dashboard = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8 blur-2xl pointer-events-none" />
             <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest mb-4 relative z-10">✨ Daily Affirmation</h2>
             <div className="flex-1 relative z-10">
-              {AFFIRMATIONS.map((a, i) => (
+              {AFF_EMOJIS.map((emoji, i) => (
                 <div key={i} className="absolute inset-0 flex flex-col justify-center transition-opacity duration-700"
                   style={{ opacity: i === affirmIdx ? 1 : 0, pointerEvents: i === affirmIdx ? 'auto' : 'none' }}>
-                  <p className="text-3xl mb-2">{a.emoji}</p>
-                  <p className="text-white font-semibold text-base leading-snug mb-3 italic">"{a.text}"</p>
-                  <p className="text-white/70 text-xs leading-relaxed">{a.visualization}</p>
+                  <p className="text-3xl mb-2">{emoji}</p>
+                  <p className="text-white font-semibold text-base leading-snug mb-3 italic">"{t(`dashboard.affirmations.${i}.text`)}"</p>
+                  <p className="text-white/70 text-xs leading-relaxed">{t(`dashboard.affirmations.${i}.visualization`)}</p>
                 </div>
               ))}
             </div>
             <div className="relative z-10 flex gap-1.5 mt-auto pt-8">
-              {AFFIRMATIONS.map((_, i) => (
+              {AFF_EMOJIS.map((_, i) => (
                 <button key={i} onClick={() => setAffirmIdx(i)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${i === affirmIdx ? 'bg-white w-5' : 'bg-white/35 w-1.5'}`} />
               ))}
@@ -330,8 +327,8 @@ const Dashboard = () => {
             <h2 className="section-title mb-1 flex items-center gap-2"><FiSmile className="text-purple-500" />How are you feeling?</h2>
             <p className="text-xs text-gray-400 mb-1">{isToday ? 'Today' : selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p>
             <div className="grid grid-cols-4 gap-2">
-              {MOODS.map(mood => (
-                <button key={mood.label} onClick={() => isToday && handleSaveMood(mood.label)}
+              {MOOD_DEFS.map(mood => (
+                <button key={mood.label} onClick={() => isToday && handleSaveMood(t(`dashboard.moods.${mood.key}`))}
                   disabled={!isToday}
                   className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
                     dayLog.mood === mood.label
@@ -339,19 +336,19 @@ const Dashboard = () => {
                       : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
                   } ${!isToday ? 'opacity-60 cursor-default' : ''}`}>
                   <span className="text-2xl leading-none">{mood.icon}</span>
-                  <span className={`text-xs font-medium ${dayLog.mood === mood.label ? mood.color : 'text-gray-500 dark:text-gray-400'}`}>{mood.label}</span>
+                  <span className={`text-xs font-medium ${dayLog.mood === t(`dashboard.moods.${mood.key}`) ? mood.color : 'text-gray-500 dark:text-gray-400'}`}>{t(`dashboard.moods.${mood.key}`)}</span>
                 </button>
               ))}
             </div>
-            {dayLog.mood && !isToday && <p className="mt-2 text-xs text-center text-gray-400">Feeling {dayLog.mood} on this day</p>}
-            {dayLog.mood && isToday && <p className="mt-2 text-xs text-center text-indigo-500 dark:text-indigo-400 font-medium">✓ Feeling {dayLog.mood} — your energy is noted</p>}
+            {dayLog.mood && !isToday && <p className="mt-2 text-xs text-center text-gray-400">{t('dashboard.feelingOnDay', {mood: dayLog.mood})}</p>}
+            {dayLog.mood && isToday && <p className="mt-2 text-xs text-center text-indigo-500 dark:text-indigo-400 font-medium">{t('dashboard.feelingNote', {mood: dayLog.mood})}</p>}
           </div>
 
           {/* Intention */}
           <div className="card p-5">
             <div className="flex items-center justify-between mb-3">
               <h2 className="section-title flex items-center gap-2"><FiTarget className="text-indigo-500" />
-                {isToday ? "Today's Intention" : `Intention for ${selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric'})}`}
+                {isToday ? t('dashboard.todayIntention') : t('dashboard.intentionFor', {date: selectedDate.toLocaleDateString()})}
               </h2>
               {isToday && !showIntentionInput && (
                 <button onClick={() => { setIntentionDraft(dayLog.intention || ''); setShowIntentionInput(true); }}
@@ -364,13 +361,13 @@ const Dashboard = () => {
               <div className="space-y-2">
                 <input autoFocus value={intentionDraft} onChange={e => setIntentionDraft(e.target.value)}
                   onKeyDown={e => { if (e.key==='Enter') handleSaveIntention(); if (e.key==='Escape') setShowIntentionInput(false); }}
-                  placeholder="I intend to…" className="input w-full text-sm" maxLength={100} />
+                  placeholder={t('dashboard.intentionPlaceholder')} className="input w-full text-sm" maxLength={100} />
                 <div className="flex gap-2">
                   <button onClick={handleSaveIntention} disabled={savingIntention}
                     className="btn btn-primary btn-sm flex-1 text-xs">
-                    {savingIntention ? <FiLoader className="animate-spin" /> : 'Set Intention'}
+                    {savingIntention ? <FiLoader className="animate-spin" /> : t('dashboard.setIntention')}
                   </button>
-                  <button onClick={() => setShowIntentionInput(false)} className="btn btn-secondary btn-sm text-xs">Cancel</button>
+                  <button onClick={() => setShowIntentionInput(false)} className="btn btn-secondary btn-sm text-xs">{t('common.cancel')}</button>
                 </div>
               </div>
             ) : dayLog.intention ? (
@@ -382,7 +379,7 @@ const Dashboard = () => {
               <button onClick={() => isToday && setShowIntentionInput(true)} disabled={!isToday}
                 className={`w-full flex items-center gap-2 p-3 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 transition-all ${isToday ? 'hover:border-indigo-300 hover:text-indigo-400' : 'opacity-50 cursor-default'}`}>
                 <FiPlus className="w-4 h-4" />
-                {isToday ? 'Set your intention for today' : 'No intention recorded'}
+                {isToday ? t('dashboard.setIntentionPrompt') : t('dashboard.noIntentionRecorded')}
               </button>
             )}
           </div>
@@ -393,14 +390,14 @@ const Dashboard = () => {
               <h2 className="section-title flex items-center gap-2"><FiBookmark className="text-indigo-500" />{t('dashboard.visionOverview')}</h2>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 {visionBoard.length > 0
-                  ? `${visionBoard.filter(v=>v.completed).length} of ${visionBoard.length} visions manifested`
-                  : 'Your vision board is empty'}
+                  ? `${t('dashboard.visionsManiifested', {count: visionBoard.filter(v=>v.completed).length, total: visionBoard.length})}`
+                  : t('dashboard.visionBoardEmpty')}
               </p>
             </div>
             {visionBoard.length > 0 && (
               <div className="px-5 pt-3">
                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5">
-                  <span>Overall progress</span>
+                  <span>{t('dashboard.overallProgress')}</span>
                   <span className="font-medium text-indigo-600 dark:text-indigo-400">
                     {Math.round(visionBoard.reduce((a,v)=>a+(v.progress||0),0)/visionBoard.length)}%
                   </span>
@@ -477,7 +474,7 @@ const Dashboard = () => {
 
             {/* Legend */}
             <div className="flex items-center justify-center gap-5 text-xs text-gray-400 border-t border-gray-100 dark:border-gray-700/50 pt-3 mb-4">
-              {[['bg-emerald-400','Check-in'],['bg-purple-400','Gratitude'],['bg-amber-400','Mood']].map(([c,l])=>(
+              {[['bg-emerald-400', t('dashboard.dailyCheckIn')],['bg-purple-400', t('dashboard.gratitudeJournal')],['bg-amber-400', t('dashboard.howAreYouFeeling')]].map(([c,l])=>(
                 <div key={l} className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${c}`}/>{l}</div>
               ))}
             </div>
@@ -485,7 +482,7 @@ const Dashboard = () => {
             {/* Date label */}
             <div className="mb-3">
               <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {isToday ? '📅 Today' : selectedDate.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+                {isToday ? t('dashboard.today') : selectedDate.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
               </p>
             </div>
 
@@ -498,7 +495,7 @@ const Dashboard = () => {
                   </h3>
                   {streakCount > 0 && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 font-medium">
-                      🔥 {streakCount} day streak
+                      🔥 {streakCount} {t('dashboard.dayStreak')}
                     </span>
                   )}
                 </div>
@@ -546,13 +543,11 @@ const Dashboard = () => {
                 onChange={e => setDayLog(prev => ({ ...prev, gratitude: e.target.value }))}
                 rows={4}
                 className="input w-full resize-none text-sm leading-relaxed"
-                placeholder={isToday
-                  ? "Write 3 things you're grateful for today…"
-                  : "What were you grateful for on this day?"}
+                placeholder={isToday ? t('dashboard.enterGratitude') : t('dashboard.enterGratitudeForDate')}
               />
               <div className="flex justify-between items-center mt-2.5">
                 <span className="text-xs text-gray-400">
-                  {monthLogs[selectedStr]?.gratitude ? '✓ Saved' : 'Unsaved'}
+                  {monthLogs[selectedStr]?.gratitude ? t('dashboard.saved') : t('dashboard.unsaved')}
                 </span>
                 <button onClick={handleSaveGratitude}
                   disabled={!dayLog.gratitude?.trim() || savingGratitude}

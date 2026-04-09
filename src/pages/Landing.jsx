@@ -233,47 +233,47 @@ const Landing = () => {
   const features = [
     {
       icon: FiEye,
-      title: 'Visual Dream Board',
-      desc: 'Create stunning vision boards with images, quotes, and goals. Bring your dreams to life in a visual canvas.',
+      title: t('landing.features.visualDreamBoard'),
+      desc: t('landing.features.visualDreamBoardDesc'),
       gradient: 'from-purple-500 to-indigo-600',
     },
     {
       icon: FiHeart,
-      title: 'Daily Gratitude & Habits',
-      desc: 'Build a powerful daily practice with check-ins, gratitude journaling, and streak tracking.',
+      title: t('landing.features.dailyHabits'),
+      desc: t('landing.features.dailyHabitsDesc'),
       gradient: 'from-pink-500 to-rose-600',
     },
     {
       icon: FiTrendingUp,
-      title: 'Track Your Progress',
-      desc: 'Monitor every goal with progress bars, milestones, and an interactive calendar to stay on track.',
+      title: t('landing.features.trackProgress'),
+      desc: t('landing.features.trackProgressDesc'),
       gradient: 'from-emerald-500 to-teal-600',
     },
   ];
 
   const steps = [
-    { number: '01', title: 'Create Your Vision', desc: 'Add your dreams as vision cards with images, descriptions, and emotional anchors.' },
-    { number: '02', title: 'Build Daily Rituals', desc: 'Check in every day, write gratitude, and recite your personalized affirmations.' },
-    { number: '03', title: 'Manifest & Celebrate', desc: 'Track your progress, complete goals, and celebrate every win on your journey.' },
+    { number: '01', title: t('landing.steps.01.title'), desc: t('landing.steps.01.desc') },
+    { number: '02', title: t('landing.steps.02.title'), desc: t('landing.steps.02.desc') },
+    { number: '03', title: t('landing.steps.03.title'), desc: t('landing.steps.03.desc') },
   ];
 
   const testimonials = [
     {
-      quote: "ManifestHub transformed how I approach my goals. Having everything visual and organized keeps me focused and motivated every single day.",
-      name: "Sarah L.",
-      role: "Entrepreneur",
+      quote: t('landing.testimonialData.sarah.quote'),
+      name: t('landing.testimonialData.sarah.name'),
+      role: t('landing.testimonialData.sarah.role'),
       avatar: "S",
     },
     {
-      quote: "The daily check-in and gratitude journal are game changers. My streak is at 60 days and I've manifested 3 major goals this year!",
-      name: "Marcus T.",
-      role: "Life Coach",
+      quote: t('landing.testimonialData.marcus.quote'),
+      name: t('landing.testimonialData.marcus.name'),
+      role: t('landing.testimonialData.marcus.role'),
       avatar: "M",
     },
     {
-      quote: "Beautiful, minimal, and powerful. I love how the vision board keeps me connected to what really matters in my life.",
-      name: "Aiko N.",
-      role: "Designer",
+      quote: t('landing.testimonialData.aiko.quote'),
+      name: t('landing.testimonialData.aiko.name'),
+      role: t('landing.testimonialData.aiko.role'),
       avatar: "A",
     },
   ];
@@ -417,18 +417,18 @@ const Landing = () => {
               <ThemeToggle />
               {user ? (
                 <Link to="/dashboard" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors">
-                  Dashboard →
+                  {t('landing.dashboardArrow')}
                 </Link>
               ) : (
                 <>
                   <Link to="/login" className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors hidden sm:block">
-                    Sign in
+                    {t('auth.signIn')}
                   </Link>
                   <Link
                     to="/register"
                     className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
                   >
-                    Get Started Free
+                    {t('landing.getStartedFree')}
                   </Link>
                 </>
               )}
@@ -442,19 +442,18 @@ const Landing = () => {
             {/* Badge */}
             <div className="animate-slide-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs font-medium mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-              Law of Attraction · Goal Manifestation Platform
+              {t('landing.badge')}
             </div>
 
             {/* Headline */}
             <h1 className="animate-scale-in text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.08] tracking-tight mb-6">
-              Manifest Your Dreams<br />
-              <span className="shimmer-text">Into Reality</span>
+              {t('landing.headline1')}<br />
+              <span className="shimmer-text">{t('landing.headline2')}</span>
             </h1>
 
             {/* Sub */}
             <p className="animate-slide-up-d1 text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Your thoughts create your reality. Visualize your goals, build powerful daily habits,
-              and watch your dreams transform into achievements — one intention at a time.
+              {t('landing.subheadline')}
             </p>
 
             {/* CTAs */}
@@ -463,14 +462,14 @@ const Landing = () => {
                 to="/register"
                 className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-600 text-white font-semibold text-base hover:from-purple-600 hover:via-violet-600 hover:to-indigo-700 transition-all cta-glow hover:scale-105 active:scale-100"
               >
-                Start Your Journey — Free
+                {t('landing.ctaStart')}
                 <FiArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/login"
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/15 text-gray-300 hover:text-white hover:border-white/30 hover:bg-white/5 font-medium text-base transition-all"
               >
-                Already have an account
+                {t('landing.ctaAlreadyHave')}
               </Link>
             </div>
 
@@ -478,17 +477,17 @@ const Landing = () => {
             <div className="mt-12 flex items-center justify-center gap-6 text-sm text-gray-500">
               <div className="flex items-center gap-1.5">
                 <FiCheckCircle className="w-4 h-4 text-emerald-400" />
-                <span>No credit card required</span>
+                <span>{t('landing.noCreditCard')}</span>
               </div>
               <div className="hidden sm:block w-px h-4 bg-gray-700" />
               <div className="hidden sm:flex items-center gap-1.5">
                 <FiCheckCircle className="w-4 h-4 text-emerald-400" />
-                <span>Free forever plan</span>
+                <span>{t('landing.freePlan')}</span>
               </div>
               <div className="hidden sm:block w-px h-4 bg-gray-700" />
               <div className="hidden sm:flex items-center gap-1.5">
                 <FiCheckCircle className="w-4 h-4 text-emerald-400" />
-                <span>2 min to set up</span>
+                <span>{t('landing.setup')}</span>
               </div>
             </div>
           </div>
@@ -498,10 +497,10 @@ const Landing = () => {
         <section className="py-24 px-5">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-14">
-              <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest mb-3">Why ManifestHub</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">Everything you need to manifest</h2>
+              <p className="text-purple-400 text-sm font-semibold uppercase tracking-widest mb-3">{t('landing.whyManifestHub')}</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">{t('landing.everythingYouNeed')}</h2>
               <p className="mt-4 text-gray-400 max-w-xl mx-auto text-base leading-relaxed">
-                A complete system to turn your intentions into reality, built on proven Law of Attraction principles.
+                {t('landing.everythingSubtitle')}
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -516,8 +515,8 @@ const Landing = () => {
         <section className="py-24 px-5">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">The Process</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">3 steps to manifest your reality</h2>
+              <p className="text-indigo-400 text-sm font-semibold uppercase tracking-widest mb-3">{t('landing.theProcess')}</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">{t('landing.threeSteps')}</h2>
             </div>
             <div className="grid md:grid-cols-2 gap-10 items-center">
               <div className="space-y-8">
@@ -540,14 +539,14 @@ const Landing = () => {
                     <div className="h-32 rounded-xl bg-gradient-to-br from-purple-900/50 to-indigo-900/50 border border-white/10" />
                     <div className="space-y-2">
                       <div className="flex justify-between text-xs text-gray-400 mb-1">
-                        <span>Progress</span><span className="text-purple-300">73%</span>
+                        <span>{t('landing.mockProgress')}</span><span className="text-purple-300">73%</span>
                       </div>
                       <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                         <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500" />
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      {['✓ Affirmation', '✓ Gratitude'].map(tag => (
+                      {[t('landing.mockAffirmation'), t('landing.mockGratitude')].map(tag => (
                         <span key={tag} className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
                           {tag}
                         </span>
@@ -567,8 +566,8 @@ const Landing = () => {
         <section className="py-24 px-5">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <p className="text-pink-400 text-sm font-semibold uppercase tracking-widest mb-3">Testimonials</p>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white">People are manifesting with us</h2>
+              <p className="text-pink-400 text-sm font-semibold uppercase tracking-widest mb-3">{t('landing.testimonials')}</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">{t('landing.manifestingWithUs')}</h2>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {testimonials.map(t => <TestimonialCard key={t.name} {...t} />)}
@@ -586,17 +585,17 @@ const Landing = () => {
               </div>
             </div>
             <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-5 leading-tight">
-              Your best life is<br />
-              <span className="shimmer-text">one decision away</span>
+              {t('landing.bestLife')}<br />
+              <span className="shimmer-text">{t('landing.oneDecisionAway')}</span>
             </h2>
             <p className="text-gray-400 mb-10 text-lg leading-relaxed">
-              Join thousands of people who are already manifesting their dreams with ManifestHub. Start for free, no credit card needed.
+              {t('landing.joinThousands')}
             </p>
             <Link
               to="/register"
               className="group inline-flex items-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-600 text-white font-bold text-lg hover:from-purple-600 hover:via-violet-600 hover:to-indigo-700 transition-all cta-glow hover:scale-105 active:scale-100"
             >
-              Begin Your Journey Today
+              {t('landing.startJourneyFree')}
               <FiArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
@@ -613,10 +612,10 @@ const Landing = () => {
               />
               <span>{t('app.name')}</span>
             </div>
-            <p>&copy; {new Date().getFullYear()} ManifestHub. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} ManifestHub. {t('landing.allRightsReserved')}</p>
             <div className="flex items-center gap-4">
-              <Link to="/login" className="hover:text-gray-300 transition-colors">Sign in</Link>
-              <Link to="/register" className="hover:text-gray-300 transition-colors">Get started</Link>
+              <Link to="/login" className="hover:text-gray-300 transition-colors">{t('auth.signIn')}</Link>
+              <Link to="/register" className="hover:text-gray-300 transition-colors">{t('landing.getStartedFree')}</Link>
             </div>
           </div>
         </footer>

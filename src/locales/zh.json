@@ -8,7 +8,8 @@
     "goals": "目标",
     "visionboard": "愿景板",
     "profile": "个人资料",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "navigate": "导航"
   },
   "auth": {
     "login": "登录",
@@ -22,7 +23,33 @@
     "signUp": "注册",
     "signIn": "登录",
     "signInWithGoogle": "使用 Google 登录",
-    "signUpWithGoogle": "使用 Google 注册"
+    "signUpWithGoogle": "使用 Google 注册",
+    "orContinueWith": "或者使用",
+    "yourName": "您的姓名",
+    "namePlaceholder": "张三",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "请输入密码",
+    "passwordMinHint": "至少 6 位字符",
+    "repeatPassword": "再次输入密码",
+    "createFreeAccount": "免费创建账号",
+    "bySigningUp": "注册即表示您同意我们的服务条款和隐私政策。",
+    "fillAllFields": "请填写所有字段",
+    "passwordMismatch": "两次密码不一致",
+    "passwordTooShort": "密码至少需要 6 位字符",
+    "sendResetLink": "发送重置链接",
+    "backToSignIn": "← 返回登录",
+    "resetPasswordSubtitle": "输入邮箱，我们将发送重置链接",
+    "resetLinkSent": "✅ 重置链接已发送！请检查您的邮箱。",
+    "welcomeBack": "欢迎回来 ✨",
+    "signInSubtitle": "登录以继续您的心想事成之旅",
+    "beginJourney": "开启您的旅程 🌟",
+    "signUpSubtitle": "免费创建账号，立即开始引力法则实践",
+    "weak": "弱",
+    "good": "中",
+    "strong": "强",
+    "passwordStrength": "密码强度",
+    "verifyingSession": "验证登录状态...",
+    "signinArrow": "登录 →"
   },
   "dashboard": {
     "welcome": "欢迎回来，{{name}}！",
@@ -34,10 +61,10 @@
     "visionOverview": "愿景概览",
     "yourVisionBoardDescription": "用您的个人愿景板创建、可视化并实现您的梦想。",
     "gratitudeJournal": "感恩日记",
-    "todayIAmGratefulFor": "今天我感谢...",
+    "todayIAmGratefulFor": "✨ 今天我感谢...",
     "iAmGratefulFor": "我感谢...",
-    "enterGratitude": "写下今天您感谢的事情...",
-    "enterGratitudeForDate": "写下这一天您感谢的事情...",
+    "enterGratitude": "写下今天您感谢的三件事...",
+    "enterGratitudeForDate": "这一天您感谢什么？",
     "saveGratitude": "保存感恩",
     "updateGratitude": "更新感恩",
     "saving": "保存中",
@@ -49,6 +76,7 @@
     "checkInNow": "立即签到",
     "currentStreak": "当前连续",
     "days": "天",
+    "dayStreak": "连续天数",
     "createVisionCard": "创建愿景卡",
     "viewAll": "查看全部",
     "noVisionItems": "暂无愿景项目。开始创建您的愿景板吧。",
@@ -58,6 +86,9 @@
     "completed": "已完成",
     "stats": "您的统计",
     "savedAt": "已保存于",
+    "saved": "已保存",
+    "unsaved": "未保存的更改",
+    "nothingSavedYet": "尚未保存",
     "keepUpGoodWork": "继续保持！明天见。",
     "shareGratitudePrompt": "分享您今天感恩的事情",
     "noEntryForDate": "该日期无感恩记录",
@@ -70,7 +101,57 @@
     "gratitudeSaved": "感恩日记保存成功！",
     "gratitudeUpdated": "感恩日记更新成功！",
     "gratitudeSaveFailed": "感恩日记保存失败，请重试。",
-    "gratitudeSaveError": "保存感恩日记时网络错误，请重试。"
+    "gratitudeSaveError": "保存感恩日记时网络错误，请重试。",
+    "gratitudeRaisesVibration": "感恩能提升您的振动频率，增强心想事成的力量。",
+    "today": "📅 今天",
+    "howAreYouFeeling": "您今天感觉怎么样？",
+    "moodSubtitle": "您的情绪状态塑造您的心想事成能量",
+    "moodSaved": "情绪已记录 ✨",
+    "feelingNote": "✓ 感觉{{mood}} — 您的能量已记录",
+    "feelingOnDay": "这一天感觉{{mood}}",
+    "todayIntention": "今日意图",
+    "intentionFor": "{{date}}的意图",
+    "setIntentionPrompt": "设定今天的意图",
+    "noIntentionRecorded": "未记录意图",
+    "setIntention": "设定意图",
+    "intentionPlaceholder": "我打算...",
+    "intentionSaved": "今日意图已设定！🎯",
+    "failedSaveIntention": "意图保存失败",
+    "overallProgress": "总体进度",
+    "visionsManiifested": "{{total}}个愿景中已实现{{count}}个",
+    "visionBoardEmpty": "您的愿景板是空的",
+    "gratefulFor": "{{date}}感恩内容",
+    "goodMorning": "早上好",
+    "goodAfternoon": "下午好",
+    "goodEvening": "晚上好",
+    "moods": {
+      "great": "很好",
+      "good": "不错",
+      "okay": "一般",
+      "low": "低落"
+    },
+    "affirmations": {
+      "0": {
+        "text": "我值得拥有我的梦想和目标。",
+        "visualization": "想象自己实现了最大的梦想。感觉如何？"
+      },
+      "1": {
+        "text": "每一天，我都在更接近我的目标。",
+        "visualization": "看到自己今天采取了小而有意义的行动。"
+      },
+      "2": {
+        "text": "我有能力创造生活中的改变。",
+        "visualization": "想象您想要创造的积极变化。"
+      },
+      "3": {
+        "text": "我吸引成功和丰盛进入我的生命。",
+        "visualization": "想象丰盛毫不费力地流入您的生命。"
+      },
+      "4": {
+        "text": "我的潜力是无限的，我可以实现任何事情。",
+        "visualization": "看到自己轻松克服任何障碍。"
+      }
+    }
   },
   "goals": {
     "myGoals": "我的目标",
@@ -95,16 +176,139 @@
       "cancel": "取消"
     }
   },
-  "visionBoard": {
+  "visionboard": {
     "title": "愿景板",
+    "subtitle": "逐一可视化您的梦想，实现您的现实",
+    "addVision": "添加愿景",
+    "newVision": "✨ 新建愿景",
+    "editVision": "✏️ 编辑愿景",
     "addCard": "添加卡片",
     "editMode": "编辑模式",
     "viewMode": "查看模式",
+    "gridView": "卡片",
+    "timelineView": "时间轴",
+    "listView": "列表",
+    "searchPlaceholder": "搜索您的愿景和目标…",
+    "allCategories": "全部分类",
+    "allStatuses": "全部状态",
+    "completed": "✅ 已完成",
+    "inProgress": "🔄 进行中",
+    "notStarted": "🌱 未开始",
+    "noMatchingVisions": "没有匹配的愿景",
+    "tryAdjustingFilters": "请调整搜索条件或筛选器。",
+    "visionBoardAwaits": "您的愿景板等待您",
+    "addFirstVision": "添加第一张愿景卡，开始实现您的梦想。",
+    "createFirstVision": "创建您的第一个愿景",
+    "showingVisions": "显示 {{count}} 个愿景",
+    "showingVisionsPlural": "显示 {{count}} 个愿景",
+    "filtered": "已筛选",
+    "manifested": "🏆 {{count}} 个已实现",
+    "visionsTotal": "共 {{count}} 个愿景",
+    "avgProgress": "平均进度 {{pct}}%",
+    "highPriority": "高",
+    "mediumPriority": "中",
+    "lowPriority": "低",
+    "overdue": "已逾期",
+    "done": "完成",
+    "progress": "进度",
+    "dueDate": "截止日期",
+    "priority": "优先级",
+    "actions": "操作",
+    "vision": "愿景",
+    "newestFirst": "最新优先",
+    "oldestFirst": "最早优先",
+    "titleAZ": "标题 A-Z",
+    "titleZA": "标题 Z-A",
+    "highestProgress": "最高进度",
+    "dueSoon": "即将到期",
+    "clearAll": "清除全部",
+    "filters": "筛选：",
+    "deleteConfirm": "确定要删除这个愿景吗？",
+    "visionDeleted": "愿景已删除",
+    "failedDelete": "删除愿景失败",
+    "deleteError": "删除失败，请重试。",
+    "goalCompleted": "🎉 恭喜！目标已完成！",
+    "visionAchieved": "🎉 恭喜！愿景已实现！",
+    "progressUpdated": "进度已更新为 {{pct}}%",
+    "failedUpdateProgress": "进度更新失败",
+    "failedUpdateProgressMsg": "进度更新失败，请重试。",
+    "visionUpdated": "愿景已更新！",
+    "visionCreated": "✨ 新愿景已创建！",
+    "failedUpdate": "愿景更新失败",
+    "failedCreate": "愿景创建失败",
     "cardTypes": {
       "image": "图片",
       "text": "文字",
       "quote": "引言",
       "affirmation": "肯定语"
+    },
+    "categories": {
+      "general": "综合",
+      "career": "职业",
+      "health": "健康",
+      "relationships": "关系",
+      "finances": "财务",
+      "personal": "个人",
+      "travel": "旅行",
+      "home": "家居",
+      "education": "教育",
+      "spirituality": "灵性"
+    },
+    "form": {
+      "title": "愿景标题",
+      "titlePlaceholder": "您想实现什么？",
+      "titleRequired": "标题不能为空",
+      "category": "分类",
+      "description": "描述",
+      "feelings": "感受与情绪",
+      "feelingsPlaceholder": "实现后您会有什么感受？",
+      "visualization": "可视化提示",
+      "visualizationPlaceholder": "描述愿景实现时的场景...",
+      "imageUpload": "上传愿景图片",
+      "imageHint": "PNG、JPG，最大 2MB",
+      "imageSizeError": "图片大小必须小于 2MB",
+      "progress": "进度",
+      "goalSection": "目标设置",
+      "dueDate": "截止日期",
+      "priority": "优先级",
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "steps": "行动步骤",
+      "addStep": "添加步骤…",
+      "addStepBtn": "添加步骤",
+      "submit": "保存愿景",
+      "update": "更新愿景",
+      "saving": "保存中…",
+      "cancel": "取消",
+      "removeImage": "删除图片"
+    },
+    "detail": {
+      "back": "返回",
+      "edit": "编辑",
+      "delete": "删除",
+      "deleteConfirm": "确定要删除这个愿景吗？",
+      "created": "创建于",
+      "updated": "更新于",
+      "status": "状态",
+      "overdue": "已逾期",
+      "completedStatus": "已完成",
+      "active": "进行中",
+      "description": "描述",
+      "feelings": "感受",
+      "visualization": "可视化",
+      "goalDetails": "目标详情",
+      "progress": "进度",
+      "dueDate": "截止日期",
+      "priority": "优先级",
+      "actionSteps": "行动步骤",
+      "noContent": "尚未添加描述。",
+      "notFound": "愿景未找到",
+      "notFoundDesc": "您寻找的愿景不存在或已被删除。",
+      "backToBoard": "返回愿景板",
+      "failedLoad": "加载愿景详情失败。",
+      "failedDelete": "删除失败，请重试。",
+      "failedUpdate": "更新失败，请重试。"
     }
   },
   "profile": {
@@ -116,7 +320,17 @@
     "language": "语言",
     "theme": "主题",
     "notifications": "通知",
-    "saveChanges": "保存更改"
+    "saveChanges": "保存更改",
+    "notificationsHint": "接收关于目标和进度的通知",
+    "profileUpdated": "个人资料更新成功！",
+    "failedUpdate": "个人资料更新失败，请重试。",
+    "accountSettings": "账号设置",
+    "dangerZone": "危险区域",
+    "deleteAccount": "删除账号",
+    "deleteAccountHint": "一旦删除，您的账号和所有数据将无法恢复。",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeSystem": "跟随系统"
   },
   "common": {
     "loading": "加载中...",
@@ -129,7 +343,15 @@
     "sortBy": "排序方式",
     "darkMode": "深色模式",
     "lightMode": "浅色模式",
-    "dismiss": "关闭"
+    "dismiss": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "close": "关闭",
+    "confirm": "确认",
+    "yes": "是",
+    "no": "否",
+    "or": "或",
+    "noDataYet": "暂无数据"
   },
   "theme": {
     "light": "浅色",
@@ -145,11 +367,187 @@
     "fr": "Français",
     "ko": "한국어",
     "pt": "Português",
-    "ru": "Русский"
+    "ru": "Русский",
+    "changeLanguage": "切换语言"
   },
   "indexNotification": {
     "title": "需要数据库索引",
     "needsIndex": "系统需要为 {{collection}} 创建索引以显示完整数据",
     "createNow": "立即创建索引"
+  },
+  "landing": {
+    "badge": "引力法则 · 目标实现平台",
+    "headline1": "让您的梦想",
+    "headline2": "成为现实",
+    "subheadline": "您的思想创造您的现实。可视化您的目标，建立强大的日常习惯，见证梦想一步步化为成就。",
+    "ctaStart": "免费开启您的旅程",
+    "ctaAlreadyHave": "已有账号？登录",
+    "noCreditCard": "无需信用卡",
+    "freePlan": "永久免费计划",
+    "setup": "2分钟即可设置",
+    "startJourneyFree": "立即开启旅程",
+    "dashboardArrow": "进入仪表盘 →",
+    "getStartedFree": "免费开始",
+    "whyManifestHub": "为什么选择 ManifestHub",
+    "everythingYouNeed": "实现心想事成所需的一切",
+    "everythingSubtitle": "基于引力法则原理构建的完整系统，将您的意图变为现实。",
+    "theProcess": "流程",
+    "threeSteps": "3步实现您的现实",
+    "testimonials": "用户评价",
+    "manifestingWithUs": "他们正在用我们的平台实现梦想",
+    "bestLife": "您最好的生活",
+    "oneDecisionAway": "只差一个决定",
+    "joinThousands": "加入数千名已在使用 ManifestHub 实现梦想的用户。免费开始，无需信用卡。",
+    "allRightsReserved": "保留所有权利。",
+    "features": {
+      "visualDreamBoard": "视觉梦想板",
+      "visualDreamBoardDesc": "用图片、引言和目标创建精美的愿景板。将您的梦想呈现在视觉画布上。",
+      "dailyHabits": "每日感恩与习惯",
+      "dailyHabitsDesc": "通过每日签到、感恩日记和连续打卡，建立强大的日常实践。",
+      "trackProgress": "追踪您的进度",
+      "trackProgressDesc": "用进度条、里程碑和互动日历监控每个目标，保持在轨道上。"
+    },
+    "steps": {
+      "01": {
+        "title": "创建您的愿景",
+        "desc": "用图片、描述和情感锚点添加您的梦想愿景卡。"
+      },
+      "02": {
+        "title": "建立日常仪式",
+        "desc": "每天签到、写感恩日记，诵读个性化肯定语。"
+      },
+      "03": {
+        "title": "实现并庆祝",
+        "desc": "追踪进度，完成目标，庆祝每一个旅程中的胜利。"
+      }
+    },
+    "mockProgress": "进度",
+    "mockAffirmation": "✓ 肯定语",
+    "mockGratitude": "✓ 感恩",
+    "testimonialData": {
+      "sarah": {
+        "quote": "ManifestHub彻底改变了我对目标的态度。一切都可视化且有条理，让我每天都保持专注和积极。",
+        "name": "Sarah L.",
+        "role": "创业者"
+      },
+      "marcus": {
+        "quote": "每日签到和感恩日记真是改变游戏规则。我的连续打卡已达60天，今年实现了3个重大目标！",
+        "name": "Marcus T.",
+        "role": "生活教练"
+      },
+      "aiko": {
+        "quote": "美观、简洁又强大。我爱这个愿景板让我与生命中真正重要的事物保持连接。",
+        "name": "Aiko N.",
+        "role": "设计师"
+      }
+    }
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "subtitle": "哎呀！您寻找的页面不存在。",
+    "backHome": "返回首页"
+  },
+  "footer": {
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "contact": "联系我们"
+  },
+  "legal": {
+    "lastUpdated": "最后更新：2026年4月",
+    "back": "返回",
+    "privacy": {
+      "title": "隐私政策",
+      "s1Title": "1. 我们收集的信息",
+      "s1": "我们收集您在创建账号时直接提供的信息，包括您的姓名、电子邮件地址，以及您在愿景板、目标和感恩日记中添加的任何内容。",
+      "s2Title": "2. 我们如何使用您的信息",
+      "s2Intro": "我们使用您的信息来：",
+      "s2Items": [
+        "提供、维护和改善 ManifestHub",
+        "个性化您的体验和肯定语",
+        "如您选择接收，发送产品更新",
+        "回应您的支持请求"
+      ],
+      "s2Outro": "我们不会向第三方出售您的个人数据。",
+      "s3Title": "3. 数据存储",
+      "s3": "您的数据使用 Google Firebase（Firestore）安全存储，托管在美国。",
+      "s4Title": "4. 身份验证",
+      "s4": "我们使用 Firebase Authentication 管理登录。我们从不存储您的原始密码。",
+      "s5Title": "5. Cookie 与本地存储",
+      "s5": "我们使用浏览器 localStorage 记住您的主题偏好、语言和会话状态。",
+      "s6Title": "6. 您的权利",
+      "s6": "您可以随时通过联系我们请求删除账号和所有相关数据。",
+      "s7Title": "7. 本政策的变更",
+      "s7": "我们可能会不时更新本政策。重大变更将通过电子邮件或应用内通知告知您。",
+      "s8Title": "8. 联系我们",
+      "s8": "关于本政策的问题？请联系"
+    },
+    "terms": {
+      "title": "服务条款",
+      "s1Title": "1. 条款接受",
+      "s1": "通过访问或使用 ManifestHub，您同意受这些服务条款的约束。",
+      "s2Title": "2. 服务描述",
+      "s2": "ManifestHub 是一个个人目标可视化和心想事成工具，供个人非商业使用。",
+      "s3Title": "3. 账号责任",
+      "s3Intro": "您负责：",
+      "s3Items": [
+        "保持账号凭据的保密性",
+        "在您账号下发生的所有活动",
+        "确保您的账号信息保持准确和最新"
+      ],
+      "s4Title": "4. 可接受使用",
+      "s4Intro": "您同意不使用 ManifestHub：",
+      "s4Items": [
+        "上传违法、有害或侵犯他人权利的内容",
+        "尝试未经授权访问服务的任何部分",
+        "使用自动化手段（机器人、爬虫）与服务交互",
+        "干扰服务的性能或完整性"
+      ],
+      "s5Title": "5. 您的内容",
+      "s5a": "您保留在 ManifestHub 中创建的所有内容的完整所有权。",
+      "s5b": "我们绝不会在未经您明确同意的情况下将您的个人内容用于广告或训练AI模型。",
+      "s6Title": "6. 可用性",
+      "s6": "我们努力保持高可用性，但不保证不间断访问。",
+      "s7Title": "7. 责任限制",
+      "s7": "在法律允许的最大范围内，ManifestHub 不对因您使用本服务而产生的任何间接、偶然或后果性损害承担责任。",
+      "s8Title": "8. 条款变更",
+      "s8": "在更改发布后继续使用本服务即表示您接受更新后的条款。",
+      "s9Title": "9. 联系我们",
+      "s9": "关于这些条款的问题？请联系"
+    }
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "我们通常在1-2个工作日内回复",
+    "getInTouch": "联系方式",
+    "emailLabel": "电子邮箱",
+    "responseTime": "响应时间",
+    "responseTimeValue": "1-2个工作日",
+    "privacyAndLegal": "隐私与法律",
+    "privacyLink": "隐私政策 →",
+    "termsLink": "服务条款 →",
+    "name": "姓名",
+    "namePlaceholder": "您的姓名",
+    "email": "电子邮箱",
+    "emailPlaceholder": "your@email.com",
+    "subject": "主题",
+    "subjectPlaceholder": "选择一个话题…",
+    "message": "消息",
+    "messagePlaceholder": "告诉我们我们如何帮助您…",
+    "send": "发送消息",
+    "sending": "发送中…",
+    "successTitle": "消息已发送！",
+    "successDesc": "感谢您的联系。我们很快会回复您。",
+    "sendAnother": "再发一条消息",
+    "subjects": [
+      "一般问题",
+      "反馈错误",
+      "功能请求",
+      "账号与计费",
+      "隐私咨询",
+      "其他"
+    ]
+  },
+  "sidebar": {
+    "dayStreak": "天连续"
   }
 }

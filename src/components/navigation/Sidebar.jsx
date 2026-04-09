@@ -76,7 +76,7 @@ const Sidebar = ({ open, setOpen, isMobile }) => {
             <div className="mt-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/40">
               <span className="text-base">🔥</span>
               <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
-                {streakCount} day streak
+                {streakCount} {t('sidebar.dayStreak')}
               </span>
             </div>
           )}
@@ -85,7 +85,7 @@ const Sidebar = ({ open, setOpen, isMobile }) => {
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           <p className="px-3 mb-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
-            Navigate
+            {t('nav.navigate')}
           </p>
           {navItems.map(item => (
             <NavLink

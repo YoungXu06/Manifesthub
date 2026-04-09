@@ -271,7 +271,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
           // Use the correct Firebase document ID for update
           const result = await updateVisionBoardItem(itemToEdit.id, dataToSave);
           if (!result.success) {
-            throw new Error(result.error || 'Update failed');
+            throw new Error(result.error || t('visionboard.failedUpdate'));
           }
         } else {
           // console.log('Adding new item');
@@ -329,12 +329,12 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
       
       {/* Basic Vision Information */}
       <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
-        <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Vision Information</h3>
+        <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">{t('visionboard.form.title')}</h3>
         
-        {/* Title */}
+        {/* {t('visionboard.form.title')} */}
         <div className="mb-3">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Title *
+            {t('visionboard.form.title')} *
           </label>
           <input
             type="text"
@@ -344,14 +344,14 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
             onChange={handleChange}
             className="input w-full"
             required
-            placeholder="Name your vision"
+            placeholder={t('visionboard.form.titlePlaceholder')}
           />
         </div>
         
         {/* Category */}
         <div className="mb-3">
           <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Category
+            {t('visionboard.form.category')}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
             {categories.map((category) => (
@@ -365,7 +365,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
                 }`}
                 onClick={() => setFormData({ ...formData, category })}
               >
-                {category}
+                {t(`visionboard.categories.${category}`, { defaultValue: category })}
               </button>
             ))}
           </div>
@@ -380,7 +380,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
           <QuillEditorV2
             value={formData.content}
             onChange={handleRichTextChange}
-            placeholder="Describe what you want to manifest in your life..."
+            placeholder={t('visionboard.form.visualizationPlaceholder')}
             className="h-48 mb-10"
           />
         </div>
@@ -388,7 +388,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
         {/* Image Upload */}
         <div className="mb-3">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Vision Image (Optional)
+            {t('visionboard.form.imageUpload')}
           </label>
           
           {/* Image Preview */}
@@ -448,7 +448,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
       
       {/* Emotional Connection */}
       <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
-        <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Emotional Connection</h3>
+        <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">{t('visionboard.form.feelings')}</h3>
         
         <div className="mb-3">
           <label htmlFor="feelings" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -461,7 +461,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
             onChange={handleChange}
             rows="2"
             className="input w-full"
-            placeholder="How will you feel when this vision is realized?"
+            placeholder={t('visionboard.form.feelingsPlaceholder')}
           />
         </div>
         
@@ -476,7 +476,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
             onChange={handleChange}
             rows="2"
             className="input w-full"
-            placeholder="Add a prompt to help you visualize this vision..."
+            placeholder={t('visionboard.form.visualizationPlaceholder')}
           />
         </div>
       </div>
@@ -530,9 +530,9 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
                   onChange={handleChange}
                   className="input w-full"
                 >
-                  <option value={1}>Low</option>
-                  <option value={2}>Medium</option>
-                  <option value={3}>High</option>
+                  <option value={1}>{t('visionboard.form.low')}</option>
+                  <option value={2}>{t('visionboard.form.medium')}</option>
+                  <option value={3}>{t('visionboard.form.high')}</option>
                 </select>
               </div>
             </div>
@@ -540,7 +540,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
             {/* Progress */}
             <div>
               <label htmlFor="progress" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Completion Progress: {formData.progress}%
+                t('visionboard.form.progress') + ': {formData.progress}%
               </label>
               <input
                 type="range"
@@ -594,7 +594,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
                   type="text"
                   value={newStep}
                   onChange={(e) => setNewStep(e.target.value)}
-                  placeholder="Add new step..."
+                  placeholder={t('visionboard.form.addStep')}
                   className="input flex-1"
                 />
                 <button
@@ -619,7 +619,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
           className="btn btn-secondary"
           disabled={isSubmitting}
         >
-          Cancel
+          {t('visionboard.form.cancel')}
         </button>
         <button
           type="submit"
@@ -632,9 +632,9 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              Processing...
+              {t('common.loading')}
             </span>
-          ) : itemToEdit ? 'Update' : 'Create'}
+          ) : itemToEdit ? t('visionboard.form.update') : t('visionboard.form.submit')}
         </button>
       </div>
     </form>

@@ -47,14 +47,14 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
     try {
       if (item.id.toString().startsWith('goal-')) {
         const result = await useStore.getState().deleteGoal(item.id.replace('goal-', ''));
-        if (result.success) showSuccess?.('Vision deleted');
+        if (result.success) showSuccess?.(t('visionboard.visionDeleted'));
         else showError?.(result.error || 'Delete failed');
       } else {
         const result = await deleteVisionBoardItem(item.id);
-        if (result.success) showSuccess?.('Vision deleted');
+        if (result.success) showSuccess?.(t('visionboard.visionDeleted'));
         else showError?.(result.error || 'Delete failed');
       }
-    } catch { showError?.('Delete failed. Please try again.'); }
+    } catch { showError?.(t('visionboard.deleteError')); }
   };
 
   const handleProgressUpdate = async (e) => {
@@ -67,8 +67,8 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
       } else {
         await updateVisionBoardItem(item.id, { progress: val, completed });
       }
-      if (completed) showSuccess?.('🎉 Vision achieved!', 4000);
-    } catch { showError?.('Update failed'); }
+      if (completed) showSuccess?.(t('visionboard.visionAchieved'), 4000);
+    } catch { showError?.(t('visionboard.failedUpdate')); }
   };
 
   const handleCardClick = () => {
@@ -281,14 +281,14 @@ const UnifiedVisionBoard = () => {
       if (itemToEdit?.id) {
         const { updateVisionBoardItem } = useStore.getState();
         const result = await updateVisionBoardItem(itemToEdit.id, formData);
-        if (result.success) { showSuccess('Vision updated!', 3000); handleFormClose(); }
-        else showError(result.error || 'Update failed');
+        if (result.success) { showSuccess(t('visionboard.visionUpdated'), 3000); handleFormClose(); }
+        else showError(result.error || t('visionboard.failedUpdate'));
       } else {
         const result = await addVisionBoardItem(formData);
-        if (result.success) { showSuccess('✨ New vision created!', 3000); handleFormClose(); }
-        else showError(result.error || 'Create failed');
+        if (result.success) { showSuccess(t('visionboard.visionCreated'), 3000); handleFormClose(); }
+        else showError(result.error || t('visionboard.failedCreate'));
       }
-    } catch { showError('Unexpected error. Please try again.'); }
+    } catch { showError(t('common.noDataYet')); }
   };
 
   const getAllCategories = () => {
@@ -348,25 +348,25 @@ const UnifiedVisionBoard = () => {
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight">
-              Vision Board
+              {t('visionboard.title')}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-              Visualize your dreams and manifest your reality, one vision at a time
+              {t('visionboard.subtitle')}
             </p>
             {/* quick summary */}
             {unifiedItems.length > 0 && (
               <div className="flex items-center gap-4 mt-3 text-xs text-gray-400">
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-indigo-400" />
-                  {unifiedItems.length} visions total
+                  {t('visionboard.visionsTotal', {count: unifiedItems.length})}
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                  {unifiedItems.filter(i => i.completed).length} manifested
+                  {t('visionboard.manifested', {count: unifiedItems.filter(i => i.completed).length})}
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-purple-400" />
-                  avg {Math.round(unifiedItems.reduce((a, i) => a + (i.progress || 0), 0) / unifiedItems.length)}% progress
+                  {t('visionboard.avgProgress', {pct: Math.round(unifiedItems.reduce((a, i) => a + (i.progress || 0), 0) / unifiedItems.length)})}
                 </span>
               </div>
             )}
@@ -376,9 +376,9 @@ const UnifiedVisionBoard = () => {
             {/* View mode switcher */}
             <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 gap-0.5">
               {[
-                { mode: 'grid', icon: <FiGrid className="w-4 h-4" />, label: 'Grid' },
-                { mode: 'timeline', icon: <FiLayout className="w-4 h-4" />, label: 'Timeline' },
-                { mode: 'list', icon: <FiList className="w-4 h-4" />, label: 'List' },
+                { mode: 'grid', icon: <FiGrid className="w-4 h-4" />, label: t('visionboard.gridView') },
+                { mode: 'timeline', icon: <FiLayout className="w-4 h-4" />, label: t('visionboard.timelineView') },
+                { mode: 'list', icon: <FiList className="w-4 h-4" />, label: t('visionboard.listView') },
               ].map(v => (
                 <button
                   key={v.mode}
@@ -416,7 +416,7 @@ const UnifiedVisionBoard = () => {
             <input
               type="text"
               className="input pl-9 w-full text-sm"
-              placeholder="Search your visions and goals…"
+              placeholder={t('visionboard.searchPlaceholder')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
@@ -439,7 +439,7 @@ const UnifiedVisionBoard = () => {
             >
               {getAllCategories().map(cat => (
                 <option key={cat} value={cat}>
-                  {cat === 'all' ? 'All Categories' : (CATEGORY_META[cat]?.emoji || '') + ' ' + cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  {cat === 'all' ? t('visionboard.allCategories') : (CATEGORY_META[cat]?.emoji || '') + ' ' + cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </option>
               ))}
             </select>
@@ -450,7 +450,7 @@ const UnifiedVisionBoard = () => {
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
             >
-              <option value="all">All Statuses</option>
+              <option value="all">{t('visionboard.allStatuses')}</option>
               <option value="completed">✅ Completed</option>
               <option value="inProgress">🔄 In Progress</option>
               <option value="notStarted">🌱 Not Started</option>
@@ -466,14 +466,14 @@ const UnifiedVisionBoard = () => {
                   setSortBy(sb); setSortOrder(so);
                 }}
               >
-                <option value="created-desc">Newest First</option>
-                <option value="created-asc">Oldest First</option>
-                <option value="title-asc">Title A-Z</option>
-                <option value="title-desc">Title Z-A</option>
-                <option value="progress-desc">Highest Progress</option>
-                <option value="progress-asc">Lowest Progress</option>
-                <option value="dueDate-asc">Due Soon</option>
-                <option value="priority-desc">High Priority</option>
+                <option value="created-desc">{t('visionboard.newestFirst')}</option>
+                <option value="created-asc">{t('visionboard.oldestFirst')}</option>
+                <option value="title-asc">{t('visionboard.titleAZ')}</option>
+                <option value="title-desc">{t('visionboard.titleZA')}</option>
+                <option value="progress-desc">{t('visionboard.highestProgress')}</option>
+                <option value="progress-asc">{t('visionboard.lowPriority')}</option>
+                <option value="dueDate-asc">{t('visionboard.dueSoon')}</option>
+                <option value="priority-desc">{t('visionboard.highPriority')}</option>
               </select>
             )}
           </div>
@@ -515,12 +515,12 @@ const UnifiedVisionBoard = () => {
       {!isLoading && filteredItems.length > 0 && (
         <div className="flex items-center justify-between mb-4 px-0.5">
           <p className="text-xs text-gray-400">
-            Showing <span className="font-semibold text-gray-600 dark:text-gray-300">{filteredItems.length}</span> vision{filteredItems.length !== 1 ? 's' : ''}
-            {hasFilters && ` (filtered)`}
+            {t('visionboard.showingVisionsPlural', {count: filteredItems.length})}
+            {hasFilters && ` (${t('visionboard.filtered')})`}
           </p>
           {completedCount > 0 && (
             <span className="text-xs text-emerald-500 font-medium">
-              🏆 {completedCount} manifested
+              {t('visionboard.manifested', {count: completedCount})}
             </span>
           )}
         </div>
@@ -649,7 +649,7 @@ const UnifiedVisionBoard = () => {
           <div className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700/50 sticky top-0 bg-white dark:bg-gray-900 z-10">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                {itemToEdit ? '✏️ Edit Vision' : '✨ New Vision'}
+                {itemToEdit ? t('visionboard.editVision') : t('visionboard.newVision')}
               </h2>
               <button
                 onClick={handleFormClose}
