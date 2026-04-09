@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
   FiPlus, FiFilter, FiSearch, FiX, FiCalendar,
@@ -232,6 +233,14 @@ const UnifiedVisionBoard = () => {
 
   const [unifiedItems, setUnifiedItems] = useState([]);
 
+  // ── Virtual pagination ──────────────────────────────────────────────
+  const PAGE_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef(null);
+
+  // Reset visible count whenever filters/sort change
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filterCategory, filterStatus, searchTerm, sortBy, sortOrder]);
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -271,6 +280,18 @@ const UnifiedVisionBoard = () => {
     });
     setUnifiedItems(combined);
   }, [visionBoard, goals, isLoading]);
+
+  // ── IntersectionObserver: load more when sentinel scrolls into view ─
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisibleCount(c => c + PAGE_SIZE); },
+      { rootMargin: '200px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [sentinelRef.current]); // re-attach when sentinel mounts/unmounts
 
   const handleAddItem = () => { setItemToEdit(null); setShowForm(true); };
   const handleEditItem = (item) => { setItemToEdit(item); setShowForm(true); };
@@ -320,8 +341,8 @@ const UnifiedVisionBoard = () => {
   });
 
   /* Timeline columns */
-  const leftColumn = filteredItems.filter((_, i) => i % 2 === 0);
-  const rightColumn = filteredItems.filter((_, i) => i % 2 !== 0);
+  const leftColumn = visibleItems.filter((_, i) => i % 2 === 0);
+  const rightColumn = visibleItems.filter((_, i) => i % 2 !== 0);
 
   const handleSort = col => {
     if (sortBy === col) setSortOrder(o => o === 'asc' ? 'desc' : 'asc');
@@ -338,6 +359,10 @@ const UnifiedVisionBoard = () => {
   const avgProgress = filteredItems.length
     ? Math.round(filteredItems.reduce((acc, i) => acc + (i.progress || 0), 0) / filteredItems.length)
     : 0;
+
+  // Sliced list for rendering — only show visibleCount items
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredItems.length;
 
   return (
     <div className="animate-fade-in max-w-7xl mx-auto">
@@ -409,13 +434,13 @@ const UnifiedVisionBoard = () => {
 
       {/* ── Filters ── */}
       <div className="mb-7 card p-4">
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           {/* Search */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-w-0">
             <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
             <input
               type="text"
-              className="input pl-9 w-full text-sm"
+              className="input pl-9 w-full text-sm h-9"
               placeholder={t('visionboard.searchPlaceholder')}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
@@ -430,10 +455,10 @@ const UnifiedVisionBoard = () => {
             )}
           </div>
 
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
             {/* Category */}
             <select
-              className="input text-sm bg-transparent min-w-[130px]"
+              className="input text-sm h-9 bg-transparent w-full sm:w-auto sm:min-w-[130px]"
               value={filterCategory}
               onChange={e => setFilterCategory(e.target.value)}
             >
@@ -446,7 +471,7 @@ const UnifiedVisionBoard = () => {
 
             {/* Status */}
             <select
-              className="input text-sm bg-transparent min-w-[120px]"
+              className="input text-sm h-9 bg-transparent w-full sm:w-auto sm:min-w-[130px]"
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
             >
@@ -459,7 +484,7 @@ const UnifiedVisionBoard = () => {
             {/* Sort (list only) */}
             {viewMode === 'list' && (
               <select
-                className="input text-sm bg-transparent min-w-[130px]"
+                className="input text-sm h-9 bg-transparent w-full sm:w-auto sm:min-w-[140px]"
                 value={`${sortBy}-${sortOrder}`}
                 onChange={e => {
                   const [sb, so] = e.target.value.split('-');
@@ -536,110 +561,135 @@ const UnifiedVisionBoard = () => {
         <EmptyState hasFilters={hasFilters} onAdd={handleAddItem} />
       ) : viewMode === 'grid' ? (
         /* ── GRID / MOOD BOARD VIEW ── */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {filteredItems.map(item => (
-            <MoodBoardCard
-              key={item.id}
-              item={item}
-              onEdit={handleEditItem}
-              showSuccess={showSuccess}
-              showError={showError}
-              showWarning={showWarning}
-            />
-          ))}
-        </div>
-      ) : viewMode === 'timeline' ? (
-        /* ── TIMELINE VIEW ── */
-        <div className="timeline-container">
-          <div className="timeline-center-line" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-16">
-              {leftColumn.map(item => (
-                <div key={item.id} className="timeline-item left">
-                  <div className="timeline-connector" />
-                  <div className="timeline-dot" />
-                  <div className="timeline-date">
-                    <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <FiCalendar className="w-3 h-3 text-indigo-400" />
-                      {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}
-                    </div>
-                  </div>
-                  <div className="timeline-content mt-6">
-                    <EnhancedVisionBoardItem
-                      item={item}
-                      onEdit={() => handleEditItem(item)}
-                      showSuccess={showSuccess}
-                      showError={showError}
-                      showWarning={showWarning}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="space-y-16 md:mt-28">
-              {rightColumn.map(item => (
-                <div key={item.id} className="timeline-item right">
-                  <div className="timeline-connector" />
-                  <div className="timeline-dot" />
-                  <div className="timeline-date">
-                    <div className="flex items-center gap-1 text-xs text-gray-400">
-                      <FiCalendar className="w-3 h-3 text-indigo-400" />
-                      {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}
-                    </div>
-                  </div>
-                  <div className="timeline-content mt-6">
-                    <EnhancedVisionBoardItem
-                      item={item}
-                      onEdit={() => handleEditItem(item)}
-                      showSuccess={showSuccess}
-                      showError={showError}
-                      showWarning={showWarning}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* ── LIST VIEW ── */
-        <div className="card overflow-hidden">
-          <div className="hidden md:grid grid-cols-[1fr_80px_90px_72px_80px] gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-700/50 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-            {[
-              { col: 'title', label: 'Vision' },
-              { col: 'progress', label: 'Progress' },
-              { col: 'dueDate', label: 'Due Date' },
-              { col: 'priority', label: 'Priority' },
-            ].map(c => (
-              <button
-                key={c.col}
-                onClick={() => handleSort(c.col)}
-                className="flex items-center gap-1 hover:text-gray-600 dark:hover:text-gray-300 transition-colors text-left"
-              >
-                {c.label}
-                {getSortIcon(c.col)}
-              </button>
-            ))}
-            <span>Actions</span>
-          </div>
-          <div className="divide-y divide-gray-100 dark:divide-gray-700/50">
-            {filteredItems.map(item => (
-              <VisionBoardListItem
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {visibleItems.map(item => (
+              <MoodBoardCard
                 key={item.id}
                 item={item}
-                onEdit={() => handleEditItem(item)}
+                onEdit={handleEditItem}
                 showSuccess={showSuccess}
                 showError={showError}
                 showWarning={showWarning}
               />
             ))}
           </div>
-        </div>
+          {/* sentinel */}
+          <div ref={sentinelRef} className="h-4" />
+          {hasMore && (
+            <div className="flex justify-center py-4">
+              <div className="w-6 h-6 rounded-full border-2 border-indigo-400 border-t-transparent animate-spin" />
+            </div>
+          )}
+        </>
+      ) : viewMode === 'timeline' ? (
+        /* ── TIMELINE VIEW ── */
+        <>
+          <div className="timeline-container">
+            <div className="timeline-center-line" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-16">
+                {leftColumn.map(item => (
+                  <div key={item.id} className="timeline-item left">
+                    <div className="timeline-connector" />
+                    <div className="timeline-dot" />
+                    <div className="timeline-date">
+                      <div className="flex items-center gap-1 text-xs text-gray-400">
+                        <FiCalendar className="w-3 h-3 text-indigo-400" />
+                        {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}
+                      </div>
+                    </div>
+                    <div className="timeline-content mt-6">
+                      <EnhancedVisionBoardItem
+                        item={item}
+                        onEdit={() => handleEditItem(item)}
+                        showSuccess={showSuccess}
+                        showError={showError}
+                        showWarning={showWarning}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-16 md:mt-28">
+                {rightColumn.map(item => (
+                  <div key={item.id} className="timeline-item right">
+                    <div className="timeline-connector" />
+                    <div className="timeline-dot" />
+                    <div className="timeline-date">
+                      <div className="flex items-center gap-1 text-xs text-gray-400">
+                        <FiCalendar className="w-3 h-3 text-indigo-400" />
+                        {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}
+                      </div>
+                    </div>
+                    <div className="timeline-content mt-6">
+                      <EnhancedVisionBoardItem
+                        item={item}
+                        onEdit={() => handleEditItem(item)}
+                        showSuccess={showSuccess}
+                        showError={showError}
+                        showWarning={showWarning}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div ref={sentinelRef} className="h-4" />
+          {hasMore && (
+            <div className="flex justify-center py-4">
+              <div className="w-6 h-6 rounded-full border-2 border-indigo-400 border-t-transparent animate-spin" />
+            </div>
+          )}
+        </>
+      ) : (
+        /* ── LIST VIEW ── */
+        <>
+          <div className="card overflow-hidden">
+            <div className="hidden md:grid grid-cols-[1fr_80px_90px_72px_80px] gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-700/50 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              {[
+                { col: 'title', label: 'Vision' },
+                { col: 'progress', label: 'Progress' },
+                { col: 'dueDate', label: 'Due Date' },
+                { col: 'priority', label: 'Priority' },
+              ].map(c => (
+                <button
+                  key={c.col}
+                  onClick={() => handleSort(c.col)}
+                  className="flex items-center gap-1 hover:text-gray-600 dark:hover:text-gray-300 transition-colors text-left"
+                >
+                  {c.label}
+                  {getSortIcon(c.col)}
+                </button>
+              ))}
+              <span>Actions</span>
+            </div>
+            <div className="divide-y divide-gray-100 dark:divide-gray-700/50">
+              {visibleItems.map(item => (
+                <VisionBoardListItem
+                  key={item.id}
+                  item={item}
+                  onEdit={() => handleEditItem(item)}
+                  showSuccess={showSuccess}
+                  showError={showError}
+                  showWarning={showWarning}
+                />
+              ))}
+            </div>
+          </div>
+          <div ref={sentinelRef} className="h-4 mt-1" />
+          {hasMore && (
+            <div className="flex justify-center py-4">
+              <div className="w-6 h-6 rounded-full border-2 border-indigo-400 border-t-transparent animate-spin" />
+            </div>
+          )}
+        </>
       )}
 
-      {/* ── Form Modal (centered) ── */}
-      {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* ── Form Modal — rendered via Portal so fixed is relative to viewport ── */}
+      {showForm && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-[5vh] px-4 pb-4">
           {/* backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -666,7 +716,7 @@ const UnifiedVisionBoard = () => {
                 <FiX className="w-4 h-4" />
               </button>
             </div>
-            {/* Drawer body — scrollable */}
+            {/* Modal body — scrollable */}
             <div className="flex-1 overflow-y-auto px-6 py-5">
               <EnhancedVisionBoardItemForm
                 itemToEdit={itemToEdit}
@@ -675,7 +725,8 @@ const UnifiedVisionBoard = () => {
               />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
