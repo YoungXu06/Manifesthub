@@ -136,11 +136,30 @@ const Dashboard = () => {
 
   /* ════════════════════════════ selected date change ════════════════════════════ */
   useEffect(() => {
-    const log = monthLogs[selectedStr] || { mood: null, intention: null, gratitude: '', checkIn: false };
-    setDayLog(log);
-    setIntentionDraft(log.intention || '');
+    // First apply whatever we already have in monthLogs (instant render)
+    const cached = monthLogs[selectedStr];
+    if (cached) {
+      setDayLog({ mood: null, intention: null, gratitude: '', checkIn: false, ...cached });
+      setIntentionDraft(cached.intention || '');
+    } else {
+      setDayLog({ mood: null, intention: null, gratitude: '', checkIn: false });
+      setIntentionDraft('');
+    }
     setShowIntentionInput(false);
-  }, [selectedStr, monthLogs]);
+
+    // Then fetch the full dailyLog for this date from Firestore (gets mood + intention)
+    fetchDailyLog(selectedDate).then(({ log }) => {
+      if (log) {
+        setDayLog(prev => ({ ...prev, ...log }));
+        setIntentionDraft(log.intention || '');
+        // Keep monthLogs in sync
+        setMonthLogs(prev => ({
+          ...prev,
+          [selectedStr]: { ...(prev[selectedStr] || {}), ...log },
+        }));
+      }
+    });
+  }, [selectedStr]);
 
   /* ─── loaders ─── */
   async function loadMonth(year, month) {
