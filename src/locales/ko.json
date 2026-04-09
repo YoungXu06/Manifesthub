@@ -281,7 +281,15 @@
       "update": "비전 업데이트",
       "saving": "저장 중…",
       "cancel": "취소",
-      "removeImage": "이미지 삭제"
+      "removeImage": "삭제",
+      "visionDescription": "비전 설명",
+      "descriptionPlaceholder": "비전을 생생하게 묘사하세요…",
+      "contentRequired": "설명이 필요합니다",
+      "visualizationPrompt": "시각화 프롬프트",
+      "uploadHint": "클릭하여 업로드 · PNG, JPG, WebP (최대 10MB)",
+      "imageUploadError": "이미지 업로드 실패",
+      "addGoalDetails": "목표 세부 정보",
+      "actionSteps": "실행 단계"
     },
     "detail": {
       "back": "뒤로",
@@ -309,7 +317,9 @@
       "failedLoad": "로드에 실패했어요.",
       "failedDelete": "삭제에 실패했어요.",
       "failedUpdate": "업데이트에 실패했어요."
-    }
+    },
+    "editVisionSubtitle": "비전 세부 사항 업데이트",
+    "newVisionSubtitle": "꿈을 현실로 만들어보세요"
   },
   "profile": {
     "personalInfo": "개인 정보",

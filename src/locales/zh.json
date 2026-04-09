@@ -281,7 +281,15 @@
       "update": "更新愿景",
       "saving": "保存中…",
       "cancel": "取消",
-      "removeImage": "删除图片"
+      "removeImage": "移除",
+      "visionDescription": "愿景描述",
+      "descriptionPlaceholder": "用生动的细节描述你的愿景…",
+      "contentRequired": "描述不能为空",
+      "visualizationPrompt": "可视化提示",
+      "uploadHint": "点击上传 · PNG、JPG、WebP（最大 10MB）",
+      "imageUploadError": "图片上传失败",
+      "addGoalDetails": "目标详情",
+      "actionSteps": "行动步骤"
     },
     "detail": {
       "back": "返回",
@@ -309,7 +317,9 @@
       "failedLoad": "加载愿景详情失败。",
       "failedDelete": "删除失败，请重试。",
       "failedUpdate": "更新失败，请重试。"
-    }
+    },
+    "editVisionSubtitle": "更新您的愿景详情",
+    "newVisionSubtitle": "让梦想成真"
   },
   "profile": {
     "personalInfo": "个人信息",

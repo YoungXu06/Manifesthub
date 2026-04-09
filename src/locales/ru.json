@@ -281,7 +281,15 @@
       "update": "Обновить видение",
       "saving": "Сохранение…",
       "cancel": "Отмена",
-      "removeImage": "Удалить изображение"
+      "removeImage": "Удалить",
+      "visionDescription": "Описание видения",
+      "descriptionPlaceholder": "Опишите своё видение в ярких деталях…",
+      "contentRequired": "Описание обязательно",
+      "visualizationPrompt": "Подсказка для визуализации",
+      "uploadHint": "Нажмите для загрузки · PNG, JPG, WebP (макс. 10МБ)",
+      "imageUploadError": "Ошибка загрузки изображения",
+      "addGoalDetails": "Детали цели",
+      "actionSteps": "Шаги к цели"
     },
     "detail": {
       "back": "Назад",
@@ -309,7 +317,9 @@
       "failedLoad": "Ошибка загрузки.",
       "failedDelete": "Ошибка удаления.",
       "failedUpdate": "Ошибка обновления."
-    }
+    },
+    "editVisionSubtitle": "Обновите детали вашего видения",
+    "newVisionSubtitle": "Воплотите мечту в реальность"
   },
   "profile": {
     "personalInfo": "Личная информация",

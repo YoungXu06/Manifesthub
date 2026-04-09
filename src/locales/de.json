@@ -281,7 +281,15 @@
       "update": "Vision aktualisieren",
       "saving": "Speichern…",
       "cancel": "Abbrechen",
-      "removeImage": "Bild entfernen"
+      "removeImage": "Entfernen",
+      "visionDescription": "Visionsbeschreibung",
+      "descriptionPlaceholder": "Beschreibe deine Vision in lebhaften Details…",
+      "contentRequired": "Beschreibung ist erforderlich",
+      "visualizationPrompt": "Visualisierungshinweis",
+      "uploadHint": "Zum Hochladen klicken · PNG, JPG, WebP (max. 10MB)",
+      "imageUploadError": "Bild-Upload fehlgeschlagen",
+      "addGoalDetails": "Zieldetails",
+      "actionSteps": "Aktionsschritte"
     },
     "detail": {
       "back": "Zurück",
@@ -309,7 +317,9 @@
       "failedLoad": "Fehler beim Laden.",
       "failedDelete": "Löschen fehlgeschlagen.",
       "failedUpdate": "Aktualisierung fehlgeschlagen."
-    }
+    },
+    "editVisionSubtitle": "Deine Visionsdetails aktualisieren",
+    "newVisionSubtitle": "Bringe deinen Traum zum Leben"
   },
   "profile": {
     "personalInfo": "Persönliche Informationen",

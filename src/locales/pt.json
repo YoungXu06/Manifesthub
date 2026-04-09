@@ -281,7 +281,15 @@
       "update": "Atualizar Visão",
       "saving": "Salvando…",
       "cancel": "Cancelar",
-      "removeImage": "Remover imagem"
+      "removeImage": "Remover",
+      "visionDescription": "Descrição da visão",
+      "descriptionPlaceholder": "Descreve a tua visão com detalhes vívidos…",
+      "contentRequired": "A descrição é obrigatória",
+      "visualizationPrompt": "Prompt de visualização",
+      "uploadHint": "Clica para carregar · PNG, JPG, WebP (máx. 10MB)",
+      "imageUploadError": "Falha ao carregar imagem",
+      "addGoalDetails": "Detalhes do objetivo",
+      "actionSteps": "Passos de ação"
     },
     "detail": {
       "back": "Voltar",
@@ -309,7 +317,9 @@
       "failedLoad": "Falha ao carregar.",
       "failedDelete": "Falha ao excluir.",
       "failedUpdate": "Falha ao atualizar."
-    }
+    },
+    "editVisionSubtitle": "Atualiza os detalhes da tua visão",
+    "newVisionSubtitle": "Dá vida ao teu sonho"
   },
   "profile": {
     "personalInfo": "Informações Pessoais",

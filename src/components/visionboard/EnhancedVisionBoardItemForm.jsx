@@ -1,644 +1,518 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiCalendar, FiTarget, FiPlus, FiX, FiImage, FiUpload, FiTrash2 } from 'react-icons/fi';
+import {
+  FiCalendar, FiTarget, FiPlus, FiX, FiUpload, FiTrash2,
+  FiChevronDown, FiChevronUp, FiLoader
+} from 'react-icons/fi';
 import useStore from '../../store';
-import QuillEditorV2 from '../common/QuillEditorV2';
 
+/* ─────────────────────────────────────────────
+   Category meta
+───────────────────────────────────────────── */
+const CATEGORY_META = {
+  general:      { emoji: '⭐', color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 ring-gray-300 dark:ring-gray-600' },
+  career:       { emoji: '💼', color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 ring-blue-400' },
+  health:       { emoji: '💪', color: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 ring-emerald-400' },
+  relationships:{ emoji: '💜', color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 ring-purple-400' },
+  finances:     { emoji: '💰', color: 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 ring-amber-400' },
+  personal:     { emoji: '🌟', color: 'bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 ring-orange-400' },
+  travel:       { emoji: '✈️', color: 'bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400 ring-cyan-400' },
+  home:         { emoji: '🏡', color: 'bg-lime-50 dark:bg-lime-900/20 text-lime-600 dark:text-lime-400 ring-lime-400' },
+  education:    { emoji: '📚', color: 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 ring-indigo-400' },
+  spirituality: { emoji: '🧘', color: 'bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400 ring-violet-400' },
+};
+
+const CATEGORIES = Object.keys(CATEGORY_META);
+
+/* ─────────────────────────────────────────────
+   Component
+───────────────────────────────────────────── */
 const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) => {
   const { t } = useTranslation();
-  const { addVisionBoardItem, updateVisionBoardItem, uploadImage, deleteImage } = useStore();
-  
-  // Convert ISO date format to yyyy-MM-dd format expected by HTML date input
+  const { addVisionBoardItem, updateVisionBoardItem, uploadImage } = useStore();
+
   const formatDateForInput = (dateString) => {
     if (!dateString) return '';
     try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return '';
-      return date.toISOString().split('T')[0]; // Return YYYY-MM-DD format
-    } catch (e) {
-      console.warn('Date format conversion failed:', e);
-      return '';
-    }
+      const d = new Date(dateString);
+      return isNaN(d.getTime()) ? '' : d.toISOString().split('T')[0];
+    } catch { return ''; }
   };
-  
-  // console.log('EnhancedVisionBoardItemForm - Editing item:', itemToEdit);
-  
+
   const [formData, setFormData] = useState({
-    // Basic vision information
     title: itemToEdit?.title || '',
     content: itemToEdit?.content || '',
-    description: itemToEdit?.description || '',
     category: itemToEdit?.category || 'general',
-    
-    // Image fields - updated for base64 storage
     imageData: itemToEdit?.imageData || '',
     imageId: itemToEdit?.imageId || '',
-    
-    // Emotional connection
     feelings: itemToEdit?.feelings || '',
     visualization: itemToEdit?.visualization || '',
-    
-    // Progress tracking
     progress: itemToEdit?.progress || 0,
     completed: itemToEdit?.completed || false,
-    
-    // Goal-like properties
     dueDate: formatDateForInput(itemToEdit?.dueDate) || '',
     priority: itemToEdit?.priority || 1,
-    steps: itemToEdit?.steps || []
+    steps: itemToEdit?.steps || [],
   });
-  
+
   const [newStep, setNewStep] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const [showGoalFields, setShowGoalFields] = useState(!!itemToEdit?.dueDate);
-  
-  // Image upload related states
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
-  
-  // Reset form data when itemToEdit changes
+  const [error, setError] = useState('');
+  const [showGoalFields, setShowGoalFields] = useState(!!itemToEdit?.dueDate || !!(itemToEdit?.steps?.length));
+  const fileInputRef = useRef(null);
+
   useEffect(() => {
     setFormData({
-      // Basic vision information
       title: itemToEdit?.title || '',
       content: itemToEdit?.content || '',
-      description: itemToEdit?.description || '',
       category: itemToEdit?.category || 'general',
-      
-      // Image fields - updated for base64 storage
       imageData: itemToEdit?.imageData || '',
       imageId: itemToEdit?.imageId || '',
-      
-      // Emotional connection
       feelings: itemToEdit?.feelings || '',
       visualization: itemToEdit?.visualization || '',
-      
-      // Progress tracking
       progress: itemToEdit?.progress || 0,
       completed: itemToEdit?.completed || false,
-      
-      // Goal-like properties
       dueDate: formatDateForInput(itemToEdit?.dueDate) || '',
       priority: itemToEdit?.priority || 1,
-      steps: itemToEdit?.steps || []
+      steps: itemToEdit?.steps || [],
     });
-    setShowGoalFields(!!itemToEdit?.dueDate);
-    // Support both new base64 format and legacy URL format
+    setShowGoalFields(!!itemToEdit?.dueDate || !!(itemToEdit?.steps?.length));
     setImagePreview(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
   }, [itemToEdit]);
-  
+
+  const set = (key, val) => setFormData(prev => ({ ...prev, [key]: val }));
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Auto-mark completed when progress reaches 100%
-    if (name === 'progress' && parseInt(value) === 100) {
-      setFormData({ 
-        ...formData, 
-        [name]: parseInt(value),
-        completed: true 
-      });
+    if (name === 'progress') {
+      const n = parseInt(value);
+      setFormData(prev => ({ ...prev, progress: n, completed: n === 100 }));
     } else if (name === 'priority') {
-      // Ensure priority is a number
-      setFormData({ ...formData, [name]: parseInt(value) });
-    } else if (name === 'progress') {
-      // Ensure progress is a number
-      setFormData({ ...formData, [name]: parseInt(value) });
+      set(name, parseInt(value));
     } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-  
-  const handleRichTextChange = (value) => {
-    // Update content only, leave other fields unchanged
-    setFormData(prevData => ({
-      ...prevData,
-      content: value
-    }));
-  };
-  
-  const handleAddStep = () => {
-    if (newStep.trim()) {
-      setFormData({
-        ...formData,
-        steps: [...formData.steps, { text: newStep.trim(), completed: false }]
-      });
-      setNewStep('');
+      set(name, value);
     }
   };
 
-  const handleRemoveStep = (index) => {
-    const newSteps = [...formData.steps];
-    newSteps.splice(index, 1);
-    setFormData({ ...formData, steps: newSteps });
-  };
-
-  const toggleStepComplete = (index) => {
-    const newSteps = [...formData.steps];
-    newSteps[index].completed = !newSteps[index].completed;
-    
-    // Check if all steps are completed
-    const allStepsCompleted = newSteps.every(step => step.completed);
-    if (allStepsCompleted) {
-      setFormData({ 
-        ...formData, 
-        steps: newSteps,
-        progress: 100,
-        completed: true 
-      });
-    } else {
-      setFormData({ ...formData, steps: newSteps });
-    }
-  };
-  
-  // Handle image upload
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
     if (!file) return;
-    
     setIsUploadingImage(true);
     setError('');
-    
     try {
       const result = await uploadImage(file, 'vision-images');
-      
       if (result.success) {
-        setFormData({
-          ...formData,
-          imageData: result.base64Data,
-          imageId: result.imageId
-        });
+        setFormData(prev => ({ ...prev, imageData: result.base64Data, imageId: result.imageId }));
         setImagePreview(result.base64Data);
       } else {
-        setError(`Image upload failed: ${result.error}`);
+        setError(result.error || t('visionboard.form.imageUploadError', { defaultValue: 'Image upload failed' }));
       }
     } catch (err) {
-      setError(`Image upload error: ${err.message}`);
+      setError(err.message);
     } finally {
       setIsUploadingImage(false);
     }
   };
-  
-  // Handle image removal
-  const handleImageRemove = async () => {
-    try {
-      setFormData({
-        ...formData,
-        imageData: '',
-        imageId: ''
-      });
-      setImagePreview('');
-    } catch (err) {
-      console.warn('Failed to remove image:', err);
-      // Still remove from form data even if there's an error
-      setFormData({
-        ...formData,
-        imageData: '',
-        imageId: ''
-      });
-      setImagePreview('');
+
+  const handleImageRemove = () => {
+    setFormData(prev => ({ ...prev, imageData: '', imageId: '' }));
+    setImagePreview('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleAddStep = () => {
+    if (newStep.trim()) {
+      set('steps', [...formData.steps, { text: newStep.trim(), completed: false }]);
+      setNewStep('');
     }
   };
-  
+
+  const handleRemoveStep = (i) => {
+    set('steps', formData.steps.filter((_, idx) => idx !== i));
+  };
+
+  const toggleStepComplete = (i) => {
+    const updated = formData.steps.map((s, idx) =>
+      idx === i ? { ...s, completed: !s.completed } : s
+    );
+    const allDone = updated.every(s => s.completed);
+    setFormData(prev => ({ ...prev, steps: updated, ...(allDone ? { progress: 100, completed: true } : {}) }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.title.trim()) { setError(t('visionboard.form.titleRequired', { defaultValue: 'Title is required' })); return; }
+    if (!formData.content.trim()) { setError(t('visionboard.form.contentRequired', { defaultValue: 'Description is required' })); return; }
+
     setIsSubmitting(true);
     setError('');
-    
-    if (!formData.title.trim()) {
-      setError('Title is required');
-      setIsSubmitting(false);
-      return;
-    }
-    
-    if (!formData.content.trim() || formData.content === '<p><br></p>') {
-      setError('Content is required');
-      setIsSubmitting(false);
-      return;
-    }
-    
+
     try {
-      // Prepare data to save
       const dataToSave = { ...formData };
-      
-      // Ensure new item has a UUID
       if (!itemToEdit) {
         dataToSave.uuid = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substr(2);
         dataToSave.createdAt = new Date().toISOString();
       }
-      
-      // console.log('Data to submit:', dataToSave);
-      
-      // Ensure steps data has correct format
-      if (dataToSave.steps && Array.isArray(dataToSave.steps)) {
-        dataToSave.steps = dataToSave.steps.map(step => ({
-          text: String(step.text || ''),
-          completed: Boolean(step.completed)
-        }));
+      if (Array.isArray(dataToSave.steps)) {
+        dataToSave.steps = dataToSave.steps.map(s => ({ text: String(s.text || ''), completed: Boolean(s.completed) }));
       }
-      
-      // Validate and convert date format - convert yyyy-MM-dd to ISO format
       if (dataToSave.dueDate) {
-        try {
-          // Validate date format is yyyy-MM-dd
-          if (/^\d{4}-\d{2}-\d{2}$/.test(dataToSave.dueDate)) {
-            // Create date object and convert to ISO string
-            const dateObj = new Date(dataToSave.dueDate);
-            if (!isNaN(dateObj.getTime())) {
-              dataToSave.dueDate = dateObj.toISOString();
-            } else {
-              dataToSave.dueDate = null;
-            }
-          } else if (!dataToSave.dueDate.includes('T')) {
-            // Not ISO format, also not yyyy-MM-dd format
-            dataToSave.dueDate = null;
-          }
-          // If already ISO format, keep as is
-        } catch (e) {
-          console.warn('Invalid date format:', e);
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dataToSave.dueDate)) {
+          const d = new Date(dataToSave.dueDate);
+          dataToSave.dueDate = isNaN(d.getTime()) ? null : d.toISOString();
+        } else if (!dataToSave.dueDate.includes('T')) {
           dataToSave.dueDate = null;
         }
       }
-      
-      // If external onSubmit function is provided, use it
+
       if (onSubmit) {
         await onSubmit(dataToSave);
+      } else if (itemToEdit?.id) {
+        const result = await updateVisionBoardItem(itemToEdit.id, dataToSave);
+        if (!result.success) throw new Error(result.error || t('visionboard.failedUpdate'));
       } else {
-        // Otherwise use default logic
-        if (itemToEdit && itemToEdit.id) {
-          // console.log('Updating item with Firebase document ID:', itemToEdit.id);
-          
-          // Use the correct Firebase document ID for update
-          const result = await updateVisionBoardItem(itemToEdit.id, dataToSave);
-          if (!result.success) {
-            throw new Error(result.error || t('visionboard.failedUpdate'));
-          }
-        } else {
-          // console.log('Adding new item');
-          await addVisionBoardItem(dataToSave);
-        }
+        await addVisionBoardItem(dataToSave);
       }
       onClose();
     } catch (err) {
-      setError(`Failed to save: ${err.message}`);
-      console.error('Error saving form:', err);
+      setError(err.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Predefined categories
-  const categories = [
-    'general',
-    'career',
-    'health',
-    'relationships',
-    'finances',
-    'personal',
-    'travel',
-    'home',
-    'education',
-    'spirituality'
+  const priorityOpts = [
+    { value: 1, label: t('visionboard.form.low'),    color: 'text-emerald-600' },
+    { value: 2, label: t('visionboard.form.medium'), color: 'text-amber-500' },
+    { value: 3, label: t('visionboard.form.high'),   color: 'text-red-500' },
   ];
-  
-  // Get color style for category
-  const getCategoryColorClass = (category) => {
-    const categoryColors = {
-      'career': 'border-blue-500 bg-blue-50 dark:bg-blue-900/10',
-      'health': 'border-green-500 bg-green-50 dark:bg-green-900/10',
-      'relationships': 'border-purple-500 bg-purple-50 dark:bg-purple-900/10',
-      'finances': 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10',
-      'personal': 'border-orange-500 bg-orange-50 dark:bg-orange-900/10',
-      'travel': 'border-cyan-500 bg-cyan-50 dark:bg-cyan-900/10',
-      'home': 'border-lime-500 bg-lime-50 dark:bg-lime-900/10',
-      'education': 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/10',
-      'spirituality': 'border-violet-500 bg-violet-50 dark:bg-violet-900/10',
-      'general': 'border-gray-500 bg-gray-50 dark:bg-gray-900/10',
-    };
-    
-    return categoryColors[category] || 'border-gray-300 bg-white dark:bg-dark-light';
-  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto max-h-[70vh]">
-      {error && (
-        <div className="p-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-md">
-          {error}
-        </div>
-      )}
-      
-      {/* Basic Vision Information */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
-        <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">{t('visionboard.form.title')}</h3>
-        
-        {/* {t('visionboard.form.title')} */}
-        <div className="mb-3">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {t('visionboard.form.title')} *
+    <form onSubmit={handleSubmit} className="flex flex-col h-full">
+
+      {/* ── Scrollable body ── */}
+      <div className="flex-1 overflow-y-auto space-y-5 pr-1">
+
+        {/* Error banner */}
+        {error && (
+          <div className="flex items-center gap-2 px-3 py-2.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm">
+            <span className="shrink-0">⚠️</span>
+            {error}
+            <button type="button" className="ml-auto" onClick={() => setError('')}><FiX className="w-4 h-4" /></button>
+          </div>
+        )}
+
+        {/* ── Title ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+            {t('visionboard.form.title')} <span className="text-red-400">*</span>
           </label>
           <input
             type="text"
-            id="title"
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="input w-full"
-            required
             placeholder={t('visionboard.form.titlePlaceholder')}
+            required
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
           />
         </div>
-        
-        {/* Category */}
-        <div className="mb-3">
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+
+        {/* ── Category pills ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
             {t('visionboard.form.category')}
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                className={`p-2 border rounded capitalize text-sm transition-all duration-200 ${
-                  formData.category === category 
-                    ? `${getCategoryColorClass(category)} border-2`
-                    : 'border-gray-200 dark:border-gray-700 hover:border-primary'
-                }`}
-                onClick={() => setFormData({ ...formData, category })}
-              >
-                {t(`visionboard.categories.${category}`, { defaultValue: category })}
-              </button>
-            ))}
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map(cat => {
+              const meta = CATEGORY_META[cat];
+              const isActive = formData.category === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => set('category', cat)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                    isActive
+                      ? `${meta.color} ring-2`
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <span>{meta.emoji}</span>
+                  {t(`visionboard.categories.${cat}`, { defaultValue: cat })}
+                </button>
+              );
+            })}
           </div>
         </div>
-        
-        {/* Description - Rich Text Editor */}
+
+        {/* ── Description ── */}
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Vision Description *
+          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+            {t('visionboard.form.visionDescription')} <span className="text-red-400">*</span>
           </label>
-          {/* Use optimised QuillEditor component */}
-          <QuillEditorV2
+          <textarea
+            name="content"
             value={formData.content}
-            onChange={handleRichTextChange}
-            placeholder={t('visionboard.form.visualizationPlaceholder')}
-            className="h-48 mb-10"
+            onChange={handleChange}
+            rows={4}
+            placeholder={t('visionboard.form.descriptionPlaceholder', { defaultValue: 'Describe your vision in vivid detail…' })}
+            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
           />
         </div>
-        
-        {/* Image Upload */}
-        <div className="mb-3">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+
+        {/* ── Image upload ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
             {t('visionboard.form.imageUpload')}
           </label>
-          
-          {/* Image Preview */}
-          {imagePreview && (
-            <div className="mb-3 relative">
-              <img
-                src={imagePreview}
-                alt="Vision preview"
-                className="w-full h-48 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
-              />
-              <button
-                type="button"
-                onClick={handleImageRemove}
-                className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                disabled={isUploadingImage}
-              >
-                <FiTrash2 className="h-4 w-4" />
-              </button>
+
+          {imagePreview ? (
+            <div className="relative rounded-xl overflow-hidden group">
+              <img src={imagePreview} alt="preview" className="w-full h-36 object-cover" />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={handleImageRemove}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600 transition"
+                >
+                  <FiTrash2 className="w-3.5 h-3.5" />
+                  {t('visionboard.form.removeImage', { defaultValue: 'Remove' })}
+                </button>
+              </div>
             </div>
-          )}
-          
-          {/* Upload Button */}
-          <div className="flex items-center justify-center w-full">
-            <label 
-              htmlFor="imageUpload" 
-              className={`flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 ${
-                isUploadingImage ? 'opacity-50 cursor-not-allowed' : ''
+          ) : (
+            <label
+              htmlFor="imageUpload"
+              className={`flex flex-col items-center justify-center gap-2 h-24 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                isUploadingImage
+                  ? 'border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/10'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/10'
               }`}
             >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                {isUploadingImage ? (
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-                ) : (
-                  <>
-                    <FiUpload className="w-8 h-8 mb-2 text-gray-500 dark:text-gray-400" />
-                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      PNG, JPG, GIF, WebP (Max 10MB)
-                    </p>
-                  </>
-                )}
-              </div>
-              <input 
-                id="imageUpload" 
-                type="file" 
-                className="hidden" 
+              {isUploadingImage ? (
+                <FiLoader className="w-5 h-5 text-indigo-500 animate-spin" />
+              ) : (
+                <>
+                  <FiUpload className="w-5 h-5 text-gray-400" />
+                  <span className="text-xs text-gray-400">
+                    {t('visionboard.form.uploadHint', { defaultValue: 'Click to upload · PNG, JPG, WebP (max 10MB)' })}
+                  </span>
+                </>
+              )}
+              <input
+                ref={fileInputRef}
+                id="imageUpload"
+                type="file"
                 accept="image/*"
+                className="hidden"
                 onChange={handleImageUpload}
                 disabled={isUploadingImage}
               />
             </label>
+          )}
+        </div>
+
+        {/* ── Two-column: feelings + visualization ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+              {t('visionboard.form.feelings')}
+            </label>
+            <textarea
+              name="feelings"
+              value={formData.feelings}
+              onChange={handleChange}
+              rows={3}
+              placeholder={t('visionboard.form.feelingsPlaceholder')}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+              {t('visionboard.form.visualizationPrompt', { defaultValue: 'Visualization Prompt' })}
+            </label>
+            <textarea
+              name="visualization"
+              value={formData.visualization}
+              onChange={handleChange}
+              rows={3}
+              placeholder={t('visionboard.form.visualizationPlaceholder')}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
+            />
           </div>
         </div>
-      </div>
-      
-      {/* Emotional Connection */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-4">
-        <h3 className="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">{t('visionboard.form.feelings')}</h3>
-        
-        <div className="mb-3">
-          <label htmlFor="feelings" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Feelings
-          </label>
-          <textarea
-            id="feelings"
-            name="feelings"
-            value={formData.feelings}
-            onChange={handleChange}
-            rows="2"
-            className="input w-full"
-            placeholder={t('visionboard.form.feelingsPlaceholder')}
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="visualization" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Visualization Prompt
-          </label>
-          <textarea
-            id="visualization"
-            name="visualization"
-            value={formData.visualization}
-            onChange={handleChange}
-            rows="2"
-            className="input w-full"
-            placeholder={t('visionboard.form.visualizationPlaceholder')}
-          />
-        </div>
-      </div>
-      
-      {/* Goal Details Toggle */}
-      <div>
-        <div className="flex items-center mb-2">
-          <input
-            type="checkbox"
-            id="showGoalFields"
-            checked={showGoalFields}
-            onChange={() => setShowGoalFields(!showGoalFields)}
-            className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded mr-2"
-          />
-          <label htmlFor="showGoalFields" className="text-md font-medium text-gray-700 dark:text-gray-300">
-            Add Goal Details
-          </label>
-        </div>
-        
-        {showGoalFields && (
-          <div className="space-y-3 border-t border-gray-200 dark:border-gray-700 pt-3">
-            {/* Due Date */}
-            <div>
-              <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Due Date
-              </label>
-              <div className="flex items-center">
-                <FiCalendar className="mr-2 text-gray-500" />
-                <input
-                  type="date"
-                  id="dueDate"
-                  name="dueDate"
-                  value={formData.dueDate}
-                  onChange={handleChange}
-                  className="input w-full"
-                />
-              </div>
-            </div>
-            
-            {/* Priority */}
-            <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Priority
-              </label>
-              <div className="flex items-center">
-                <FiTarget className="mr-2 text-gray-500" />
-                <select
-                  id="priority"
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleChange}
-                  className="input w-full"
-                >
-                  <option value={1}>{t('visionboard.form.low')}</option>
-                  <option value={2}>{t('visionboard.form.medium')}</option>
-                  <option value={3}>{t('visionboard.form.high')}</option>
-                </select>
-              </div>
-            </div>
-            
-            {/* Progress */}
-            <div>
-              <label htmlFor="progress" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                t('visionboard.form.progress') + ': {formData.progress}%
-              </label>
-              <input
-                type="range"
-                id="progress"
-                name="progress"
-                min="0"
-                max="100"
-                step="5"
-                value={formData.progress}
-                onChange={handleChange}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-              />
-            </div>
-            
-            {/* Steps */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Action Steps
-              </label>
-              <div className="space-y-2 mb-2">
-                {formData.steps.map((step, index) => (
-                  <div key={index} className="flex items-center space-x-2">
+
+        {/* ── Goal details accordion ── */}
+        <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setShowGoalFields(v => !v)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            <span className="flex items-center gap-2">
+              <FiTarget className="w-4 h-4 text-indigo-500" />
+              {t('visionboard.form.addGoalDetails', { defaultValue: 'Goal Details' })}
+            </span>
+            {showGoalFields ? <FiChevronUp className="w-4 h-4 text-gray-400" /> : <FiChevronDown className="w-4 h-4 text-gray-400" />}
+          </button>
+
+          {showGoalFields && (
+            <div className="px-4 py-4 space-y-4 border-t border-gray-200 dark:border-gray-700">
+
+              {/* Due date + Priority side-by-side */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                    {t('visionboard.form.dueDate', { defaultValue: 'Due Date' })}
+                  </label>
+                  <div className="relative">
+                    <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                     <input
-                      type="checkbox"
-                      checked={step.completed}
-                      onChange={() => toggleStepComplete(index)}
-                      className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                      type="date"
+                      name="dueDate"
+                      value={formData.dueDate}
+                      onChange={handleChange}
+                      className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
                     />
-                    <input
-                      type="text"
-                      value={step.text}
-                      onChange={(e) => {
-                        const newSteps = [...formData.steps];
-                        newSteps[index].text = e.target.value;
-                        setFormData({ ...formData, steps: newSteps });
-                      }}
-                      className="input flex-1"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveStep(index)}
-                      className="p-1 text-gray-500 hover:text-red-500"
-                    >
-                      <FiX className="h-5 w-5" />
-                    </button>
                   </div>
-                ))}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                    {t('visionboard.form.priority', { defaultValue: 'Priority' })}
+                  </label>
+                  <div className="flex gap-1.5">
+                    {priorityOpts.map(opt => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => set('priority', opt.value)}
+                        className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all border ${
+                          formData.priority === opt.value
+                            ? opt.value === 3
+                              ? 'bg-red-50 dark:bg-red-900/20 border-red-400 text-red-500'
+                              : opt.value === 2
+                              ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-400 text-amber-500'
+                              : 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-400 text-emerald-600'
+                            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 hover:border-gray-300'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center mt-2">
+
+              {/* Progress slider */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                    {t('visionboard.form.progress')}
+                  </label>
+                  <span className={`text-sm font-bold ${formData.completed ? 'text-emerald-500' : 'text-indigo-500'}`}>
+                    {formData.progress}%
+                  </span>
+                </div>
+                <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${formData.completed ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' : 'bg-gradient-to-r from-indigo-400 to-purple-500'}`}
+                    style={{ width: `${formData.progress}%` }}
+                  />
+                </div>
                 <input
-                  type="text"
-                  value={newStep}
-                  onChange={(e) => setNewStep(e.target.value)}
-                  placeholder={t('visionboard.form.addStep')}
-                  className="input flex-1"
+                  type="range"
+                  name="progress"
+                  min="0" max="100" step="5"
+                  value={formData.progress}
+                  onChange={handleChange}
+                  className="w-full h-2 -mt-2 opacity-0 cursor-pointer relative z-10"
+                  style={{ marginTop: '-8px' }}
                 />
-                <button
-                  type="button"
-                  onClick={handleAddStep}
-                  className="ml-2 p-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-md"
-                  disabled={!newStep.trim()}
-                >
-                  <FiPlus className="h-5 w-5" />
-                </button>
+              </div>
+
+              {/* Action steps */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                  {t('visionboard.form.actionSteps', { defaultValue: 'Action Steps' })}
+                </label>
+                <div className="space-y-2 mb-2">
+                  {formData.steps.map((step, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={step.completed}
+                        onChange={() => toggleStepComplete(i)}
+                        className="h-4 w-4 rounded text-indigo-500 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
+                      />
+                      <input
+                        type="text"
+                        value={step.text}
+                        onChange={e => {
+                          const updated = [...formData.steps];
+                          updated[i] = { ...updated[i], text: e.target.value };
+                          set('steps', updated);
+                        }}
+                        className={`flex-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 transition ${step.completed ? 'line-through text-gray-400' : ''}`}
+                      />
+                      <button type="button" onClick={() => handleRemoveStep(i)} className="text-gray-400 hover:text-red-500 transition-colors">
+                        <FiX className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newStep}
+                    onChange={e => setNewStep(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddStep())}
+                    placeholder={t('visionboard.form.addStep')}
+                    className="flex-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 transition"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddStep}
+                    disabled={!newStep.trim()}
+                    className="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-40 text-white rounded-lg transition-colors"
+                  >
+                    <FiPlus className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-      
-      {/* Submit buttons */}
-      <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+
+      {/* ── Footer buttons ── */}
+      <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700/50 mt-5 shrink-0">
         <button
           type="button"
           onClick={onClose}
-          className="btn btn-secondary"
           disabled={isSubmitting}
+          className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
         >
           {t('visionboard.form.cancel')}
         </button>
         <button
           type="submit"
-          className="btn btn-primary"
           disabled={isSubmitting}
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white text-sm font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all disabled:opacity-60 flex items-center gap-2"
         >
-          {isSubmitting ? (
-            <span className="flex items-center">
-              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              {t('common.loading')}
-            </span>
-          ) : itemToEdit ? t('visionboard.form.update') : t('visionboard.form.submit')}
+          {isSubmitting && (
+            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+          )}
+          {isSubmitting ? t('common.loading') : itemToEdit ? t('visionboard.form.update') : t('visionboard.form.submit')}
         </button>
       </div>
     </form>
   );
 };
 
-export default EnhancedVisionBoardItemForm; 
+export default EnhancedVisionBoardItemForm;

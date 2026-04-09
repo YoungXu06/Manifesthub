@@ -281,7 +281,15 @@
       "update": "Mettre à jour la vision",
       "saving": "Enregistrement…",
       "cancel": "Annuler",
-      "removeImage": "Supprimer l'image"
+      "removeImage": "Supprimer",
+      "visionDescription": "Description de la vision",
+      "descriptionPlaceholder": "Décris ta vision avec des détails vivants…",
+      "contentRequired": "La description est obligatoire",
+      "visualizationPrompt": "Prompt de visualisation",
+      "uploadHint": "Cliquer pour télécharger · PNG, JPG, WebP (max 10Mo)",
+      "imageUploadError": "Échec du téléchargement de l'image",
+      "addGoalDetails": "Détails de l'objectif",
+      "actionSteps": "Étapes d'action"
     },
     "detail": {
       "back": "Retour",
@@ -309,7 +317,9 @@
       "failedLoad": "Échec du chargement.",
       "failedDelete": "Échec de la suppression.",
       "failedUpdate": "Échec de la mise à jour."
-    }
+    },
+    "editVisionSubtitle": "Mets à jour les détails de ta vision",
+    "newVisionSubtitle": "Donne vie à ton rêve"
   },
   "profile": {
     "personalInfo": "Informations personnelles",
