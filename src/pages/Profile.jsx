@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiUser, FiMail, FiLock, FiSettings, FiBell, FiGlobe, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import useStore from '../store';
+import { SUPPORTED_LANGUAGES } from '../i18n';
 
 const Profile = () => {
   const { t, i18n } = useTranslation();
@@ -63,6 +64,7 @@ const Profile = () => {
     
     // Apply language changes immediately
     if (name === 'language' && value !== i18n.language) {
+      i18n.changeLanguage(value);
       setLanguage(value);
     }
   };
@@ -346,7 +348,11 @@ const Profile = () => {
                     onChange={handlePreferenceChange}
                     className="input w-full"
                   >
-                    <option value="en">English</option>
+                    {SUPPORTED_LANGUAGES.map(l => (
+                      <option key={l.code} value={l.code}>
+                        {l.flag} {l.nativeName}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 

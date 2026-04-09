@@ -1,0 +1,155 @@
+{
+  "app": {
+    "name": "Manifest Hub",
+    "tagline": "夢を視覚化し、現実を引き寄せる"
+  },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "goals": "目標",
+    "visionboard": "ビジョンボード",
+    "profile": "プロフィール",
+    "logout": "ログアウト"
+  },
+  "auth": {
+    "login": "ログイン",
+    "register": "登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirmPassword": "パスワード確認",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "signUp": "登録する",
+    "signIn": "ログイン",
+    "signInWithGoogle": "Googleでログイン",
+    "signUpWithGoogle": "Googleで登録"
+  },
+  "dashboard": {
+    "welcome": "おかえりなさい、{{name}}さん！",
+    "manifestationJourney": "あなたの引き寄せの旅は美しく展開されています。",
+    "todayGoals": "今日の目標",
+    "affirmation": "日々のアファメーション",
+    "todayAffirmation": "今日のアファメーション",
+    "visualizationPrompt": "ビジュアライゼーションガイド",
+    "visionOverview": "ビジョン概要",
+    "yourVisionBoardDescription": "個人のビジョンボードで夢を作成、視覚化し、引き寄せましょう。",
+    "gratitudeJournal": "感謝日記",
+    "todayIAmGratefulFor": "今日感謝していること...",
+    "iAmGratefulFor": "感謝していること...",
+    "enterGratitude": "今日感謝していることを書いてください...",
+    "enterGratitudeForDate": "この日に感謝していたことを書いてください...",
+    "saveGratitude": "感謝を保存",
+    "updateGratitude": "感謝を更新",
+    "saving": "保存中",
+    "checkingIn": "チェックイン中",
+    "recentGratitude": "最近の感謝",
+    "calendarAndProgress": "日々の記録",
+    "dailyCheckIn": "毎日チェックイン",
+    "checkedInToday": "今日チェックイン済み！",
+    "checkInNow": "今すぐチェックイン",
+    "currentStreak": "現在の連続記録",
+    "days": "日",
+    "createVisionCard": "ビジョンカードを作成",
+    "viewAll": "すべて見る",
+    "noVisionItems": "まだビジョンがありません。ビジョンボードを作り始めましょう。",
+    "totalGoals": "目標総数",
+    "inProgress": "進行中",
+    "visionItems": "ビジョン",
+    "completed": "完了",
+    "stats": "あなたの統計",
+    "savedAt": "保存済み",
+    "keepUpGoodWork": "その調子で！また明日。",
+    "shareGratitudePrompt": "今日感謝していることをシェアしましょう",
+    "noEntryForDate": "この日付の感謝記録はありません",
+    "checkInStatus": "チェックイン状況",
+    "checkedInOnDate": "この日にチェックイン済み",
+    "noCheckInOnDate": "この日のチェックインはありません",
+    "checkInSuccess": "チェックイン成功！その調子で！",
+    "checkInFailed": "チェックインに失敗しました。もう一度お試しください。",
+    "checkInError": "チェックイン中にネットワークエラーが発生しました。",
+    "gratitudeSaved": "感謝日記を保存しました！",
+    "gratitudeUpdated": "感謝日記を更新しました！",
+    "gratitudeSaveFailed": "感謝日記の保存に失敗しました。",
+    "gratitudeSaveError": "保存中にネットワークエラーが発生しました。"
+  },
+  "goals": {
+    "myGoals": "私の目標",
+    "addNew": "新しい目標を追加",
+    "categories": {
+      "all": "すべての目標",
+      "career": "キャリア",
+      "finance": "財務",
+      "health": "健康",
+      "relationships": "人間関係",
+      "personal": "個人",
+      "other": "その他"
+    },
+    "form": {
+      "title": "目標タイトル",
+      "category": "カテゴリー",
+      "description": "説明",
+      "targetDate": "目標日",
+      "tags": "タグ",
+      "addTag": "タグを追加",
+      "save": "目標を保存",
+      "cancel": "キャンセル"
+    }
+  },
+  "visionBoard": {
+    "title": "ビジョンボード",
+    "addCard": "カードを追加",
+    "editMode": "編集モード",
+    "viewMode": "表示モード",
+    "cardTypes": {
+      "image": "画像",
+      "text": "テキスト",
+      "quote": "引用",
+      "affirmation": "アファメーション"
+    }
+  },
+  "profile": {
+    "personalInfo": "個人情報",
+    "name": "名前",
+    "email": "メールアドレス",
+    "changePassword": "パスワード変更",
+    "preferences": "設定",
+    "language": "言語",
+    "theme": "テーマ",
+    "notifications": "通知",
+    "saveChanges": "変更を保存"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "search": "検索",
+    "filters": "フィルター",
+    "sortBy": "並び替え",
+    "darkMode": "ダークモード",
+    "lightMode": "ライトモード",
+    "dismiss": "閉じる"
+  },
+  "theme": {
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский"
+  },
+  "indexNotification": {
+    "title": "データベースインデックスが必要です",
+    "needsIndex": "{{collection}} の完全なデータを表示するためにインデックスの作成が必要です",
+    "createNow": "今すぐインデックスを作成"
+  }
+}

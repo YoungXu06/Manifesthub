@@ -1,0 +1,155 @@
+{
+  "app": {
+    "name": "Manifest Hub",
+    "tagline": "Visualisiere deine Träume, manifestiere deine Realität"
+  },
+  "nav": {
+    "dashboard": "Übersicht",
+    "goals": "Ziele",
+    "visionboard": "Visionboard",
+    "profile": "Profil",
+    "logout": "Abmelden"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "forgotPassword": "Passwort vergessen?",
+    "noAccount": "Kein Konto?",
+    "hasAccount": "Bereits ein Konto?",
+    "signUp": "Registrieren",
+    "signIn": "Anmelden",
+    "signInWithGoogle": "Mit Google anmelden",
+    "signUpWithGoogle": "Mit Google registrieren"
+  },
+  "dashboard": {
+    "welcome": "Willkommen zurück, {{name}}!",
+    "manifestationJourney": "Deine Manifestationsreise entfaltet sich wunderschön.",
+    "todayGoals": "Heutige Ziele",
+    "affirmation": "Tägliche Affirmation",
+    "todayAffirmation": "Heutige Affirmation",
+    "visualizationPrompt": "Visualisierungshinweis",
+    "visionOverview": "Visionsübersicht",
+    "yourVisionBoardDescription": "Erstelle, visualisiere und manifestiere deine Träume mit deinem persönlichen Visionboard.",
+    "gratitudeJournal": "Dankbarkeitsjournal",
+    "todayIAmGratefulFor": "Heute bin ich dankbar für...",
+    "iAmGratefulFor": "Ich bin dankbar für...",
+    "enterGratitude": "Schreibe, wofür du heute dankbar bist...",
+    "enterGratitudeForDate": "Schreibe, wofür du an diesem Datum dankbar warst...",
+    "saveGratitude": "Dankbarkeit speichern",
+    "updateGratitude": "Dankbarkeit aktualisieren",
+    "saving": "Speichern",
+    "checkingIn": "Einchecken",
+    "recentGratitude": "Letzte Dankbarkeit",
+    "calendarAndProgress": "Tägliche Aufzeichnung",
+    "dailyCheckIn": "Tägliches Check-in",
+    "checkedInToday": "Heute eingecheckt!",
+    "checkInNow": "Jetzt einchecken",
+    "currentStreak": "Aktuelle Serie",
+    "days": "Tage",
+    "createVisionCard": "Visionskarte erstellen",
+    "viewAll": "Alle anzeigen",
+    "noVisionItems": "Noch keine Visionen. Beginne mit deinem Visionboard.",
+    "totalGoals": "Gesamtziele",
+    "inProgress": "In Bearbeitung",
+    "visionItems": "Visionen",
+    "completed": "Abgeschlossen",
+    "stats": "Deine Statistiken",
+    "savedAt": "Gespeichert um",
+    "keepUpGoodWork": "Weiter so! Bis morgen.",
+    "shareGratitudePrompt": "Teile, wofür du heute dankbar bist",
+    "noEntryForDate": "Kein Dankbarkeitseintrag für dieses Datum",
+    "checkInStatus": "Check-in-Status",
+    "checkedInOnDate": "An diesem Datum eingecheckt",
+    "noCheckInOnDate": "Kein Check-in an diesem Datum",
+    "checkInSuccess": "Check-in erfolgreich! Weiter so!",
+    "checkInFailed": "Check-in fehlgeschlagen. Bitte erneut versuchen.",
+    "checkInError": "Netzwerkfehler beim Check-in. Bitte erneut versuchen.",
+    "gratitudeSaved": "Dankbarkeit erfolgreich gespeichert!",
+    "gratitudeUpdated": "Dankbarkeit erfolgreich aktualisiert!",
+    "gratitudeSaveFailed": "Dankbarkeit konnte nicht gespeichert werden.",
+    "gratitudeSaveError": "Netzwerkfehler beim Speichern. Bitte erneut versuchen."
+  },
+  "goals": {
+    "myGoals": "Meine Ziele",
+    "addNew": "Neues Ziel hinzufügen",
+    "categories": {
+      "all": "Alle Ziele",
+      "career": "Karriere",
+      "finance": "Finanzen",
+      "health": "Gesundheit",
+      "relationships": "Beziehungen",
+      "personal": "Persönlich",
+      "other": "Sonstiges"
+    },
+    "form": {
+      "title": "Zieltitel",
+      "category": "Kategorie",
+      "description": "Beschreibung",
+      "targetDate": "Zieldatum",
+      "tags": "Tags",
+      "addTag": "Tag hinzufügen",
+      "save": "Ziel speichern",
+      "cancel": "Abbrechen"
+    }
+  },
+  "visionBoard": {
+    "title": "Visionboard",
+    "addCard": "Karte hinzufügen",
+    "editMode": "Bearbeitungsmodus",
+    "viewMode": "Ansichtsmodus",
+    "cardTypes": {
+      "image": "Bild",
+      "text": "Text",
+      "quote": "Zitat",
+      "affirmation": "Affirmation"
+    }
+  },
+  "profile": {
+    "personalInfo": "Persönliche Informationen",
+    "name": "Name",
+    "email": "E-Mail",
+    "changePassword": "Passwort ändern",
+    "preferences": "Einstellungen",
+    "language": "Sprache",
+    "theme": "Design",
+    "notifications": "Benachrichtigungen",
+    "saveChanges": "Änderungen speichern"
+  },
+  "common": {
+    "loading": "Laden...",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "search": "Suchen",
+    "filters": "Filter",
+    "sortBy": "Sortieren nach",
+    "darkMode": "Dunkelmodus",
+    "lightMode": "Hellmodus",
+    "dismiss": "Schließen"
+  },
+  "theme": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский"
+  },
+  "indexNotification": {
+    "title": "Datenbankindex erforderlich",
+    "needsIndex": "Das System muss einen Index für {{collection}} erstellen, um vollständige Daten anzuzeigen",
+    "createNow": "Index jetzt erstellen"
+  }
+}

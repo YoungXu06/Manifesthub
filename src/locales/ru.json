@@ -1,0 +1,155 @@
+{
+  "app": {
+    "name": "Manifest Hub",
+    "tagline": "Визуализируйте мечты, воплощайте реальность"
+  },
+  "nav": {
+    "dashboard": "Панель",
+    "goals": "Цели",
+    "visionboard": "Доска видения",
+    "profile": "Профиль",
+    "logout": "Выйти"
+  },
+  "auth": {
+    "login": "Войти",
+    "register": "Регистрация",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "forgotPassword": "Забыли пароль?",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "signUp": "Зарегистрироваться",
+    "signIn": "Войти",
+    "signInWithGoogle": "Войти через Google",
+    "signUpWithGoogle": "Зарегистрироваться через Google"
+  },
+  "dashboard": {
+    "welcome": "С возвращением, {{name}}!",
+    "manifestationJourney": "Ваше путешествие к мечте разворачивается прекрасно.",
+    "todayGoals": "Цели на сегодня",
+    "affirmation": "Ежедневная аффирмация",
+    "todayAffirmation": "Аффирмация дня",
+    "visualizationPrompt": "Руководство по визуализации",
+    "visionOverview": "Обзор видения",
+    "yourVisionBoardDescription": "Создавайте, визуализируйте и воплощайте свои мечты с личной доской видения.",
+    "gratitudeJournal": "Дневник благодарности",
+    "todayIAmGratefulFor": "Сегодня я благодарен(на) за...",
+    "iAmGratefulFor": "Я благодарен(на) за...",
+    "enterGratitude": "Напишите, за что вы благодарны сегодня...",
+    "enterGratitudeForDate": "Напишите, за что вы были благодарны в этот день...",
+    "saveGratitude": "Сохранить благодарность",
+    "updateGratitude": "Обновить благодарность",
+    "saving": "Сохранение",
+    "checkingIn": "Отметка",
+    "recentGratitude": "Недавняя благодарность",
+    "calendarAndProgress": "Ежедневный трекер",
+    "dailyCheckIn": "Ежедневная отметка",
+    "checkedInToday": "Отметка сделана сегодня!",
+    "checkInNow": "Отметиться сейчас",
+    "currentStreak": "Текущая серия",
+    "days": "дн.",
+    "createVisionCard": "Создать карточку видения",
+    "viewAll": "Смотреть всё",
+    "noVisionItems": "Видений пока нет. Начните создавать доску.",
+    "totalGoals": "Всего целей",
+    "inProgress": "В процессе",
+    "visionItems": "Видения",
+    "completed": "Завершено",
+    "stats": "Ваша статистика",
+    "savedAt": "Сохранено в",
+    "keepUpGoodWork": "Продолжайте! До завтра.",
+    "shareGratitudePrompt": "Поделитесь тем, за что вы благодарны сегодня",
+    "noEntryForDate": "Нет записи благодарности за эту дату",
+    "checkInStatus": "Статус отметки",
+    "checkedInOnDate": "Отметка сделана в эту дату",
+    "noCheckInOnDate": "Нет отметки за эту дату",
+    "checkInSuccess": "Отметка успешна! Продолжайте!",
+    "checkInFailed": "Ошибка отметки. Попробуйте ещё раз.",
+    "checkInError": "Ошибка сети при отметке. Попробуйте ещё раз.",
+    "gratitudeSaved": "Благодарность успешно сохранена!",
+    "gratitudeUpdated": "Благодарность успешно обновлена!",
+    "gratitudeSaveFailed": "Не удалось сохранить благодарность.",
+    "gratitudeSaveError": "Ошибка сети при сохранении. Попробуйте ещё раз."
+  },
+  "goals": {
+    "myGoals": "Мои цели",
+    "addNew": "Добавить новую цель",
+    "categories": {
+      "all": "Все цели",
+      "career": "Карьера",
+      "finance": "Финансы",
+      "health": "Здоровье",
+      "relationships": "Отношения",
+      "personal": "Личное",
+      "other": "Другое"
+    },
+    "form": {
+      "title": "Название цели",
+      "category": "Категория",
+      "description": "Описание",
+      "targetDate": "Целевая дата",
+      "tags": "Теги",
+      "addTag": "Добавить тег",
+      "save": "Сохранить цель",
+      "cancel": "Отмена"
+    }
+  },
+  "visionBoard": {
+    "title": "Доска видения",
+    "addCard": "Добавить карточку",
+    "editMode": "Режим редактирования",
+    "viewMode": "Режим просмотра",
+    "cardTypes": {
+      "image": "Изображение",
+      "text": "Текст",
+      "quote": "Цитата",
+      "affirmation": "Аффирмация"
+    }
+  },
+  "profile": {
+    "personalInfo": "Личная информация",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "changePassword": "Изменить пароль",
+    "preferences": "Настройки",
+    "language": "Язык",
+    "theme": "Тема",
+    "notifications": "Уведомления",
+    "saveChanges": "Сохранить изменения"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "search": "Поиск",
+    "filters": "Фильтры",
+    "sortBy": "Сортировать по",
+    "darkMode": "Тёмная тема",
+    "lightMode": "Светлая тема",
+    "dismiss": "Закрыть"
+  },
+  "theme": {
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский"
+  },
+  "indexNotification": {
+    "title": "Требуется индекс базы данных",
+    "needsIndex": "Системе необходимо создать индекс для {{collection}} для отображения полных данных",
+    "createNow": "Создать индекс сейчас"
+  }
+}

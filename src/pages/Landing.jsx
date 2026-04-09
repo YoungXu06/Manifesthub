@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiArrowRight, FiStar, FiHeart, FiTarget, FiCheckCircle, FiZap, FiEye, FiTrendingUp } from 'react-icons/fi';
 import ThemeToggle from '../components/common/ThemeToggle';
+import LanguageSelector from '../components/common/LanguageSelector';
+import SeoHead from '../components/common/SeoHead';
 import useStore from '../store';
 
 /* ─────────────────────────────────────────────
@@ -278,6 +280,7 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-black">
+      <SeoHead path="/" />
       <style>{`
         @keyframes twinkle {
           0%, 100% { opacity: 0.15; transform: scale(1); }
@@ -409,7 +412,8 @@ const Landing = () => {
             </Link>
 
             {/* Nav actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <LanguageSelector variant="icon" />
               <ThemeToggle />
               {user ? (
                 <Link to="/dashboard" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors">

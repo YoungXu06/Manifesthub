@@ -1,0 +1,155 @@
+{
+  "app": {
+    "name": "Manifest Hub",
+    "tagline": "Visualize seus sonhos, manifeste sua realidade"
+  },
+  "nav": {
+    "dashboard": "Painel",
+    "goals": "Objetivos",
+    "visionboard": "Quadro de Visão",
+    "profile": "Perfil",
+    "logout": "Sair"
+  },
+  "auth": {
+    "login": "Entrar",
+    "register": "Registrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "confirmPassword": "Confirmar Senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "noAccount": "Não tem conta?",
+    "hasAccount": "Já tem conta?",
+    "signUp": "Cadastrar",
+    "signIn": "Entrar",
+    "signInWithGoogle": "Entrar com Google",
+    "signUpWithGoogle": "Registrar com Google"
+  },
+  "dashboard": {
+    "welcome": "Bem-vindo de volta, {{name}}!",
+    "manifestationJourney": "Sua jornada de manifestação está se desdobrando lindamente.",
+    "todayGoals": "Objetivos de Hoje",
+    "affirmation": "Afirmação Diária",
+    "todayAffirmation": "Afirmação de Hoje",
+    "visualizationPrompt": "Guia de Visualização",
+    "visionOverview": "Visão Geral",
+    "yourVisionBoardDescription": "Crie, visualize e manifeste seus sonhos com seu quadro de visão pessoal.",
+    "gratitudeJournal": "Diário de Gratidão",
+    "todayIAmGratefulFor": "Hoje sou grato(a) por...",
+    "iAmGratefulFor": "Sou grato(a) por...",
+    "enterGratitude": "Escreva pelo que você é grato(a) hoje...",
+    "enterGratitudeForDate": "Escreva pelo que você era grato(a) nesta data...",
+    "saveGratitude": "Salvar Gratidão",
+    "updateGratitude": "Atualizar Gratidão",
+    "saving": "Salvando",
+    "checkingIn": "Registrando",
+    "recentGratitude": "Gratidão Recente",
+    "calendarAndProgress": "Registro Diário",
+    "dailyCheckIn": "Check-in Diário",
+    "checkedInToday": "Check-in feito hoje!",
+    "checkInNow": "Fazer Check-in Agora",
+    "currentStreak": "Sequência Atual",
+    "days": "dias",
+    "createVisionCard": "Criar Cartão de Visão",
+    "viewAll": "Ver Tudo",
+    "noVisionItems": "Ainda sem visões. Comece seu quadro.",
+    "totalGoals": "Total de Objetivos",
+    "inProgress": "Em Andamento",
+    "visionItems": "Visões",
+    "completed": "Concluído",
+    "stats": "Suas Estatísticas",
+    "savedAt": "Salvo às",
+    "keepUpGoodWork": "Continue assim! Até amanhã.",
+    "shareGratitudePrompt": "Compartilhe pelo que você é grato(a) hoje",
+    "noEntryForDate": "Sem entrada de gratidão para esta data",
+    "checkInStatus": "Status do check-in",
+    "checkedInOnDate": "Check-in feito nesta data",
+    "noCheckInOnDate": "Sem check-in nesta data",
+    "checkInSuccess": "Check-in realizado! Continue assim!",
+    "checkInFailed": "Falha no check-in. Tente novamente.",
+    "checkInError": "Erro de rede no check-in. Tente novamente.",
+    "gratitudeSaved": "Gratidão salva com sucesso!",
+    "gratitudeUpdated": "Gratidão atualizada com sucesso!",
+    "gratitudeSaveFailed": "Falha ao salvar gratidão. Tente novamente.",
+    "gratitudeSaveError": "Erro de rede ao salvar. Tente novamente."
+  },
+  "goals": {
+    "myGoals": "Meus Objetivos",
+    "addNew": "Adicionar Novo Objetivo",
+    "categories": {
+      "all": "Todos os Objetivos",
+      "career": "Carreira",
+      "finance": "Finanças",
+      "health": "Saúde",
+      "relationships": "Relacionamentos",
+      "personal": "Pessoal",
+      "other": "Outro"
+    },
+    "form": {
+      "title": "Título do Objetivo",
+      "category": "Categoria",
+      "description": "Descrição",
+      "targetDate": "Data Alvo",
+      "tags": "Tags",
+      "addTag": "Adicionar Tag",
+      "save": "Salvar Objetivo",
+      "cancel": "Cancelar"
+    }
+  },
+  "visionBoard": {
+    "title": "Quadro de Visão",
+    "addCard": "Adicionar Cartão",
+    "editMode": "Modo Edição",
+    "viewMode": "Modo Visualização",
+    "cardTypes": {
+      "image": "Imagem",
+      "text": "Texto",
+      "quote": "Citação",
+      "affirmation": "Afirmação"
+    }
+  },
+  "profile": {
+    "personalInfo": "Informações Pessoais",
+    "name": "Nome",
+    "email": "E-mail",
+    "changePassword": "Alterar Senha",
+    "preferences": "Preferências",
+    "language": "Idioma",
+    "theme": "Tema",
+    "notifications": "Notificações",
+    "saveChanges": "Salvar Alterações"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "search": "Buscar",
+    "filters": "Filtros",
+    "sortBy": "Ordenar por",
+    "darkMode": "Modo Escuro",
+    "lightMode": "Modo Claro",
+    "dismiss": "Fechar"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский"
+  },
+  "indexNotification": {
+    "title": "Índice de Banco de Dados Necessário",
+    "needsIndex": "O sistema precisa criar um índice para {{collection}} para exibir dados completos",
+    "createNow": "Criar Índice Agora"
+  }
+}

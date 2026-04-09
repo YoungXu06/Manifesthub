@@ -9,24 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.16",
     "date-fns": "^2.30.0",
     "firebase": "^11.6.0",
     "framer-motion": "^12.9.4",
     "i18next": "^23.7.6",
+    "postcss": "^8.4.31",
     "quill": "^2.0.3",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
+    "react-helmet-async": "^3.0.0",
     "react-i18next": "^13.5.0",
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.20.0",
     "react-transition-group": "^4.4.5",
     "tailwindcss": "^3.3.5",
-    "zustand": "^4.4.6",
     "vite": "^6.3.2",
-    "@vitejs/plugin-react": "^4.4.1",
-    "postcss": "^8.4.31"
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",

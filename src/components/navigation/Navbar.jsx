@@ -4,20 +4,20 @@ import { useTranslation } from 'react-i18next';
 import { FiMenu, FiX } from 'react-icons/fi';
 import useStore from '../../store';
 import ThemeToggle from '../common/ThemeToggle';
+import LanguageSelector from '../common/LanguageSelector';
 import UserMenu from './UserMenu';
 
 const Navbar = ({ toggleSidebar, sidebarOpen, isMobile }) => {
   const { t } = useTranslation();
   const { user } = useStore();
 
-  // On desktop, when sidebar is open it already shows the logo — hide it here
   const showLogo = isMobile || !sidebarOpen;
 
   return (
     <header className="sticky top-0 z-20 h-16 flex items-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800/70 shadow-sm">
       <div className="flex items-center justify-between w-full px-4 sm:px-6">
 
-        {/* Left: toggle + logo (logo hidden on desktop when sidebar is open) */}
+        {/* Left: toggle + logo */}
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -47,8 +47,9 @@ const Navbar = ({ toggleSidebar, sidebarOpen, isMobile }) => {
         </div>
 
         {/* Right: controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <div className="hidden md:flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="hidden md:flex items-center gap-1">
+            <LanguageSelector variant="icon" />
             <ThemeToggle />
           </div>
           <UserMenu user={user} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ThemeToggle from '../components/common/ThemeToggle';
+import LanguageSelector from '../components/common/LanguageSelector';
 
 /* Left-panel quote rotation */
 const QUOTES = [
@@ -87,7 +88,8 @@ const AuthLayout = () => {
             />
             <span className="text-base font-bold text-gray-900 dark:text-white">{t('app.name')}</span>
           </Link>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-2">
+            <LanguageSelector variant="icon" />
             <ThemeToggle />
           </div>
         </header>

@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "梦想中心",
-    "tagline": "想象你的梦想，实现你的现实"
+    "name": "Manifest Hub",
+    "tagline": "可视化您的梦想，实现您的现实"
   },
   "nav": {
     "dashboard": "仪表盘",
@@ -17,76 +17,76 @@
     "password": "密码",
     "confirmPassword": "确认密码",
     "forgotPassword": "忘记密码？",
-    "noAccount": "没有账户？",
-    "hasAccount": "已有账户？",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已有账号？",
     "signUp": "注册",
     "signIn": "登录",
-    "signInWithGoogle": "使用谷歌登录",
-    "signUpWithGoogle": "使用谷歌注册"
+    "signInWithGoogle": "使用 Google 登录",
+    "signUpWithGoogle": "使用 Google 注册"
   },
   "dashboard": {
     "welcome": "欢迎回来，{{name}}！",
-    "manifestationJourney": "你的梦想正在美丽地展开。",
+    "manifestationJourney": "您的心想事成之旅正在美丽地展开。",
     "todayGoals": "今日目标",
-    "affirmation": "每日肯定",
+    "affirmation": "每日肯定语",
     "todayAffirmation": "今日肯定语",
     "visualizationPrompt": "可视化提示",
     "visionOverview": "愿景概览",
-    "yourVisionBoardDescription": "创建、可视化并实现你的梦想，通过你的个人愿景板。",
+    "yourVisionBoardDescription": "用您的个人愿景板创建、可视化并实现您的梦想。",
     "gratitudeJournal": "感恩日记",
-    "todayIAmGratefulFor": "今天我感恩...",
-    "iAmGratefulFor": "在这一天我感恩...",
-    "enterGratitude": "输入你今天感恩的事物...",
-    "enterGratitudeForDate": "输入你在这一天感恩的事物...",
+    "todayIAmGratefulFor": "今天我感谢...",
+    "iAmGratefulFor": "我感谢...",
+    "enterGratitude": "写下今天您感谢的事情...",
+    "enterGratitudeForDate": "写下这一天您感谢的事情...",
     "saveGratitude": "保存感恩",
     "updateGratitude": "更新感恩",
     "saving": "保存中",
     "checkingIn": "签到中",
-    "recentGratitude": "最近的感恩",
-    "calendarAndProgress": "日历与进度",
+    "recentGratitude": "近期感恩",
+    "calendarAndProgress": "每日记录",
     "dailyCheckIn": "每日签到",
-    "checkedInToday": "今日已签到！",
+    "checkedInToday": "今天已签到！",
     "checkInNow": "立即签到",
     "currentStreak": "当前连续",
     "days": "天",
-    "createVisionCard": "创建愿景卡片",
+    "createVisionCard": "创建愿景卡",
     "viewAll": "查看全部",
-    "noVisionItems": "还没有愿景项目。开始创建你的愿景板吧。",
-    "totalGoals": "总目标",
+    "noVisionItems": "暂无愿景项目。开始创建您的愿景板吧。",
+    "totalGoals": "目标总数",
     "inProgress": "进行中",
     "visionItems": "愿景项目",
     "completed": "已完成",
-    "stats": "你的统计",
-    "savedAt": "保存于",
+    "stats": "您的统计",
+    "savedAt": "已保存于",
     "keepUpGoodWork": "继续保持！明天见。",
-    "shareGratitudePrompt": "分享你今天感恩的事物",
-    "noEntryForDate": "这一天没有感恩记录",
+    "shareGratitudePrompt": "分享您今天感恩的事情",
+    "noEntryForDate": "该日期无感恩记录",
     "checkInStatus": "签到状态",
-    "checkedInOnDate": "这一天已签到",
-    "noCheckInOnDate": "这一天未签到",
+    "checkedInOnDate": "已在该日期签到",
+    "noCheckInOnDate": "该日期未签到",
     "checkInSuccess": "签到成功！继续保持！",
     "checkInFailed": "签到失败，请重试。",
     "checkInError": "签到时网络错误，请重试。",
     "gratitudeSaved": "感恩日记保存成功！",
     "gratitudeUpdated": "感恩日记更新成功！",
-    "gratitudeSaveFailed": "保存感恩日记失败，请重试。",
+    "gratitudeSaveFailed": "感恩日记保存失败，请重试。",
     "gratitudeSaveError": "保存感恩日记时网络错误，请重试。"
   },
   "goals": {
     "myGoals": "我的目标",
     "addNew": "添加新目标",
     "categories": {
-      "all": "所有目标",
+      "all": "全部目标",
       "career": "职业",
       "finance": "财务",
       "health": "健康",
-      "relationships": "人际关系",
+      "relationships": "关系",
       "personal": "个人",
       "other": "其他"
     },
     "form": {
       "title": "目标标题",
-      "category": "类别",
+      "category": "分类",
       "description": "描述",
       "targetDate": "目标日期",
       "tags": "标签",
@@ -102,9 +102,9 @@
     "viewMode": "查看模式",
     "cardTypes": {
       "image": "图片",
-      "text": "文本",
-      "quote": "引用",
-      "affirmation": "肯定"
+      "text": "文字",
+      "quote": "引言",
+      "affirmation": "肯定语"
     }
   },
   "profile": {
@@ -127,22 +127,29 @@
     "search": "搜索",
     "filters": "筛选",
     "sortBy": "排序方式",
-    "darkMode": "暗色模式",
-    "lightMode": "亮色模式",
+    "darkMode": "深色模式",
+    "lightMode": "浅色模式",
     "dismiss": "关闭"
   },
   "theme": {
-    "light": "亮色",
-    "dark": "暗色",
+    "light": "浅色",
+    "dark": "深色",
     "system": "系统"
   },
   "language": {
     "en": "English",
-    "zh": "中文"
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский"
   },
   "indexNotification": {
-    "title": "需要创建索引",
-    "needsIndex": "系统需要为 {{collection}} 创建数据库索引才能显示完整数据",
-    "createNow": "点击创建索引"
+    "title": "需要数据库索引",
+    "needsIndex": "系统需要为 {{collection}} 创建索引以显示完整数据",
+    "createNow": "立即创建索引"
   }
 }
