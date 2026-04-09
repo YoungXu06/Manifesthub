@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -34,8 +34,8 @@ const CATEGORY_META = {
    Grid / Mood Board Card
 ───────────────────────────────────────────── */
 const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) => {
+  const { t } = useTranslation();
   const { deleteVisionBoardItem, updateVisionBoardItem } = useStore();
-  const navigate = window;
 
   const meta = CATEGORY_META[item.category] || CATEGORY_META.general;
   const progress = item.progress || 0;
@@ -236,7 +236,6 @@ const UnifiedVisionBoard = () => {
   // ── Virtual pagination ──────────────────────────────────────────────
   const PAGE_SIZE = 12;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const sentinelRef = useRef(null);
 
   // Reset visible count whenever filters/sort change
   useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filterCategory, filterStatus, searchTerm, sortBy, sortOrder]);
@@ -282,8 +281,9 @@ const UnifiedVisionBoard = () => {
   }, [visionBoard, goals, isLoading]);
 
   // ── IntersectionObserver: load more when sentinel scrolls into view ─
-  useEffect(() => {
-    const el = sentinelRef.current;
+  // Use a callback ref so the observer re-attaches whenever the sentinel
+  // mounts/unmounts (switching view modes), without putting .current in deps.
+  const sentinelRef = useCallback((el) => {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisibleCount(c => c + PAGE_SIZE); },
@@ -291,7 +291,7 @@ const UnifiedVisionBoard = () => {
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [sentinelRef.current]); // re-attach when sentinel mounts/unmounts
+  }, []); // stable — never needs to re-run
 
   const handleAddItem = () => { setItemToEdit(null); setShowForm(true); };
   const handleEditItem = (item) => { setItemToEdit(item); setShowForm(true); };
