@@ -30,6 +30,81 @@
   --color-gray-900-rgb: 31, 41, 55;
 }
 
+/* ── Vision-form progress slider ─────────────────────────────────────
+   The visual track is rendered by a <div> underneath; the <input type="range">
+   sits on top with an invisible track but a visible, styled thumb.
+──────────────────────────────────────────────────────────────────── */
+.vision-progress-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+}
+
+/* Webkit track (hidden — visual track provided by sibling div) */
+.vision-progress-slider::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 8px;
+  border-radius: 9999px;
+}
+
+/* Webkit thumb */
+.vision-progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2.5px solid #6366f1;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.4);
+  cursor: pointer;
+  margin-top: -5px; /* centre thumb on 8px track */
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.vision-progress-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
+}
+.vision-progress-slider:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+/* Firefox track */
+.vision-progress-slider::-moz-range-track {
+  background: transparent;
+  height: 8px;
+  border-radius: 9999px;
+  border: none;
+}
+/* Firefox thumb */
+.vision-progress-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2.5px solid #6366f1;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.4);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.vision-progress-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Dark mode thumb */
+.dark .vision-progress-slider::-webkit-slider-thumb {
+  background: #1e1b4b;
+  border-color: #818cf8;
+  box-shadow: 0 1px 4px rgba(129, 140, 248, 0.4);
+}
+.dark .vision-progress-slider::-moz-range-thumb {
+  background: #1e1b4b;
+  border-color: #818cf8;
+}
+
 @layer base {
   body {
     @apply bg-gray-50 dark:bg-dark text-gray-800 dark:text-gray-200 transition-colors duration-200 ease-in-out;

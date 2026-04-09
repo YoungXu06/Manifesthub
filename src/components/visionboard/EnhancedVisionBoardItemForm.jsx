@@ -412,25 +412,39 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
                   <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                     {t('visionboard.form.progress')}
                   </label>
-                  <span className={`text-sm font-bold ${formData.completed ? 'text-emerald-500' : 'text-indigo-500'}`}>
+                  <span className={`text-sm font-bold tabular-nums ${formData.completed ? 'text-emerald-500' : 'text-indigo-500'}`}>
                     {formData.progress}%
                   </span>
                 </div>
-                <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-300 ${formData.completed ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' : 'bg-gradient-to-r from-indigo-400 to-purple-500'}`}
-                    style={{ width: `${formData.progress}%` }}
+                {/* Track + thumb wrapper — range sits on top of the visual bar */}
+                <div className="relative h-5 flex items-center">
+                  {/* Visual track */}
+                  <div className="absolute inset-x-0 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden pointer-events-none">
+                    <div
+                      className={`h-full rounded-full transition-all duration-200 ${
+                        formData.completed
+                          ? 'bg-gradient-to-r from-emerald-400 to-emerald-500'
+                          : 'bg-gradient-to-r from-indigo-400 to-purple-500'
+                      }`}
+                      style={{ width: `${formData.progress}%` }}
+                    />
+                  </div>
+                  {/* Native range input — styled thumb, transparent track */}
+                  <input
+                    type="range"
+                    name="progress"
+                    min="0" max="100" step="5"
+                    value={formData.progress}
+                    onChange={handleChange}
+                    className="vision-progress-slider absolute inset-0 w-full h-full cursor-pointer z-10"
                   />
                 </div>
-                <input
-                  type="range"
-                  name="progress"
-                  min="0" max="100" step="5"
-                  value={formData.progress}
-                  onChange={handleChange}
-                  className="w-full h-2 -mt-2 opacity-0 cursor-pointer relative z-10"
-                  style={{ marginTop: '-8px' }}
-                />
+                {/* Step ticks */}
+                <div className="flex justify-between mt-1 px-0.5">
+                  {[0, 25, 50, 75, 100].map(v => (
+                    <span key={v} className="text-[10px] text-gray-400 dark:text-gray-500">{v}%</span>
+                  ))}
+                </div>
               </div>
 
               {/* Action steps */}
