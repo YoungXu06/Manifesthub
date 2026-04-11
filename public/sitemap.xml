@@ -3,7 +3,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://manifest-hub.com/</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,7 +11,7 @@
   <!-- User Registration Page -->
   <url>
     <loc>https://manifest-hub.com/register</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -19,7 +19,7 @@
   <!-- User Login Page -->
   <url>
     <loc>https://manifest-hub.com/login</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -27,21 +27,21 @@
   <!-- Feature Pages - These require login but should be known to search engines -->
   <url>
     <loc>https://manifest-hub.com/dashboard</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://manifest-hub.com/visionboard</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://manifest-hub.com/profile</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -49,21 +49,21 @@
   <!-- Possible Terms Pages - Inferred from footer links -->
   <url>
     <loc>https://manifest-hub.com/privacy-policy</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://manifest-hub.com/terms-of-service</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://manifest-hub.com/contact</loc>
-    <lastmod>2025-06-01</lastmod>
+    <lastmod>2026-04-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
