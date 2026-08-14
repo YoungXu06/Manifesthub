@@ -23,7 +23,7 @@ const Navbar = ({ toggleSidebar, sidebarOpen, isMobile }) => {
             type="button"
             className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
             onClick={toggleSidebar}
-            aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+            aria-label={sidebarOpen ? t('common.closeSidebar') : t('common.openSidebar')}
           >
             {sidebarOpen && !isMobile ? (
               <FiX className="h-5 w-5" />

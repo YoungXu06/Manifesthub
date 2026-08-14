@@ -6,7 +6,7 @@ import { SUPPORTED_LANGUAGES } from '../../i18n';
 
 const LanguageSelector = ({ variant = 'icon' }) => {
   // variant: 'icon' (compact icon button) | 'full' (show current language name)
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const { setLanguage } = useStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -36,7 +36,7 @@ const LanguageSelector = ({ variant = 'icon' }) => {
       <button
         type="button"
         onClick={() => setIsOpen(v => !v)}
-        aria-label="Change language"
+        aria-label={t('language.changeLanguage')}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         className="flex items-center gap-1.5 p-2 rounded-xl text-gray-500 dark:text-gray-400
@@ -56,7 +56,7 @@ const LanguageSelector = ({ variant = 'icon' }) => {
       {isOpen && (
         <div
           role="listbox"
-          aria-label="Select language"
+          aria-label={t('language.selectLanguage')}
           className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-900 rounded-2xl shadow-xl
                      border border-gray-100 dark:border-gray-800 py-1.5 z-50 overflow-hidden"
           style={{ maxHeight: '360px', overflowY: 'auto' }}

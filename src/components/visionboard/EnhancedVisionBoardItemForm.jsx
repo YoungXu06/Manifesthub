@@ -5,6 +5,7 @@ import {
   FiChevronDown, FiChevronUp, FiLoader
 } from 'react-icons/fi';
 import useStore from '../../store';
+import { LENS_LEVELS } from '../../utils/manifestProtocol';
 
 /* ─────────────────────────────────────────────
    Category meta
@@ -27,9 +28,9 @@ const CATEGORIES = Object.keys(CATEGORY_META);
 /* ─────────────────────────────────────────────
    Component
 ───────────────────────────────────────────── */
-const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) => {
+const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, defaultLevel = null }) => {
   const { t } = useTranslation();
-  const { addVisionBoardItem, updateVisionBoardItem, uploadImage } = useStore();
+  const { addVisionBoardItem, updateVisionBoardItem, uploadImage, user } = useStore();
 
   const formatDateForInput = (dateString) => {
     if (!dateString) return '';
@@ -52,6 +53,8 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
     dueDate: formatDateForInput(itemToEdit?.dueDate) || '',
     priority: itemToEdit?.priority || 1,
     steps: itemToEdit?.steps || [],
+    level: itemToEdit?.level || defaultLevel || 'month',
+    identityLink: itemToEdit?.identityLink || '',
   });
 
   const [newStep, setNewStep] = useState('');
@@ -76,6 +79,8 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
       dueDate: formatDateForInput(itemToEdit?.dueDate) || '',
       priority: itemToEdit?.priority || 1,
       steps: itemToEdit?.steps || [],
+      level: itemToEdit?.level || defaultLevel || 'month',
+      identityLink: itemToEdit?.identityLink || '',
     });
     setShowGoalFields(true);
     setImagePreview(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
@@ -218,6 +223,54 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit }) =
             className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
           />
         </div>
+
+        {/* ── Lens level (year/month/week/day) ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+            {t('lens.formLabel')}
+          </label>
+          <div className="grid grid-cols-4 gap-2">
+            {LENS_LEVELS.map(({ id, emoji, gradient }) => {
+              const active = formData.level === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => set('level', id)}
+                  className={`flex flex-col items-center gap-1 p-2.5 rounded-xl border transition-all text-xs ${
+                    active
+                      ? `bg-gradient-to-br ${gradient} text-white border-transparent shadow`
+                      : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  }`}
+                >
+                  <span className="text-lg">{emoji}</span>
+                  <span className="font-semibold">{t(`lens.${id}.label`)}</span>
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[11px] text-gray-400 mt-1.5">{t(`lens.${formData.level}.help`)}</p>
+        </div>
+
+        {/* ── Identity link — connects this card to user's foundation ── */}
+        {user?.foundation?.identityStatement && (
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+              {t('lens.identityLinkLabel')}
+            </label>
+            <p className="text-[11px] text-gray-400 mb-1.5 italic">
+              "{user.foundation.identityStatement}"
+            </p>
+            <input
+              type="text"
+              value={formData.identityLink}
+              onChange={(e) => set('identityLink', e.target.value)}
+              placeholder={t('lens.identityLinkPlaceholder')}
+              maxLength={140}
+              className="w-full px-3.5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
+            />
+          </div>
+        )}
 
         {/* ── Category pills ── */}
         <div>

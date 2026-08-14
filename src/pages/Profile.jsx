@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiUser, FiMail, FiLock, FiSettings, FiBell, FiGlobe, FiCheck, FiAlertCircle } from 'react-icons/fi';
+import { FiUser, FiMail, FiLock, FiSettings, FiBell, FiGlobe, FiCheck, FiAlertCircle, FiZap, FiExternalLink } from 'react-icons/fi';
 import useStore from '../store';
+import useSubscription from '../hooks/useSubscription';
+import InterruptToggle from '../components/interrupts/InterruptToggle';
 import { SUPPORTED_LANGUAGES } from '../i18n';
+import { formatHuman } from '../utils/dateUtils';
 
 const Profile = () => {
   const { t, i18n } = useTranslation();
   const { user, updateProfile, darkMode, toggleDarkMode, setLanguage } = useStore();
+  const { isPaid, willCancel, expiresAt, openCheckout, openPortal } = useSubscription();
   
   const [profileData, setProfileData] = useState({
     displayName: user?.displayName || '',
@@ -172,6 +176,64 @@ const Profile = () => {
       )}
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Subscription panel */}
+        <div className="lg:col-span-3">
+          <div className="rounded-2xl border border-gray-100 dark:border-gray-800/50 bg-white dark:bg-dark-light p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <FiZap className="text-indigo-500" />
+              {t('subscription.heading', { defaultValue: 'Subscription' })}
+            </h2>
+
+            {isPaid ? (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                    {t('subscription.activePlan', { defaultValue: 'ManifestHub Annual — Active' })}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    {willCancel
+                      ? t('subscription.cancellingAt', { date: expiresAt ? formatHuman(expiresAt) : '—', defaultValue: `Access until ${expiresAt ? formatHuman(expiresAt) : '—'}` })
+                      : t('subscription.renewsAt', { date: expiresAt ? formatHuman(expiresAt) : '—', defaultValue: `Renews on ${expiresAt ? formatHuman(expiresAt) : '—'}` })}
+                  </p>
+                </div>
+                <button onClick={openPortal} className="btn btn-secondary inline-flex items-center gap-2">
+                  <FiExternalLink className="w-4 h-4" />
+                  {t('subscription.manage', { defaultValue: 'Manage subscription' })}
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                    {t('subscription.freePlan', { defaultValue: 'Free plan' })}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    {t('subscription.upgradeBlurb', { defaultValue: 'Unlock full Reset Protocol, unlimited history, and AI mirror — $99.99/year.' })}
+                  </p>
+                </div>
+                <button onClick={openCheckout} className="btn btn-primary inline-flex items-center gap-2">
+                  <FiZap className="w-4 h-4" />
+                  {t('subscription.upgrade', { defaultValue: 'Upgrade to Annual' })}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Pattern interrupts toggle */}
+        <div className="lg:col-span-3">
+          <div className="rounded-2xl border border-gray-100 dark:border-gray-800/50 bg-white dark:bg-dark-light p-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+              <FiBell className="text-indigo-500" />
+              {t('interrupts.section', { defaultValue: 'Pattern Interrupts' })}
+            </h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+              {t('interrupts.sectionDesc', { defaultValue: 'Schedule 6 micro-prompts through the day to break autopilot.' })}
+            </p>
+            <InterruptToggle />
+          </div>
+        </div>
+
         {/* Personal Information */}
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-dark-light rounded-lg shadow-md overflow-hidden">

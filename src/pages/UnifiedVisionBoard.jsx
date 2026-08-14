@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   FiPlus, FiFilter, FiSearch, FiX, FiCalendar,
   FiGrid, FiList, FiChevronUp, FiChevronDown, FiLayout,
-  FiStar, FiTarget, FiCheck, FiClock
+  FiStar, FiTarget, FiCheck, FiClock, FiZap, FiLock,
 } from 'react-icons/fi';
 import useStore from '../store';
 import EnhancedVisionBoardItem from '../components/visionboard/EnhancedVisionBoardItem';
@@ -12,6 +12,9 @@ import VisionBoardListItem from '../components/visionboard/VisionBoardListItem';
 import EnhancedVisionBoardItemForm from '../components/visionboard/EnhancedVisionBoardItemForm';
 import { ToastContainer } from '../components/Toast';
 import useToast from '../hooks/useToast';
+import useSubscription from '../hooks/useSubscription';
+import { LENS_LEVELS, FREE_TIER_LIMITS } from '../utils/manifestProtocol';
+import { isLensCapped } from '../utils/subscription';
 import '../styles/timeline.css';
 
 /* ─────────────────────────────────────────────
@@ -38,6 +41,7 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
   const { deleteVisionBoardItem, updateVisionBoardItem } = useStore();
 
   const meta = CATEGORY_META[item.category] || CATEGORY_META.general;
+  const lensLevel = LENS_LEVELS.find(l => l.id === (item.level || 'month'));
   const progress = item.progress || 0;
   const isCompleted = item.completed || progress === 100;
   const isDue = item.dueDate && new Date(item.dueDate) < new Date() && !isCompleted;
@@ -134,12 +138,23 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
 
       {/* Card body */}
       <div className="p-4">
-        {/* Category + title */}
+        {/* Lens level + Title */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-semibold text-gray-900 dark:text-white text-sm leading-snug line-clamp-2 flex-1">
             {item.title}
           </h3>
+          {lensLevel && (
+            <span className={`shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-lg text-base bg-gradient-to-br ${lensLevel.gradient} text-white shadow-sm`}>
+              {lensLevel.emoji}
+            </span>
+          )}
         </div>
+
+        {item.identityLink && (
+          <p className="text-[11px] italic text-indigo-500 dark:text-indigo-400 line-clamp-1 mb-2">
+            ↳ {item.identityLink}
+          </p>
+        )}
 
         {item.category && (
           <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 mb-3">
@@ -213,13 +228,16 @@ const EmptyState = ({ hasFilters, onAdd }) => (
 const UnifiedVisionBoard = () => {
   const { t } = useTranslation();
   const { visionBoard, goals, fetchVisionBoard, fetchGoals, deleteVisionBoardItem, addVisionBoardItem } = useStore();
+  const { isPaid, openCheckout } = useSubscription();
   const { toasts, removeToast, showSuccess, showError, showWarning } = useToast();
 
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(null);
+  const [defaultLevel, setDefaultLevel] = useState(null);  // for create flow
   const [filterCategory, setFilterCategory] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterLevel, setFilterLevel] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState(() => {
     try { return localStorage.getItem('visionboard-view-mode') || 'grid'; } catch { return 'grid'; }
@@ -238,7 +256,7 @@ const UnifiedVisionBoard = () => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Reset visible count whenever filters/sort change
-  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filterCategory, filterStatus, searchTerm, sortBy, sortOrder]);
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filterCategory, filterStatus, filterLevel, searchTerm, sortBy, sortOrder]);
 
   useEffect(() => {
     const load = async () => {
@@ -293,19 +311,37 @@ const UnifiedVisionBoard = () => {
     return () => obs.disconnect();
   }, []); // stable — never needs to re-run
 
-  const handleAddItem = () => { setItemToEdit(null); setShowForm(true); };
+  const handleAddItem = (level = null) => {
+    // Free-tier quota gate per-level
+    if (level && level !== 'day' && !isPaid) {
+      const currentCountForLevel = visionBoard.filter(v => (v.level || 'month') === level).length;
+      if (isLensCapped(level, currentCountForLevel, isPaid)) {
+        showWarning(t('lens.quotaExceeded'));
+        openCheckout();
+        return;
+      }
+    }
+    setDefaultLevel(level);
+    setItemToEdit(null);
+    setShowForm(true);
+  };
   const handleEditItem = (item) => { setItemToEdit(item); setShowForm(true); };
-  const handleFormClose = () => { setShowForm(false); setItemToEdit(null); };
+  const handleFormClose = () => { setShowForm(false); setItemToEdit(null); setDefaultLevel(null); };
 
   const handleFormSubmit = async (formData) => {
     try {
+      // Default level for new items so the lens hierarchy isn't undefined
+      const dataWithLevel = {
+        ...formData,
+        level: formData.level || defaultLevel || itemToEdit?.level || 'month',
+      };
       if (itemToEdit?.id) {
         const { updateVisionBoardItem } = useStore.getState();
-        const result = await updateVisionBoardItem(itemToEdit.id, formData);
+        const result = await updateVisionBoardItem(itemToEdit.id, dataWithLevel);
         if (result.success) { showSuccess(t('visionboard.visionUpdated'), 3000); handleFormClose(); }
         else showError(result.error || t('visionboard.failedUpdate'));
       } else {
-        const result = await addVisionBoardItem(formData);
+        const result = await addVisionBoardItem(dataWithLevel);
         if (result.success) { showSuccess(t('visionboard.visionCreated'), 3000); handleFormClose(); }
         else showError(result.error || t('visionboard.failedCreate'));
       }
@@ -319,6 +355,8 @@ const UnifiedVisionBoard = () => {
   };
 
   const filteredItems = unifiedItems.filter(item => {
+    const itemLevel = item.level || 'month';
+    const matchLevel = filterLevel === 'all' || itemLevel === filterLevel;
     const matchCat = filterCategory === 'all' || item.category === filterCategory;
     const matchStatus = filterStatus === 'all' ||
       (filterStatus === 'completed' && item.completed) ||
@@ -327,7 +365,7 @@ const UnifiedVisionBoard = () => {
     const matchSearch = !searchTerm ||
       (item.title?.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (item.content?.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchCat && matchStatus && matchSearch;
+    return matchLevel && matchCat && matchStatus && matchSearch;
   }).sort((a, b) => {
     let aV, bV;
     switch (sortBy) {
@@ -422,7 +460,7 @@ const UnifiedVisionBoard = () => {
             </div>
 
             <button
-              onClick={handleAddItem}
+              onClick={() => handleAddItem()}
               className="btn btn-primary flex items-center gap-2 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 active:translate-y-0"
             >
               <FiPlus className="w-4 h-4" />
@@ -430,6 +468,55 @@ const UnifiedVisionBoard = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* ── Lens Hierarchy tabs ── */}
+      <div className="mb-5 flex flex-wrap gap-2">
+        <button
+          onClick={() => setFilterLevel('all')}
+          className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all ${
+            filterLevel === 'all'
+              ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-sm'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+          }`}
+        >
+          {t('lens.all')} · {unifiedItems.length}
+        </button>
+        {LENS_LEVELS.map(({ id, emoji, gradient }) => {
+          const count = unifiedItems.filter(i => (i.level || 'month') === id).length;
+          const max = FREE_TIER_LIMITS[`${id}Lens`];
+          const showQuota = !isPaid && Number.isFinite(max);
+          const capped = showQuota && count >= max;
+          const active = filterLevel === id;
+          return (
+            <button
+              key={id}
+              onClick={() => setFilterLevel(id)}
+              title={t(`lens.${id}.help`)}
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+                active
+                  ? `bg-gradient-to-r ${gradient} text-white shadow-md`
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
+            >
+              <span>{emoji}</span>
+              <span>{t(`lens.${id}.label`)}</span>
+              <span className={`text-xs ${active ? 'text-white/80' : 'text-gray-400'}`}>
+                {showQuota ? `${count}/${max}` : count}
+              </span>
+              {capped && <FiLock className={`w-3 h-3 ${active ? 'text-white/70' : 'text-gray-400'}`} />}
+            </button>
+          );
+        })}
+        {filterLevel !== 'all' && (
+          <button
+            onClick={() => handleAddItem(filterLevel)}
+            className="ml-auto inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors"
+          >
+            <FiPlus className="w-3.5 h-3.5" />
+            {t('lens.addAt', { level: t(`lens.${filterLevel}.label`) })}
+          </button>
+        )}
       </div>
 
       {/* ── Filters ── */}
@@ -558,7 +645,7 @@ const UnifiedVisionBoard = () => {
           <p className="text-sm text-gray-400">Loading your visions…</p>
         </div>
       ) : filteredItems.length === 0 ? (
-        <EmptyState hasFilters={hasFilters} onAdd={handleAddItem} />
+        <EmptyState hasFilters={hasFilters} onAdd={() => handleAddItem()} />
       ) : viewMode === 'grid' ? (
         /* ── GRID / MOOD BOARD VIEW ── */
         <>
@@ -720,6 +807,7 @@ const UnifiedVisionBoard = () => {
             <div className="flex-1 overflow-y-auto px-6 py-5">
               <EnhancedVisionBoardItemForm
                 itemToEdit={itemToEdit}
+                defaultLevel={defaultLevel}
                 onClose={handleFormClose}
                 onSubmit={handleFormSubmit}
               />

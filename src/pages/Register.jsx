@@ -36,13 +36,13 @@ const Register = () => {
       setLocalError(t('auth.passwordTooShort')); return;
     }
     const result = await register(email, password, displayName);
-    if (result.success) navigate('/dashboard');
+    if (result.success) navigate('/foundation/onboard');
   };
 
   const handleGoogleLogin = async () => {
     setLocalError('');
     const result = await loginWithGoogle();
-    if (result.success) navigate('/dashboard');
+    if (result.success) navigate('/foundation/onboard');
   };
 
   const currentError = localError || authError;

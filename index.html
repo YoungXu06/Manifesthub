@@ -26,11 +26,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- Lemon.js — drives the in-app Lemonsqueezy checkout overlay -->
+  <script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+
   <title>Manifest Hub - Visualize Your Visions | Law of Attraction in action | Positive Energy</title>
 </head>
 <body>
   <div id="root"></div>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  <script>
+    /* Initialize Lemon.js once the SDK is loaded. */
+    window.addEventListener('load', () => {
+      if (window.createLemonSqueezy) window.createLemonSqueezy();
+    });
+  </script>
   <script type="module" src="/src/index.jsx"></script>
 </body>
 </html> 

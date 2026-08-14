@@ -9,7 +9,10 @@
     "visionboard": "愿景板",
     "profile": "个人资料",
     "logout": "退出登录",
-    "navigate": "导航"
+    "navigate": "导航",
+    "foundation": "身份地基",
+    "reset": "重启协议",
+    "reflect": "周度复盘"
   },
   "auth": {
     "login": "登录",
@@ -151,6 +154,29 @@
         "text": "我的潜力是无限的，我可以实现任何事情。",
         "visualization": "看到自己轻松克服任何障碍。"
       }
+    },
+    "intentionFromIdentity": "身份版本的我今天会做什么？",
+    "aff": {
+      "identityLens": "身份镜头",
+      "setup": "去设置",
+      "antiVisionPrefix": "我拒绝：",
+      "identityCaption": "想变小的时候来读这一句。",
+      "antiVisionCaption": "你正在远离的，是行动背后的引力。",
+      "visionCaption": "你正在奔赴的方向 · 它会演化。",
+      "monthCaption": "本月的 boss 战。",
+      "yearCaption": "12 个月后那一件单一的真相。"
+    },
+    "identity": {
+      "tag": "你的身份镜头",
+      "thisMonth": "本月",
+      "setupTitle": "设置你的身份地基",
+      "setupDesc": "5 分钟 · 六个元素 · 重新定义你看这一年的镜头。"
+    },
+    "quick": {
+      "reset": "重启协议",
+      "lens": "镜头层级",
+      "reflect": "周度复盘",
+      "foundation": "身份地基"
     }
   },
   "goals": {
@@ -361,7 +387,9 @@
     "yes": "是",
     "no": "否",
     "or": "或",
-    "noDataYet": "暂无数据"
+    "noDataYet": "暂无数据",
+    "openSidebar": "打开侧边栏",
+    "closeSidebar": "关闭侧边栏"
   },
   "theme": {
     "light": "浅色",
@@ -378,7 +406,8 @@
     "ko": "한국어",
     "pt": "Português",
     "ru": "Русский",
-    "changeLanguage": "切换语言"
+    "changeLanguage": "切换语言",
+    "selectLanguage": "选择语言"
   },
   "indexNotification": {
     "title": "需要数据库索引",
@@ -558,6 +587,345 @@
     ]
   },
   "sidebar": {
-    "dayStreak": "天连续"
+    "dayStreak": "天连续",
+    "annualMember": "年度会员",
+    "upgrade": "升级年度版"
+  },
+  "paywall": {
+    "lockedFeature": "年度计划",
+    "default": "此为 ManifestHub 年度版功能",
+    "defaultBlurb": "$99.99/年解锁完整的身份转化工具集。",
+    "cta": "升级 — $99.99/年",
+    "priceHint": "≈ $8.33/月，按年付费，可随时取消。",
+    "included": "已包含",
+    "annual": "年度",
+    "b1": "完整的 1 日重启协议",
+    "b2": "无限层级愿景卡 + 历史归档",
+    "b3": "身份地基演化时间线",
+    "b4": "全天 6 次模式打断"
+  },
+  "subscription": {
+    "heading": "订阅",
+    "freePlan": "免费版",
+    "activePlan": "ManifestHub 年度 — 已激活",
+    "upgrade": "升级到年度",
+    "upgradeBlurb": "解锁完整重启协议、无限历史与年度对比 — $99.99/年。",
+    "manage": "管理订阅",
+    "renewsAt": "{{date}} 续费",
+    "cancellingAt": "可用至 {{date}}"
+  },
+  "lens": {
+    "all": "全部镜头",
+    "formLabel": "这张卡服务于哪一层镜头？",
+    "addAt": "添加到{{level}}",
+    "quotaExceeded": "免费版在该层级已达上限，升级以继续添加。",
+    "identityLinkLabel": "这张卡如何服务于你的身份？",
+    "identityLinkPlaceholder": "把这张卡和你正在成为的人连起来…",
+    "year": {
+      "label": "年镜头",
+      "help": "一年内最唯一、最不容置疑的真相。"
+    },
+    "month": {
+      "label": "月镜头",
+      "help": "本月的 boss 战 —— 推动年度真相成立的项目或技能。"
+    },
+    "week": {
+      "label": "周任务",
+      "help": "本周日前必须完成的具体成果。"
+    },
+    "day": {
+      "label": "日杠杆",
+      "help": "今天就做的、像呼吸一样自然的关键动作。"
+    }
+  },
+  "foundation": {
+    "title": "身份地基",
+    "heading": "你的身份地基",
+    "subheading": "六个元素组成你看待这一年的镜头：简短、诚实、亲手书写。可随时编辑演化。",
+    "emptyTitle": "搭建看待这一年的镜头",
+    "emptyDesc": "5 分钟 · 六个问题 · 每题一句话。这将成为你之后每一次重启、每一张愿景卡、每一周复盘的脊椎。",
+    "start": "开始搭建",
+    "edit": "编辑",
+    "save": "保存地基",
+    "saving": "保存中…",
+    "saved": "地基已保存。",
+    "saveFailed": "保存失败，请重试。",
+    "updatedAt": "更新于 {{date}}",
+    "historyTitle": "历史版本",
+    "historyEmpty": "尚无历史版本 —— 编辑后旧版本会自动归档于此。",
+    "historyEntry": "于 {{date}} 替换",
+    "historyLocked": "年度会员保留每一次地基修改的历史版本，可逐字对比演化。",
+    "onboard": {
+      "step": "第 {{current}} / {{total}} 步",
+      "skip": "暂时跳过",
+      "fiveMin": "全部约 5 分钟",
+      "lockIn": "锁定地基"
+    },
+    "antiVision": {
+      "label": "反愿景",
+      "help": "假如未来 5 年什么都不变，描述那个生活里平均的一个周二，越具体越好。",
+      "placeholder": "我绝不让我的人生变成…"
+    },
+    "vision": {
+      "label": "愿景",
+      "help": "抛开现实主义。如果 3 年后你能立刻活在另一种生活里，那是怎样的一个周二？",
+      "placeholder": "我正在打造的是…"
+    },
+    "identityStatement": {
+      "label": "身份陈述",
+      "help": "要让那个生活感到自然而非强迫，你必须相信自己是怎样的人？",
+      "placeholder": "我是那种…的人"
+    },
+    "oneYearLens": {
+      "label": "年镜头",
+      "help": "一年后哪件单一、可观测的事情发生了，就证明旧模式被打破？",
+      "placeholder": "到 [日期]，一件具体的事是真的：…"
+    },
+    "oneMonthProject": {
+      "label": "月项目",
+      "help": "本月的 boss 战是什么 —— 必须存在的技能 / 成果 / 系统？",
+      "placeholder": "本月我在打造 / 学习 / 交付…"
+    },
+    "constraints": {
+      "label": "约束（红线）",
+      "help": "为了奔赴愿景，你绝不愿意牺牲什么？3-5 条。这是你游戏的规则。",
+      "placeholder": "我绝不牺牲…"
+    }
+  },
+  "reset": {
+    "indexTag": "重启协议",
+    "indexTitle": "一场让你进入新章节的仪式。",
+    "indexSubtitle": "改编自《How to fix your entire life in 1 day》—— 协议分三段：晨间挖掘、日间打断、夜间合成。请选择强度：",
+    "miniName": "迷你重启",
+    "miniDuration": "约 30 分钟 · 免费",
+    "miniDesc": "七个浓缩问题：暴露不满、命名要放下的身份、播下愿景 MVP。",
+    "miniQuotaThisQuarter": "本季度已使用 {{used}}/{{total}}",
+    "miniNextQuarter": "下季度可再次使用。",
+    "fullName": "完整 1 日重启",
+    "fullDuration": "约 1 天 · 年度版",
+    "fullDesc": "14 道晨间挖掘 + 6 次日间打断 + 8 道夜间合成。最终答案会直接写入你的身份地基。",
+    "startMini": "开始迷你重启",
+    "startFull": "开始 1 日重启",
+    "unlockFull": "解锁完整重启",
+    "fullTitle": "1 日重启协议",
+    "fullSubtitle": "旗舰仪式 · 年度版专属",
+    "lockedTitle": "完整重启协议属于年度版",
+    "lockedBlurb": "14 道晨间挖掘、6 次日间打断、8 道夜间合成，结果直接写入你的身份地基。",
+    "fallbackHint": "想先试 30 分钟版？免费的。",
+    "historyTitle": "历史会话",
+    "historyEmpty": "暂无重启会话 —— 第一次完成后会出现在这里。",
+    "completed": "{{date}} 完成",
+    "draft": "草稿 · {{date}}",
+    "continue": "继续",
+    "stage": {
+      "morning": "晨间",
+      "evening": "夜间"
+    },
+    "saving": "保存中…",
+    "autosaved": "已自动保存",
+    "completing": "完成中…",
+    "finish": "完成 & 同步到地基",
+    "noAi": "不要把这种沉思外包给 AI。写下对你而言真实的东西。",
+    "placeholder": "慢慢来，没有错误答案。",
+    "done": {
+      "title": "重启完成。",
+      "miniDesc": "和写下的内容静坐片刻。明天再读一次。功夫在思考里，不在文档里。",
+      "fullDesc": "你的身份地基已根据合成结果更新。把接下来 30 天当作新的章节。",
+      "viewFoundation": "查看我的地基",
+      "dashboard": "返回仪表盘"
+    },
+    "q": {
+      "q1_dullDissatisfaction": {
+        "prompt": "你已经习惯忍受的、那种持续而钝感的不满是什么？",
+        "help": "不是深度的痛苦，而是默默容忍的东西。如果你不讨厌它，就会一直容忍。"
+      },
+      "q2_repeatedComplaints": {
+        "prompt": "你反复抱怨、却从未真正去改变的是什么？",
+        "help": "写下过去一年你最常说出口的三个抱怨。"
+      },
+      "q3_behaviorVsWords": {
+        "prompt": "对每个抱怨：观察你行为的人会得出你「实际上」想要的是什么？",
+        "help": "行为比语言更真实地揭示目标。"
+      },
+      "q4_unbearableTruth": {
+        "prompt": "你当前生活里的哪一个真相，对你深深尊重的人来说会难以启齿？",
+        "help": "还是写下来。命名即松动。"
+      },
+      "q5_fiveYearTuesday": {
+        "prompt": "如果未来 5 年什么都不变，描述一个普通的星期二。",
+        "help": "你在哪里醒来？身体是什么感觉？9 到 18 点做什么？晚上 10 点是什么心情？"
+      },
+      "q6_tenYearMissed": {
+        "prompt": "再做一次 —— 但是 10 年后。你错过了什么？哪些机会关闭了？谁放弃了你？",
+        "help": "你不在场时人们怎么谈论你？"
+      },
+      "q7_endOfLife": {
+        "prompt": "终局视角 —— 你过了「安全版本」的人生。代价是什么？",
+        "help": "你从未让自己感受、尝试或成为的是什么？"
+      },
+      "q8_alreadyLivingFuture": {
+        "prompt": "你的身边有谁，正在过你刚才描述的「未来」？",
+        "help": "在同一轨迹上比你多走了 5、10、20 年的人。想到自己变成 ta 是什么感受？"
+      },
+      "q9_identityToGiveUp": {
+        "prompt": "要真正改变，你必须放下哪一种身份？",
+        "help": "完成：「我是那种…的人」—— 然后注意：不再是那种人，会让你在社交上付出什么代价。"
+      },
+      "q10_embarrassingReason": {
+        "prompt": "你没有改变，最让你难为情的真实原因是什么？",
+        "help": "听起来是软弱、害怕、懒惰，而不是合理。"
+      },
+      "q11_protectionCost": {
+        "prompt": "如果当前的行为是一种自我保护 —— 你究竟在保护什么？这种保护让你失去了什么？",
+        "help": "两个问题都需要诚实回答。"
+      },
+      "q12_idealTuesday": {
+        "prompt": "打个响指 —— 3 年后你过着理想生活，那个普通的星期二是怎样的？",
+        "help": "和 Q5 同样的细节程度。先抛开现实主义。"
+      },
+      "q13_identityToHave": {
+        "prompt": "要让那个生活感觉自然，你必须相信自己是怎样的人？",
+        "help": "写下身份陈述：「我是那种…的人」"
+      },
+      "q14_oneActionThisWeek": {
+        "prompt": "如果你已经是那个人，本周会做哪一件事？",
+        "help": "具体到能加入日历的程度。"
+      },
+      "e1_whyStuck": {
+        "prompt": "经过今天 —— 关于你为什么一直卡住，最真实的答案是什么？",
+        "help": "把今早浮现的内容综合起来。"
+      },
+      "e2_actualEnemy": {
+        "prompt": "命名「真正的敌人」。不是环境、不是别人 —— 是那条一直主导一切的内在模式或信念。",
+        "help": "毫不留情地具体。"
+      },
+      "e3_antiVisionSentence": {
+        "prompt": "用一句话写出：你绝不允许自己的生活变成什么样。",
+        "help": "这是你的反愿景压缩版。读到时应该让你心里咯噔一下。"
+      },
+      "e4_visionSentence": {
+        "prompt": "用一句话写出：你正在打造的是什么 —— 知道它会演化。",
+        "help": "这是你的愿景 MVP。简短没关系，深度来自之后几个月的行动。"
+      },
+      "e5_oneYearLens": {
+        "prompt": "年镜头：12 个月后哪一件事必须为真，才能证明旧模式被打破？",
+        "help": "具体、可观测、二元的。不是「感觉变好」，而是「上线了 X / 减重 Y / 交付了 Z」。"
+      },
+      "e6_oneMonthLens": {
+        "prompt": "月项目：本月 boss 战长什么样？",
+        "help": "你需要学会 / 打造 / 获得什么，才能让年镜头继续可能？"
+      },
+      "e7_dailyLevers": {
+        "prompt": "两到三个日杠杆：未来的你会毫无谈判地直接做的动作。",
+        "help": "明天就把它们排进日历。"
+      },
+      "e8_constraints": {
+        "prompt": "约束：你「绝不」愿意为达成愿景而牺牲什么？",
+        "help": "这是你游戏的规则。没有规则就没有游戏。"
+      }
+    }
+  },
+  "interrupts": {
+    "tag": "模式打断",
+    "section": "模式打断",
+    "sectionDesc": "在白天安排 6 个微提问，打破自动驾驶。打开应用时浏览器通知会触发；错过的会进入收件箱。",
+    "toggleTitle": "每日模式打断",
+    "toggleEnabled": "已开启 · 全天 6 次提问",
+    "toggleDisabled": "未开启 · 开启以打破自动驾驶",
+    "enabledWithNotif": "通知已启用。请在白天保持 ManifestHub 打开。",
+    "enabledNoNotif": "已开启（仅应用内 —— 浏览器通知未授权）。",
+    "disabled": "模式打断已关闭。",
+    "permissionFailed": "无法启用，请在浏览器设置中允许通知。",
+    "notFound": "未找到该打断。",
+    "saved": "已记录。",
+    "saveFailed": "保存失败，请重试。",
+    "save": "记录回答",
+    "update": "更新回答",
+    "placeholder": "第一念头 —— 不要修饰。60 秒已经够了。",
+    "softTimer": "60 秒提示器，超过也无妨。",
+    "banner": {
+      "title": "{{count}} 个待回答的打断",
+      "answer": "回答"
+    },
+    "q": {
+      "i1_avoiding": {
+        "short": "我此刻在回避什么？",
+        "prompt": "我现在做这件事，是在回避什么？"
+      },
+      "i2_filmedBehavior": {
+        "short": "如果有人录下你？",
+        "prompt": "如果有人录下我过去 2 小时的行为，他们会得出我「想要」什么样的人生？"
+      },
+      "i3_lifeIHate": {
+        "short": "在朝想要还是讨厌的方向？",
+        "prompt": "我此刻在朝我想要的人生还是我讨厌的人生靠近？"
+      },
+      "i4_pretendingNotImportant": {
+        "short": "在装作不重要的那件事？",
+        "prompt": "我「假装」不重要的、那件最重要的事是什么？"
+      },
+      "i5_identityProtection": {
+        "short": "出于身份保护还是真实欲望？",
+        "prompt": "我今天有哪些行为是出于身份保护，而非真实欲望？"
+      },
+      "i6_aliveVsDead": {
+        "short": "最鲜活 vs 最麻木的时刻？",
+        "prompt": "今天什么时候我最鲜活？什么时候最麻木？"
+      },
+      "i7_stoppedNeeding": {
+        "short": "若不再需要被认可？",
+        "prompt": "如果我不再需要别人这样看我，会有什么改变？"
+      },
+      "i8_aliveVsSafety": {
+        "short": "用鲜活换安全的地方？",
+        "prompt": "我在生活的哪一处，正在用「鲜活」换「安全」？"
+      },
+      "i9_smallestVersion": {
+        "short": "明天最小可成为的版本？",
+        "prompt": "我想成为的那个人，「最小」的版本，明天就能做出来吗？"
+      }
+    }
+  },
+  "reflection": {
+    "tag": "周度复盘",
+    "title": "这一周让你向哪里移动了？",
+    "subtitle": "五个问题，闭合控制论回路。",
+    "save": "保存复盘",
+    "saved": "复盘已保存。",
+    "saveFailed": "保存失败，请重试。",
+    "placeholder": "诚实，简短。",
+    "summary": "评分 {{score}}/5 · 项目：{{status}}",
+    "historyTitle": "过往周",
+    "historyEmpty": "尚无复盘 —— 第一次完成后会出现在这里。",
+    "hiddenCount": "归档里还有 {{count}} 周",
+    "unlockHint": "年度版解锁无限历史与月/季度趋势。",
+    "statusOpts": {
+      "ahead": "超前",
+      "on": "在轨",
+      "behind": "落后",
+      "adjust": "需调整"
+    },
+    "q": {
+      "w1_identityProgress": {
+        "prompt": "这一周让你朝身份陈述移动了多少？",
+        "help": "1 = 没有移动 · 5 = 明显更近。"
+      },
+      "w2_antiVisionSlips": {
+        "prompt": "这周哪些「反愿景」行为复发了？",
+        "help": "命名它们，让它们停止隐藏。"
+      },
+      "w3_futureMomentum": {
+        "prompt": "这周哪些行为最像「未来的你」？",
+        "help": "下周想要更多的就是它。"
+      },
+      "w4_projectStatus": {
+        "prompt": "1 个月项目目前进度？",
+        "help": "选最诚实的标签，哪怕不舒服。"
+      },
+      "w5_dailyLevers": {
+        "prompt": "下周承诺的两个日杠杆？",
+        "help": "具体、可加日历、不可妥协。"
+      }
+    }
   }
 }

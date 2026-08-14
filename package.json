@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.16",
     "date-fns": "^2.30.0",
     "firebase": "^11.6.0",
+    "firebase-admin": "^12.7.0",
     "framer-motion": "^12.9.4",
     "i18next": "^23.7.6",
     "postcss": "^8.4.31",

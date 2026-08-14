@@ -19,6 +19,12 @@ import Landing from './pages/Landing';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import Contact from './pages/Contact';
+import Foundation from './pages/Foundation';
+import FoundationOnboard from './pages/FoundationOnboard';
+import ResetIndex from './pages/ResetIndex';
+import Reset from './pages/Reset';
+import Interrupt from './pages/Interrupt';
+import WeeklyReflection from './pages/WeeklyReflection';
 
 // Components
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -37,7 +43,7 @@ function App() {
       await checkAuth();
       setIsInitializing(false);
     };
-    
+
     initApp();
   }, [checkAuth]);
 
@@ -55,14 +61,14 @@ function App() {
     <>
       {/* Global Toast Notifications */}
       <GlobalToastNotifications />
-      
+
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/contact" element={<Contact />} />
-        
+
         {/* Auth routes */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={
@@ -75,13 +81,18 @@ function App() {
           } />
           <Route path="/register" element={
             !user ? (
-              <Register /> 
+              <Register />
             ) : (
               <Navigate to={location.state?.from || "/dashboard"} replace />
             )
           } />
         </Route>
-        
+
+        {/* Onboarding (no main layout chrome) */}
+        <Route element={<ProtectedRoute user={user} authChecked={authChecked} />}>
+          <Route path="/foundation/onboard" element={<FoundationOnboard />} />
+        </Route>
+
         {/* Protected routes */}
         <Route element={<ProtectedRoute user={user} authChecked={authChecked} />}>
           <Route element={<MainLayout />}>
@@ -94,9 +105,15 @@ function App() {
             <Route path="/visionboard/:id" element={<VisionDetail />} />
             <Route path="/visionboard-board" element={<Navigate to="/visionboard" replace />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/foundation" element={<Foundation />} />
+            <Route path="/reset" element={<ResetIndex />} />
+            <Route path="/reset/run" element={<Reset />} />
+            <Route path="/interrupt" element={<Interrupt />} />
+            <Route path="/reflect/weekly" element={<WeeklyReflection />} />
+            <Route path="/billing/success" element={<Navigate to="/dashboard?upgraded=1" replace />} />
           </Route>
         </Route>
-        
+
         {/* 404 page */}
         <Route path="*" element={<NotFound />} />
       </Routes>

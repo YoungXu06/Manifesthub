@@ -1,19 +1,64 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   FiCalendar, FiCheck, FiPlus, FiStar, FiHeart,
   FiChevronLeft, FiChevronRight, FiBookmark, FiTrendingUp, FiLoader,
   FiZap, FiSun, FiMoon, FiCloud, FiSmile, FiEdit3, FiTarget,
+  FiUser, FiArrowRight, FiCompass,
 } from 'react-icons/fi';
 import useStore from '../store';
 import IndexNotification from '../components/IndexNotification';
 import { ToastContainer } from '../components/Toast';
 import useToast from '../hooks/useToast';
+import useSubscription from '../hooks/useSubscription';
 
-/* ─── Affirmation emojis (text/visualization come from i18n) ─── */
+/* ─── Affirmation emojis (text/visualization come from i18n or foundation) ─── */
 const AFF_EMOJIS = ['✨','🎯','⚡','🌟','🦋'];
-const AFF_COUNT = 5;
+const AFF_COUNT_FALLBACK = 5;
+
+/** Build a 5-card affirmation deck from the user's foundation. Returns null
+ *  when not enough foundation data exists; caller should fallback to static. */
+function buildFoundationAffirmations(foundation, t) {
+  if (!foundation) return null;
+  const cards = [];
+  if (foundation.identityStatement) {
+    cards.push({
+      emoji: '🪞',
+      text: foundation.identityStatement,
+      caption: t('dashboard.aff.identityCaption'),
+    });
+  }
+  if (foundation.antiVision) {
+    cards.push({
+      emoji: '🛡️',
+      text: t('dashboard.aff.antiVisionPrefix') + foundation.antiVision,
+      caption: t('dashboard.aff.antiVisionCaption'),
+    });
+  }
+  if (foundation.vision) {
+    cards.push({
+      emoji: '🌅',
+      text: foundation.vision,
+      caption: t('dashboard.aff.visionCaption'),
+    });
+  }
+  if (foundation.oneMonthProject) {
+    cards.push({
+      emoji: '⚔️',
+      text: foundation.oneMonthProject,
+      caption: t('dashboard.aff.monthCaption'),
+    });
+  }
+  if (foundation.oneYearLens) {
+    cards.push({
+      emoji: '🎯',
+      text: foundation.oneYearLens,
+      caption: t('dashboard.aff.yearCaption'),
+    });
+  }
+  return cards.length >= 2 ? cards : null;
+}
 
 /* ─── Moods (static colors/icons, labels resolved in component) ─── */
 const MOOD_DEFS = [
@@ -75,12 +120,26 @@ const Dashboard = () => {
   } = useStore();
 
   const { toasts, removeToast, showSuccess, showError } = useToast();
+  const { isPaid, openCheckout } = useSubscription();
   const greetingHour = getGreetingHour();
   const greeting = greetingHour < 12
     ? { text: t('dashboard.goodMorning'), icon: <FiSun className="text-amber-400" /> }
     : greetingHour < 17
     ? { text: t('dashboard.goodAfternoon'), icon: <FiCloud className="text-blue-400" /> }
     : { text: t('dashboard.goodEvening'), icon: <FiMoon className="text-indigo-400" /> };
+
+  /* ── identity-driven affirmation deck ── */
+  const affirmDeck = useMemo(() => {
+    const fromFoundation = buildFoundationAffirmations(user?.foundation, t);
+    if (fromFoundation) return fromFoundation;
+    // Fallback to legacy static i18n affirmations
+    return Array.from({ length: AFF_COUNT_FALLBACK }, (_, i) => ({
+      emoji: AFF_EMOJIS[i],
+      text: t(`dashboard.affirmations.${i}.text`),
+      caption: t(`dashboard.affirmations.${i}.visualization`),
+    }));
+  }, [user?.foundation, t]);
+  const affCount = affirmDeck.length;
 
   /* ── calendar state ── */
   const [currentDate, setCurrentDate]   = useState(new Date());
@@ -122,9 +181,9 @@ const Dashboard = () => {
     };
     load();
 
-    affirmTimer.current = setInterval(() => setAffirmIdx(p => (p + 1) % AFF_COUNT), 5500);
+    affirmTimer.current = setInterval(() => setAffirmIdx(p => (p + 1) % affCount), 5500);
     return () => clearInterval(affirmTimer.current);
-  }, []);
+  }, [affCount]);
 
   /* ════════════════════════════ month change ════════════════════════════ */
   useEffect(() => {
@@ -287,6 +346,71 @@ const Dashboard = () => {
         )}
       </div>
 
+      {/* ── Identity hero (or onboarding nudge) ── */}
+      {user?.foundation?.identityStatement ? (
+        <Link
+          to="/foundation"
+          className="block mb-7 group"
+        >
+          <div className="relative rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-indigo-950/40 dark:via-gray-900 dark:to-purple-950/40 border border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-colors shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                <FiUser className="w-3 h-3" />
+                {t('dashboard.identity.tag')}
+              </span>
+              <FiEdit3 className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <p className="mt-2 text-base sm:text-lg font-serif italic text-gray-900 dark:text-white leading-snug">
+              "{user.foundation.identityStatement}"
+            </p>
+            {user.foundation.oneMonthProject && (
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-1">
+                <FiZap className="inline w-3 h-3 mr-1 text-amber-500" />
+                {t('dashboard.identity.thisMonth')}: {user.foundation.oneMonthProject}
+              </p>
+            )}
+          </div>
+        </Link>
+      ) : (
+        <Link
+          to="/foundation/onboard"
+          className="block mb-7 group"
+        >
+          <div className="rounded-2xl p-5 border-2 border-dashed border-indigo-200 dark:border-indigo-800/50 hover:border-indigo-400 dark:hover:border-indigo-700 hover:bg-indigo-50/30 dark:hover:bg-indigo-950/20 transition-all">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 flex-shrink-0">
+                <FiZap className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">{t('dashboard.identity.setupTitle')}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t('dashboard.identity.setupDesc')}</p>
+              </div>
+              <FiArrowRight className="w-5 h-5 text-indigo-500 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+            </div>
+          </div>
+        </Link>
+      )}
+
+      {/* ── Quick action ribbon ── */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <Link to="/reset" className="group flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white dark:bg-gray-800/80 border border-gray-100 dark:border-gray-700/50 hover:border-amber-300 dark:hover:border-amber-700/60 transition-colors">
+          <span className="text-lg">☀️</span>
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-200 truncate">{t('dashboard.quick.reset')}</span>
+        </Link>
+        <Link to="/visionboard" className="group flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white dark:bg-gray-800/80 border border-gray-100 dark:border-gray-700/50 hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-colors">
+          <span className="text-lg">🎯</span>
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-200 truncate">{t('dashboard.quick.lens')}</span>
+        </Link>
+        <Link to="/reflect/weekly" className="group flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white dark:bg-gray-800/80 border border-gray-100 dark:border-gray-700/50 hover:border-emerald-300 dark:hover:border-emerald-700/60 transition-colors">
+          <span className="text-lg">📅</span>
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-200 truncate">{t('dashboard.quick.reflect')}</span>
+        </Link>
+        <Link to="/foundation" className="group flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white dark:bg-gray-800/80 border border-gray-100 dark:border-gray-700/50 hover:border-purple-300 dark:hover:border-purple-700/60 transition-colors">
+          <span className="text-lg">🪞</span>
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-200 truncate">{t('dashboard.quick.foundation')}</span>
+        </Link>
+      </div>
+
       {/* ── Stats ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-7">
         {stats.map((s, i) => <StatCard key={i} {...s} />)}
@@ -301,19 +425,32 @@ const Dashboard = () => {
           {/* Affirmation carousel */}
           <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-5 shadow-lg shadow-purple-500/20 min-h-[200px] flex flex-col">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8 blur-2xl pointer-events-none" />
-            <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest mb-4 relative z-10">✨ Daily Affirmation</h2>
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest">
+                {user?.foundation ? t('dashboard.aff.identityLens') : '✨ ' + t('dashboard.affirmation')}
+              </h2>
+              {!user?.foundation && (
+                <Link
+                  to="/foundation"
+                  className="text-[10px] uppercase tracking-wider font-semibold text-white/70 hover:text-white inline-flex items-center gap-1"
+                >
+                  {t('dashboard.aff.setup')}
+                  <FiArrowRight className="w-3 h-3" />
+                </Link>
+              )}
+            </div>
             <div className="flex-1 relative z-10">
-              {AFF_EMOJIS.map((emoji, i) => (
+              {affirmDeck.map((card, i) => (
                 <div key={i} className="absolute inset-0 flex flex-col justify-center transition-opacity duration-700"
                   style={{ opacity: i === affirmIdx ? 1 : 0, pointerEvents: i === affirmIdx ? 'auto' : 'none' }}>
-                  <p className="text-3xl mb-2">{emoji}</p>
-                  <p className="text-white font-semibold text-base leading-snug mb-3 italic">"{t(`dashboard.affirmations.${i}.text`)}"</p>
-                  <p className="text-white/70 text-xs leading-relaxed">{t(`dashboard.affirmations.${i}.visualization`)}</p>
+                  <p className="text-3xl mb-2">{card.emoji}</p>
+                  <p className="text-white font-semibold text-base leading-snug mb-3 italic">"{card.text}"</p>
+                  <p className="text-white/70 text-xs leading-relaxed">{card.caption}</p>
                 </div>
               ))}
             </div>
             <div className="relative z-10 flex gap-1.5 mt-auto pt-8">
-              {AFF_EMOJIS.map((_, i) => (
+              {affirmDeck.map((_, i) => (
                 <button key={i} onClick={() => setAffirmIdx(i)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${i === affirmIdx ? 'bg-white w-5' : 'bg-white/35 w-1.5'}`} />
               ))}
@@ -325,18 +462,22 @@ const Dashboard = () => {
             <h2 className="section-title mb-1 flex items-center gap-2"><FiSmile className="text-purple-500" />How are you feeling?</h2>
             <p className="text-xs text-gray-400 mb-1">{isToday ? 'Today' : selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p>
             <div className="grid grid-cols-4 gap-2">
-              {MOOD_DEFS.map(mood => (
-                <button key={mood.label} onClick={() => isToday && handleSaveMood(t(`dashboard.moods.${mood.key}`))}
-                  disabled={!isToday}
-                  className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
-                    dayLog.mood === mood.label
-                      ? `${mood.bg} ring-2 ring-offset-1 ring-indigo-400 scale-105`
-                      : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  } ${!isToday ? 'opacity-60 cursor-default' : ''}`}>
-                  <span className="text-2xl leading-none">{mood.icon}</span>
-                  <span className={`text-xs font-medium ${dayLog.mood === t(`dashboard.moods.${mood.key}`) ? mood.color : 'text-gray-500 dark:text-gray-400'}`}>{t(`dashboard.moods.${mood.key}`)}</span>
-                </button>
-              ))}
+              {MOOD_DEFS.map(mood => {
+                const moodLabel = t(`dashboard.moods.${mood.key}`);
+                const selected = dayLog.mood === moodLabel;
+                return (
+                  <button key={mood.key} onClick={() => isToday && handleSaveMood(moodLabel)}
+                    disabled={!isToday}
+                    className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
+                      selected
+                        ? `${mood.bg} ring-2 ring-offset-1 ring-indigo-400 scale-105`
+                        : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    } ${!isToday ? 'opacity-60 cursor-default' : ''}`}>
+                    <span className="text-2xl leading-none">{mood.icon}</span>
+                    <span className={`text-xs font-medium ${selected ? mood.color : 'text-gray-500 dark:text-gray-400'}`}>{moodLabel}</span>
+                  </button>
+                );
+              })}
             </div>
             {dayLog.mood && !isToday && <p className="mt-2 text-xs text-center text-gray-400">{t('dashboard.feelingOnDay', {mood: dayLog.mood})}</p>}
             {dayLog.mood && isToday && <p className="mt-2 text-xs text-center text-indigo-500 dark:text-indigo-400 font-medium">{t('dashboard.feelingNote', {mood: dayLog.mood})}</p>}
@@ -359,7 +500,12 @@ const Dashboard = () => {
               <div className="space-y-2">
                 <input autoFocus value={intentionDraft} onChange={e => setIntentionDraft(e.target.value)}
                   onKeyDown={e => { if (e.key==='Enter') handleSaveIntention(); if (e.key==='Escape') setShowIntentionInput(false); }}
-                  placeholder={t('dashboard.intentionPlaceholder')} className="input w-full text-sm" maxLength={100} />
+                  placeholder={
+                    user?.foundation?.identityStatement
+                      ? t('dashboard.intentionFromIdentity', { defaultValue: 'What would the ideal version of me do today?' })
+                      : t('dashboard.intentionPlaceholder')
+                  }
+                  className="input w-full text-sm" maxLength={140} />
                 <div className="flex gap-2">
                   <button onClick={handleSaveIntention} disabled={savingIntention}
                     className="btn btn-primary btn-sm flex-1 text-xs">

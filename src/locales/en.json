@@ -9,7 +9,10 @@
     "visionboard": "Visionboard",
     "profile": "Profile",
     "logout": "Logout",
-    "navigate": "Navigate"
+    "navigate": "Navigate",
+    "foundation": "Foundation",
+    "reset": "Reset",
+    "reflect": "Reflect"
   },
   "auth": {
     "login": "Login",
@@ -50,6 +53,193 @@
     "passwordStrength": "Password strength",
     "verifyingSession": "Verifying your session...",
     "signinArrow": "Sign in →"
+  },
+  "sidebar": {
+    "dayStreak": "day streak",
+    "annualMember": "Annual Member",
+    "upgrade": "Upgrade to Annual"
+  },
+  "paywall": {
+    "lockedFeature": "Annual Plan",
+    "default": "This is part of ManifestHub Annual",
+    "defaultBlurb": "Unlock the full identity-transformation toolkit for $99.99 / year.",
+    "cta": "Upgrade — $99.99/yr",
+    "priceHint": "≈ $8.33/month, billed yearly. Cancel anytime.",
+    "included": "Included",
+    "annual": "Annual",
+    "b1": "Full 1-day Reset Protocol",
+    "b2": "Unlimited lens cards + history",
+    "b3": "Foundation evolution timeline",
+    "b4": "Pattern interrupts (6 daily prompts)"
+  },
+  "subscription": {
+    "heading": "Subscription",
+    "freePlan": "Free plan",
+    "activePlan": "ManifestHub Annual — Active",
+    "upgrade": "Upgrade to Annual",
+    "upgradeBlurb": "Unlock full Reset Protocol, unlimited history, and year-over-year compare — $99.99/year.",
+    "manage": "Manage subscription",
+    "renewsAt": "Renews on {{date}}",
+    "cancellingAt": "Access until {{date}}"
+  },
+  "lens": {
+    "all": "All Lenses",
+    "formLabel": "Which lens does this serve?",
+    "addAt": "Add to {{level}}",
+    "quotaExceeded": "Free plan reached its limit at this lens. Upgrade to add more.",
+    "identityLinkLabel": "How does this serve your identity?",
+    "identityLinkPlaceholder": "Connect this card to who you're becoming…",
+    "year":  { "label": "Year",  "help": "The single one-year truth: what makes the past 12 months feel real." },
+    "month": { "label": "Month", "help": "The boss fight: the project or skill that moves the year-lens forward." },
+    "week":  { "label": "Week",  "help": "The quest: a focused outcome to hit before next Sunday." },
+    "day":   { "label": "Day",   "help": "The lever: the needle-moving action you do today, on auto-pilot." }
+  },
+  "foundation": {
+    "title": "Foundation",
+    "heading": "Your Identity Foundation",
+    "subheading": "Six elements that compose the lens through which you'll see your year. Brief, honest, hand-written. Edit anytime as it evolves.",
+    "emptyTitle": "Set the lens you'll see your year through",
+    "emptyDesc": "5 minutes — six prompts, one sentence each. This becomes the spine of every Reset, lens card, and weekly reflection.",
+    "start": "Start Foundation",
+    "edit": "Edit",
+    "save": "Save Foundation",
+    "saving": "Saving…",
+    "saved": "Foundation saved.",
+    "saveFailed": "Could not save. Try again.",
+    "updatedAt": "Updated {{date}}",
+    "historyTitle": "Foundation history",
+    "historyEmpty": "No previous versions yet. Edit the foundation and the prior version will be saved here.",
+    "historyEntry": "Replaced on {{date}}",
+    "historyLocked": "Annual members keep every prior version of their Foundation, with side-by-side comparison.",
+    "onboard": {
+      "step": "Step {{current}} of {{total}}",
+      "skip": "Skip for now",
+      "fiveMin": "5 minutes total",
+      "lockIn": "Lock it in"
+    },
+    "antiVision":        { "label": "Anti-Vision",         "help": "If absolutely nothing changes for the next 5 years — describe an average Tuesday in that life. Use brutal specifics.",                "placeholder": "I refuse to let my life become…" },
+    "vision":            { "label": "Vision",              "help": "Forget practicality. If you could snap your fingers and live differently in 3 years — what's an average Tuesday like?",                "placeholder": "What I'm building toward…" },
+    "identityStatement": { "label": "Identity Statement",  "help": "What would you have to believe about yourself for that life to feel natural rather than forced?",                                       "placeholder": "I am the type of person who…" },
+    "oneYearLens":       { "label": "One-Year Lens",       "help": "What single thing would have to be true in 12 months for you to know the old pattern broke?",                                            "placeholder": "By [date], one concrete thing is true…" },
+    "oneMonthProject":   { "label": "One-Month Project",   "help": "What is the boss fight this month — the skill / artifact / system that has to exist for the year-lens to remain possible?",            "placeholder": "This month I'm building / learning / shipping…" },
+    "constraints":       { "label": "Constraints",         "help": "What are you NOT willing to sacrifice to chase your vision? 3–5 lines. These are the rules of your game.",                              "placeholder": "I will not sacrifice…" }
+  },
+  "reset": {
+    "indexTag": "Reset Protocol",
+    "indexTitle": "A ritual to launch into a new chapter.",
+    "indexSubtitle": "Adapted from \"How to fix your entire life in 1 day\" — the protocol uses three stages: morning excavation, daytime pattern-breaks, evening synthesis. Pick a flavor below.",
+    "miniName": "Mini Reset",
+    "miniDuration": "~30 minutes · Free",
+    "miniDesc": "Seven distilled prompts that surface the dissatisfaction, name the identity to give up, and seed a vision MVP.",
+    "miniQuotaThisQuarter": "{{used}}/{{total}} used this quarter",
+    "miniNextQuarter": "Available again next quarter.",
+    "fullName": "Full 1-Day Reset",
+    "fullDuration": "~1 day · Annual",
+    "fullDesc": "Fourteen morning excavation prompts, six day-time interrupts, eight evening synthesis prompts. The output writes directly into your Foundation.",
+    "startMini": "Start Mini Reset",
+    "startFull": "Start 1-Day Reset",
+    "unlockFull": "Unlock Full Reset",
+    "fullTitle": "1-Day Reset Protocol",
+    "fullSubtitle": "The flagship ritual, available on the Annual plan.",
+    "lockedTitle": "The full Reset is part of Annual",
+    "lockedBlurb": "Fourteen morning prompts, six daytime pattern-interrupts, eight evening synthesis prompts that write directly into your Foundation.",
+    "fallbackHint": "Want to try the 30-minute version instead? It's free.",
+    "historyTitle": "Past sessions",
+    "historyEmpty": "No reset sessions yet — your first will appear here.",
+    "completed": "Completed {{date}}",
+    "draft": "Draft · {{date}}",
+    "continue": "Continue",
+    "stage": { "morning": "Morning", "evening": "Evening" },
+    "saving": "Saving…",
+    "autosaved": "Auto-saved",
+    "completing": "Completing…",
+    "finish": "Finish & sync to Foundation",
+    "noAi": "Don't outsource this contemplation to AI. Write what's true for you.",
+    "placeholder": "Take your time. There's no wrong answer.",
+    "done": {
+      "title": "Reset complete.",
+      "miniDesc": "Sit with what you wrote. Re-read it tomorrow. The work is in the contemplation, not the document.",
+      "fullDesc": "Your Foundation has been updated with the synthesis. Treat the next 30 days as a fresh chapter.",
+      "viewFoundation": "View my Foundation",
+      "dashboard": "Back to Dashboard"
+    },
+    "q": {
+      "q1_dullDissatisfaction": { "prompt": "What is the dull, persistent dissatisfaction you've learned to live with?",                              "help": "Not deep suffering — the thing you've quietly tolerated. If you don't hate it, you'll keep tolerating it." },
+      "q2_repeatedComplaints":   { "prompt": "What do you complain about repeatedly but never actually change?",                                       "help": "Write the three complaints you've voiced most often this past year." },
+      "q3_behaviorVsWords":      { "prompt": "For each complaint — what would someone watching your behavior conclude you actually want?",             "help": "Behavior reveals goals more honestly than words." },
+      "q4_unbearableTruth":      { "prompt": "What truth about your current life would be unbearable to admit to someone you deeply respect?",          "help": "Write it anyway. The naming is the loosening." },
+      "q5_fiveYearTuesday":      { "prompt": "If absolutely nothing changes for 5 years — describe an average Tuesday.",                                "help": "Where do you wake up? What does your body feel like? What do you do between 9 and 6? How do you feel at 10pm?" },
+      "q6_tenYearMissed":        { "prompt": "Now do it for 10 years out — what have you missed? Which opportunities closed? Who gave up on you?",      "help": "What do people say about you when you're not in the room?" },
+      "q7_endOfLife":            { "prompt": "End-of-life perspective — you lived the safe version. What was the cost?",                                "help": "What did you never let yourself feel, try, or become?" },
+      "q8_alreadyLivingFuture":  { "prompt": "Who in your life is already living the future you just described?",                                       "help": "Someone 5, 10, 20 years ahead on the same trajectory. What do you feel when you imagine becoming them?" },
+      "q9_identityToGiveUp":     { "prompt": "What identity would you have to give up to actually change?",                                            "help": "Complete: 'I am the type of person who…' — and notice what would cost you socially to no longer be that." },
+      "q10_embarrassingReason":  { "prompt": "What's the most embarrassing reason you haven't changed?",                                                "help": "The one that makes you sound weak, scared, or lazy — not reasonable." },
+      "q11_protectionCost":      { "prompt": "If your current behavior is self-protection — what exactly are you protecting? What is that costing you?","help": "Both questions need an honest answer." },
+      "q12_idealTuesday":        { "prompt": "Snap your fingers — you live your ideal life in 3 years. Describe an average Tuesday.",                   "help": "Same level of detail as Q5. Forget practicality." },
+      "q13_identityToHave":      { "prompt": "What would you have to believe about yourself for that life to feel natural rather than forced?",        "help": "Write the identity statement: 'I am the type of person who…'" },
+      "q14_oneActionThisWeek":   { "prompt": "Name one thing you would do this week if you were already that person.",                                  "help": "Be specific. Schedule it." },
+      "e1_whyStuck":             { "prompt": "After today — what feels most true about why you've been stuck?",                                         "help": "Synthesize what surfaced this morning." },
+      "e2_actualEnemy":          { "prompt": "Name the actual enemy. Not circumstances, not people — the internal pattern or belief that has been running the show.", "help": "Be ruthlessly specific." },
+      "e3_antiVisionSentence":   { "prompt": "Write a single sentence: what you refuse to let your life become.",                                       "help": "This is your anti-vision compressed. It should make you feel something when you read it." },
+      "e4_visionSentence":       { "prompt": "Write a single sentence: what you're building toward — knowing it will evolve.",                          "help": "This is your vision MVP. Brevity is fine; depth comes from the months of action that follow." },
+      "e5_oneYearLens":          { "prompt": "One-year lens: what single thing has to be true in 12 months for the old pattern to be broken?",         "help": "Concrete, observable, binary. Not 'feel better' — 'launched X' / 'lost Y' / 'shipped Z'." },
+      "e6_oneMonthLens":         { "prompt": "One-month project: what does this month's boss fight look like?",                                         "help": "What do you need to learn / build / acquire so the one-year lens stays possible?" },
+      "e7_dailyLevers":          { "prompt": "Two or three daily levers: actions the future-you would simply do, no negotiation.",                      "help": "Block them in your calendar tomorrow." },
+      "e8_constraints":          { "prompt": "Constraints: what are you NOT willing to sacrifice to get there?",                                        "help": "These are the rules of your game. Without rules, there's no game." }
+    }
+  },
+  "interrupts": {
+    "tag": "Pattern Interrupt",
+    "section": "Pattern Interrupts",
+    "sectionDesc": "Schedule six micro-prompts through the day to break autopilot. Notifications fire while the app is open; missed prompts queue in the inbox.",
+    "toggleTitle": "Daily pattern interrupts",
+    "toggleEnabled": "Enabled · 6 prompts during the day",
+    "toggleDisabled": "Off · enable to break autopilot",
+    "enabledWithNotif": "Notifications enabled. Keep ManifestHub open during the day.",
+    "enabledNoNotif": "Enabled (in-app only — browser notifications were not granted).",
+    "disabled": "Pattern interrupts disabled.",
+    "permissionFailed": "Could not enable. Allow notifications in your browser settings.",
+    "notFound": "Interrupt not found.",
+    "saved": "Logged.",
+    "saveFailed": "Could not save. Try again.",
+    "save": "Log answer",
+    "update": "Update answer",
+    "placeholder": "First thought — don't filter. 60 seconds is enough.",
+    "softTimer": "Soft 60-second timer. Spend longer if you need.",
+    "banner": { "title": "{{count}} interrupt(s) waiting", "answer": "Answer" },
+    "q": {
+      "i1_avoiding":               { "short": "What am I avoiding right now?",     "prompt": "What am I avoiding right now by doing what I'm doing?" },
+      "i2_filmedBehavior":         { "short": "Filmed behavior would say what?",    "prompt": "If someone filmed the last two hours, what would they conclude I want from my life?" },
+      "i3_lifeIHate":              { "short": "Toward life I want or hate?",        "prompt": "Am I moving toward the life I hate or the life I want?" },
+      "i4_pretendingNotImportant": { "short": "Pretending this isn't important?",   "prompt": "What's the most important thing I'm pretending isn't important?" },
+      "i5_identityProtection":     { "short": "Identity protection vs desire?",     "prompt": "What did I do today out of identity protection rather than genuine desire?" },
+      "i6_aliveVsDead":            { "short": "Most alive vs dead?",                "prompt": "When did I feel most alive today? When did I feel most dead?" },
+      "i7_stoppedNeeding":         { "short": "If I stopped needing approval?",     "prompt": "What would change if I stopped needing people to see me a certain way?" },
+      "i8_aliveVsSafety":          { "short": "Aliveness vs safety?",               "prompt": "Where in my life am I trading aliveness for safety?" },
+      "i9_smallestVersion":        { "short": "Smallest version tomorrow?",         "prompt": "What's the smallest version of the person I want to become that I could be tomorrow?" }
+    }
+  },
+  "reflection": {
+    "tag": "Weekly Reflection",
+    "title": "How did the week move you?",
+    "subtitle": "Five questions. Loop closed.",
+    "save": "Save reflection",
+    "saved": "Reflection saved.",
+    "saveFailed": "Could not save. Try again.",
+    "placeholder": "Honest, brief.",
+    "summary": "Score {{score}}/5 · Project: {{status}}",
+    "historyTitle": "Past weeks",
+    "historyEmpty": "No reflections yet — your first will appear here.",
+    "hiddenCount": "{{count}} more weeks in your archive",
+    "unlockHint": "Annual unlocks unlimited history + month/quarter trends.",
+    "statusOpts": { "ahead": "Ahead", "on": "On track", "behind": "Behind", "adjust": "Need to adjust" },
+    "q": {
+      "w1_identityProgress": { "prompt": "How much did this week move you toward your Identity Statement?",      "help": "1 = no movement · 5 = clearly closer." },
+      "w2_antiVisionSlips":  { "prompt": "What anti-vision behaviors recurred this week?",                       "help": "Name them so they stop hiding." },
+      "w3_futureMomentum":   { "prompt": "What did you do that most resembled the future-you?",                  "help": "What you want more of next week." },
+      "w4_projectStatus":    { "prompt": "How is the 1-Month Project tracking?",                                 "help": "Pick the most honest label, even if uncomfortable." },
+      "w5_dailyLevers":      { "prompt": "Two daily levers you commit to next week.",                            "help": "Specific. Calendarable. Non-negotiable." }
+    }
   },
   "dashboard": {
     "welcome": "Welcome back, {{name}}!",
@@ -115,6 +305,8 @@
     "noIntentionRecorded": "No intention recorded",
     "setIntention": "Set Intention",
     "intentionPlaceholder": "I intend to…",
+    "intentionFromIdentity": "What would the identity-version of me do today?",
+    "intentionFromIdentity": "What would the identity-version of me do today?",
     "intentionSaved": "Today's intention saved! 🎯",
     "failedSaveIntention": "Failed to save intention",
     "overallProgress": "Overall progress",
@@ -136,6 +328,28 @@
       "2": { "text": "I have the power to create change in my life.", "visualization": "Visualize the positive changes you want to create." },
       "3": { "text": "I attract success and abundance into my life.", "visualization": "Imagine abundance flowing effortlessly into your life." },
       "4": { "text": "My potential is unlimited, and I can achieve anything.", "visualization": "See yourself easily overcoming any obstacle." }
+    },
+    "aff": {
+      "identityLens": "Identity Lens",
+      "setup": "Set up",
+      "antiVisionPrefix": "I refuse: ",
+      "identityCaption": "Read this when you're tempted to be smaller.",
+      "antiVisionCaption": "What you're moving away from — the gravity behind your effort.",
+      "visionCaption": "What you're moving toward. It will evolve.",
+      "monthCaption": "This month's boss fight.",
+      "yearCaption": "The single one-year truth that proves the pattern broke."
+    },
+    "identity": {
+      "tag": "Your Identity Lens",
+      "thisMonth": "This month",
+      "setupTitle": "Set your identity foundation",
+      "setupDesc": "5 minutes — six elements that reshape how you see your year. Adapted from the 1-day reset protocol."
+    },
+    "quick": {
+      "reset": "Reset Protocol",
+      "lens": "Lens Hierarchy",
+      "reflect": "Weekly Reflect",
+      "foundation": "Foundation"
     }
   },
   "goals": {
@@ -346,7 +560,9 @@
     "yes": "Yes",
     "no": "No",
     "or": "or",
-    "noDataYet": "No data yet"
+    "noDataYet": "No data yet",
+    "openSidebar": "Open sidebar",
+    "closeSidebar": "Close sidebar"
   },
   "theme": {
     "light": "Light",
@@ -363,7 +579,8 @@
     "ko": "한국어",
     "pt": "Português",
     "ru": "Русский",
-    "changeLanguage": "Change language"
+    "changeLanguage": "Change language",
+    "selectLanguage": "Select language"
   },
   "indexNotification": {
     "title": "Database Index Required",
@@ -513,6 +730,8 @@
     "subjects": ["General question", "Bug report", "Feature request", "Account & billing", "Privacy inquiry", "Other"]
   },
   "sidebar": {
-    "dayStreak": "day streak"
+    "dayStreak": "day streak",
+    "annualMember": "Annual Member",
+    "upgrade": "Upgrade to Annual"
   }
 }

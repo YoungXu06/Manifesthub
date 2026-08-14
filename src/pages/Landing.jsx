@@ -238,6 +238,18 @@ const Landing = () => {
       gradient: 'from-purple-500 to-indigo-600',
     },
     {
+      icon: FiTarget,
+      title: t('landing.features.identityFoundation', { defaultValue: 'Identity Foundation' }),
+      desc: t('landing.features.identityFoundationDesc', { defaultValue: 'Anchor a 6-element identity blueprint — anti-vision, vision, monthly project, daily levers, constraints — that reframes who you become, not just what you do.' }),
+      gradient: 'from-emerald-500 to-teal-600',
+    },
+    {
+      icon: FiZap,
+      title: t('landing.features.resetProtocol', { defaultValue: '1-Day Reset Protocol' }),
+      desc: t('landing.features.resetProtocolDesc', { defaultValue: 'A guided ritual to excavate what you actually want, surface what is silently stopping you, and lock in a year-long lens.' }),
+      gradient: 'from-amber-500 to-rose-600',
+    },
+    {
       icon: FiHeart,
       title: t('landing.features.dailyHabits'),
       desc: t('landing.features.dailyHabitsDesc'),
@@ -248,6 +260,12 @@ const Landing = () => {
       title: t('landing.features.trackProgress'),
       desc: t('landing.features.trackProgressDesc'),
       gradient: 'from-emerald-500 to-teal-600',
+    },
+    {
+      icon: FiStar,
+      title: t('landing.features.weeklyReflection', { defaultValue: 'Weekly Reflection' }),
+      desc: t('landing.features.weeklyReflectionDesc', { defaultValue: 'Five Sunday questions that close the loop between who you say you are and what your actions reveal.' }),
+      gradient: 'from-blue-500 to-cyan-600',
     },
   ];
 
@@ -557,6 +575,71 @@ const Landing = () => {
                   <div className="absolute -top-4 -right-4 w-16 h-16 rounded-full bg-purple-500/20 blur-xl" />
                   <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-indigo-500/20 blur-xl" />
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Pricing ── */}
+        <section className="py-24 px-5">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-amber-400 text-sm font-semibold uppercase tracking-widest mb-3">
+                {t('landing.pricingTag', { defaultValue: 'Pricing' })}
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                {t('landing.pricingTitle', { defaultValue: 'Simple as a New-Year resolution.' })}
+              </h2>
+              <p className="mt-4 text-gray-400 max-w-xl mx-auto text-base leading-relaxed">
+                {t('landing.pricingSubtitle', { defaultValue: 'One plan. One year. Either you commit, or you don\'t.' })}
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-5">
+              {/* Free */}
+              <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-7 flex flex-col">
+                <p className="text-xs uppercase tracking-widest font-semibold text-gray-500 mb-2">
+                  {t('landing.priceFree', { defaultValue: 'Seeker' })}
+                </p>
+                <p className="text-3xl font-bold text-white mb-1">$0</p>
+                <p className="text-sm text-gray-400 mb-6">{t('landing.priceFreeNote', { defaultValue: 'Forever free' })}</p>
+                <ul className="text-sm text-gray-300 space-y-2 mb-8 flex-1">
+                  <li>• {t('landing.priceFreeF1', { defaultValue: 'Identity Foundation (latest version)' })}</li>
+                  <li>• {t('landing.priceFreeF2', { defaultValue: 'Daily check-ins, mood, gratitude' })}</li>
+                  <li>• {t('landing.priceFreeF3', { defaultValue: '30-min Mini Reset (quarterly)' })}</li>
+                  <li>• {t('landing.priceFreeF4', { defaultValue: 'Limited lens cards · 4 weeks of history' })}</li>
+                </ul>
+                <Link to="/register" className="text-center block px-5 py-3 rounded-full border border-white/15 hover:border-white/30 text-gray-300 hover:text-white text-sm font-semibold transition-colors">
+                  {t('landing.getStartedFree')}
+                </Link>
+              </div>
+
+              {/* Annual */}
+              <div className="relative rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-900/30 to-indigo-900/30 backdrop-blur-sm p-7 flex flex-col cta-glow">
+                <span className="absolute -top-3 right-5 text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-400 to-rose-400 text-gray-900">
+                  {t('landing.priceBest', { defaultValue: 'Best for serious work' })}
+                </span>
+                <p className="text-xs uppercase tracking-widest font-semibold text-purple-300 mb-2">
+                  {t('landing.priceAnnual', { defaultValue: 'ManifestHub Annual' })}
+                </p>
+                <div className="flex items-baseline gap-1 mb-1">
+                  <span className="text-3xl font-bold text-white">$99.99</span>
+                  <span className="text-sm text-gray-400">/ {t('landing.priceYear', { defaultValue: 'year' })}</span>
+                </div>
+                <p className="text-sm text-purple-300 mb-6">{t('landing.priceAnnualNote', { defaultValue: '≈ $8.33 / month, billed yearly' })}</p>
+                <ul className="text-sm text-gray-200 space-y-2 mb-8 flex-1">
+                  <li>✓ {t('landing.priceAnnualF1', { defaultValue: 'Full 1-day Reset Protocol' })}</li>
+                  <li>✓ {t('landing.priceAnnualF2', { defaultValue: 'Unlimited lens cards across year/month/week/day' })}</li>
+                  <li>✓ {t('landing.priceAnnualF3', { defaultValue: 'Unlimited history + year-over-year compare' })}</li>
+                  <li>✓ {t('landing.priceAnnualF4', { defaultValue: 'Foundation evolution timeline' })}</li>
+                  <li>✓ {t('landing.priceAnnualF5', { defaultValue: 'Pattern interrupts (6 daily slots)' })}</li>
+                </ul>
+                <Link
+                  to="/register"
+                  className="text-center block px-5 py-3 rounded-full bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-600 text-white font-semibold text-sm hover:from-purple-600 hover:via-violet-600 hover:to-indigo-700 transition-all"
+                >
+                  {t('landing.priceAnnualCta', { defaultValue: 'Start free → upgrade anytime' })}
+                </Link>
               </div>
             </div>
           </div>

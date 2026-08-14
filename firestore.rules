@@ -11,14 +11,28 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
 
+    // Disallow client-side writes to subscription / billing fields —
+    // only the Cloud Function (Admin SDK, bypasses rules) may set them.
+    function noProtectedKeys() {
+      return !request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny([
+          'subscriptionStatus',
+          'subscriptionExpiresAt',
+          'lemonsqueezyCustomerId',
+          'lemonsqueezySubscriptionId',
+          'lemonsqueezyCustomerPortalUrl'
+        ]);
+    }
+
     // ── users ─────────────────────────────────────────────
-    // Each user can only read/write their own profile doc
     match /users/{userId} {
-      allow read, write: if isSignedIn() && isOwner(userId);
+      allow read:   if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isSignedIn() && isOwner(userId) && noProtectedKeys();
+      allow delete: if false;
     }
 
     // ── visionBoard ───────────────────────────────────────
-    // Documents have a `userId` field; only the owner can access them
     match /visionBoard/{docId} {
       allow read, write: if isSignedIn() && isOwner(resource.data.userId);
       allow create:      if isSignedIn() && isOwner(request.resource.data.userId);
@@ -43,16 +57,41 @@ service cloud.firestore {
     }
 
     // ── dailyLogs ─────────────────────────────────────────
-    // Document ID: `{userId}_{YYYY-MM-DD}`
     match /dailyLogs/{docId} {
       allow read, write: if isSignedIn() && isOwner(resource.data.userId);
       allow create:      if isSignedIn() && isOwner(request.resource.data.userId);
     }
 
-    // ── gratitude (legacy collection name) ────────────────
+    // ── gratitude (legacy) ────────────────────────────────
     match /gratitude/{docId} {
       allow read, write: if isSignedIn() && isOwner(resource.data.userId);
       allow create:      if isSignedIn() && isOwner(request.resource.data.userId);
+    }
+
+    // ── foundationHistory ─────────────────────────────────
+    match /foundationHistory/{docId} {
+      allow read:           if isSignedIn() && isOwner(resource.data.userId);
+      allow create:         if isSignedIn() && isOwner(request.resource.data.userId);
+      // Snapshots are immutable.
+      allow update, delete: if false;
+    }
+
+    // ── resetSessions ─────────────────────────────────────
+    match /resetSessions/{docId} {
+      allow read, update, delete: if isSignedIn() && isOwner(resource.data.userId);
+      allow create:               if isSignedIn() && isOwner(request.resource.data.userId);
+    }
+
+    // ── interruptResponses ────────────────────────────────
+    match /interruptResponses/{docId} {
+      allow read, update, delete: if isSignedIn() && isOwner(resource.data.userId);
+      allow create:               if isSignedIn() && isOwner(request.resource.data.userId);
+    }
+
+    // ── weeklyReflections ─────────────────────────────────
+    match /weeklyReflections/{docId} {
+      allow read, update, delete: if isSignedIn() && isOwner(resource.data.userId);
+      allow create:               if isSignedIn() && isOwner(request.resource.data.userId);
     }
   }
 }

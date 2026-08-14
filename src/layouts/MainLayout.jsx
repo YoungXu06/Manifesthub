@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from '../components/navigation/Navbar';
 import Sidebar from '../components/navigation/Sidebar';
 import Footer from '../components/navigation/Footer';
+import InterruptInbox from '../components/interrupts/InterruptInbox';
 import useStore from '../store';
 
 const MainLayout = () => {
@@ -58,6 +59,7 @@ const MainLayout = () => {
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50 dark:bg-dark">
           <div className="container mx-auto">
+            <InterruptInbox />
             <Outlet />
           </div>
         </main>

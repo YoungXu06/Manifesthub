@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
@@ -11,23 +11,25 @@ import {
   signInWithRedirect
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { 
-  doc, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
-  collection, 
-  query, 
-  where, 
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
   getDocs,
   addDoc,
   deleteDoc,
   orderBy,
   limit,
+  onSnapshot,
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
 import { notifyIndexRequired } from '../components/IndexNotification';
+import { toIsoWeek, toQuarter, toDateStr } from '../utils/dateUtils';
 
 const mapAuthErrorCode = (errorCode) => {
   const errorMap = {
@@ -123,44 +125,66 @@ const useStore = create(
       },
       
       // Auth Actions
+      _userUnsub: null,
       checkAuth: async () => {
         return new Promise((resolve) => {
           const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            // tear down any prior live user-doc listener
+            const prevUnsub = get()._userUnsub;
+            if (prevUnsub) { try { prevUnsub(); } catch {} set({ _userUnsub: null }); }
+
             if (user) {
+              // Live-subscribe to the user doc so subscription state changes
+              // (webhook → Firestore) propagate without a refresh.
+              const userRef = doc(db, 'users', user.uid);
               try {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                const userData = userDoc.data() || {};
-                
-                set({ 
-                  user: { 
-                    uid: user.uid, 
-                    email: user.email, 
+                const initial = await getDoc(userRef);
+                const userData = initial.data() || {};
+                set({
+                  user: {
+                    uid: user.uid,
+                    email: user.email,
                     displayName: user.displayName || userData?.displayName || 'User',
                     photoURL: user.photoURL || userData?.photoURL,
-                    ...userData
-                  }, 
+                    ...userData,
+                  },
                   authChecked: true,
-                  authError: null
+                  authError: null,
                 });
               } catch (error) {
                 console.error('Error fetching user data:', error);
                 get().showError('Failed to load user profile. Some features may not work properly.');
-                set({ 
-                  user: { 
-                    uid: user.uid, 
-                    email: user.email, 
+                set({
+                  user: {
+                    uid: user.uid,
+                    email: user.email,
                     displayName: user.displayName || 'User',
-                    photoURL: user.photoURL
-                  }, 
+                    photoURL: user.photoURL,
+                  },
                   authChecked: true,
-                  authError: 'Failed to load user profile. Some features may not work properly.'
+                  authError: 'Failed to load user profile. Some features may not work properly.',
                 });
               }
+
+              // Attach live listener for subscription / streak updates
+              const unsubDoc = onSnapshot(userRef, (snap) => {
+                if (!snap.exists()) return;
+                const data = snap.data();
+                const cur = get().user;
+                if (!cur || cur.uid !== user.uid) return;
+                set({
+                  user: {
+                    ...cur,
+                    ...data,
+                  },
+                });
+              }, () => {});
+              set({ _userUnsub: unsubDoc });
             } else {
               set({ user: null, authChecked: true, authError: null });
             }
             resolve();
-            unsubscribe(); // clean up listener
+            unsubscribe(); // we don't need the auth listener after first resolve
           });
         });
       },
@@ -1385,6 +1409,330 @@ const useStore = create(
         } catch (error) {
           console.error('Error fetching month daily logs:', error);
           return { logs: {} };
+        }
+      },
+
+      // ── Foundation (6-element identity) ─────────────────────────────────
+      // Stored at users/{uid}.foundation (active version) +
+      // foundationHistory/{userId}_{ts} (immutable snapshots).
+      foundation: null,
+
+      fetchFoundation: async () => {
+        const { user } = get();
+        if (!user) return { foundation: null };
+        const cur = user.foundation || null;
+        set({ foundation: cur });
+        return { foundation: cur };
+      },
+
+      saveFoundation: async (next) => {
+        const { user } = get();
+        if (!user) return { success: false, error: 'Not authenticated' };
+        try {
+          const userRef = doc(db, 'users', user.uid);
+          // Snapshot previous version (paid users get history; free users get latest only)
+          const prev = user.foundation;
+          if (prev && (prev.antiVision || prev.vision || prev.identityStatement)) {
+            try {
+              await addDoc(collection(db, 'foundationHistory'), {
+                userId: user.uid,
+                snapshot: prev,
+                replacedAt: serverTimestamp(),
+              });
+            } catch (e) { /* non-fatal */ }
+          }
+          const cleaned = Object.fromEntries(
+            Object.entries(next).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v])
+          );
+          const payload = {
+            ...cleaned,
+            updatedAt: new Date().toISOString(),
+          };
+          await updateDoc(userRef, { foundation: payload });
+          set({ foundation: payload, user: { ...user, foundation: payload } });
+          return { success: true };
+        } catch (error) {
+          console.error('Error saving foundation:', error);
+          get().showError('Failed to save your Foundation. Please try again.');
+          return { success: false, error: error.message };
+        }
+      },
+
+      fetchFoundationHistory: async () => {
+        const { user } = get();
+        if (!user) return { history: [] };
+        try {
+          const q = query(
+            collection(db, 'foundationHistory'),
+            where('userId', '==', user.uid)
+          );
+          const snap = await getDocs(q);
+          const history = [];
+          snap.forEach(d => {
+            const data = d.data();
+            history.push({
+              id: d.id,
+              ...data,
+              replacedAt: data.replacedAt?.toDate?.()?.toISOString?.() || null,
+            });
+          });
+          history.sort((a, b) =>
+            (b.replacedAt || '').localeCompare(a.replacedAt || '')
+          );
+          return { history };
+        } catch (error) {
+          console.error('Error fetching foundation history:', error);
+          return { history: [] };
+        }
+      },
+
+      // ── Reset Sessions (1-day Reset Protocol persistence) ──────────────
+      saveResetSession: async (sessionData) => {
+        const { user } = get();
+        if (!user) return { success: false, error: 'Not authenticated' };
+        try {
+          // sessionData: { id?, kind: 'mini'|'full', stage, answers, completedAt? }
+          const id = sessionData.id || `${user.uid}_${Date.now()}`;
+          const ref = doc(db, 'resetSessions', id);
+          const payload = {
+            userId: user.uid,
+            kind: sessionData.kind || 'full',
+            stage: sessionData.stage || 'morning',
+            answers: sessionData.answers || {},
+            completedAt: sessionData.completedAt || null,
+            updatedAt: serverTimestamp(),
+            year: new Date().getFullYear(),
+            quarter: toQuarter(new Date()),
+          };
+          const exists = await getDoc(ref);
+          if (exists.exists()) {
+            await updateDoc(ref, payload);
+          } else {
+            await setDoc(ref, { ...payload, createdAt: serverTimestamp() });
+          }
+          return { success: true, id };
+        } catch (error) {
+          console.error('Error saving reset session:', error);
+          return { success: false, error: error.message };
+        }
+      },
+
+      fetchResetSession: async (id) => {
+        if (!id) return { session: null };
+        try {
+          const snap = await getDoc(doc(db, 'resetSessions', id));
+          if (!snap.exists()) return { session: null };
+          return { session: { id: snap.id, ...snap.data() } };
+        } catch (error) {
+          console.error('Error fetching reset session:', error);
+          return { session: null };
+        }
+      },
+
+      fetchResetSessions: async () => {
+        const { user } = get();
+        if (!user) return { sessions: [] };
+        try {
+          const q = query(
+            collection(db, 'resetSessions'),
+            where('userId', '==', user.uid)
+          );
+          const snap = await getDocs(q);
+          const sessions = [];
+          snap.forEach(d => sessions.push({ id: d.id, ...d.data() }));
+          sessions.sort((a, b) => {
+            const ta = a.completedAt || a.updatedAt?.toDate?.()?.toISOString?.() || '';
+            const tb = b.completedAt || b.updatedAt?.toDate?.()?.toISOString?.() || '';
+            return tb.localeCompare(ta);
+          });
+          return { sessions };
+        } catch (error) {
+          console.error('Error fetching reset sessions:', error);
+          return { sessions: [] };
+        }
+      },
+
+      // Count completed mini-resets in the current quarter (for free-tier gating).
+      countMiniResetsThisQuarter: async () => {
+        const { user } = get();
+        if (!user) return 0;
+        try {
+          const q = query(
+            collection(db, 'resetSessions'),
+            where('userId', '==', user.uid),
+            where('quarter', '==', toQuarter(new Date()))
+          );
+          const snap = await getDocs(q);
+          let n = 0;
+          snap.forEach(d => {
+            const data = d.data();
+            if (data.kind === 'mini' && data.completedAt) n++;
+          });
+          return n;
+        } catch (error) {
+          console.warn('Could not count mini resets:', error);
+          return 0;
+        }
+      },
+
+      // ── Pattern Interrupts ─────────────────────────────────────────────
+      saveInterruptResponse: async (dateStr, slotKey, payload) => {
+        const { user } = get();
+        if (!user) return { success: false, error: 'Not authenticated' };
+        try {
+          const id = `${user.uid}_${dateStr}_${slotKey}`;
+          await setDoc(doc(db, 'interruptResponses', id), {
+            userId: user.uid,
+            dateStr,
+            slotKey,
+            answer: payload.answer || '',
+            updatedAt: serverTimestamp(),
+          });
+          return { success: true, id };
+        } catch (error) {
+          console.error('Error saving interrupt response:', error);
+          return { success: false, error: error.message };
+        }
+      },
+
+      fetchInterruptResponses: async (dateStr) => {
+        const { user } = get();
+        if (!user) return { responses: {} };
+        try {
+          const q = query(
+            collection(db, 'interruptResponses'),
+            where('userId', '==', user.uid),
+            where('dateStr', '==', dateStr)
+          );
+          const snap = await getDocs(q);
+          const responses = {};
+          snap.forEach(d => {
+            const data = d.data();
+            responses[data.slotKey] = data.answer || '';
+          });
+          return { responses };
+        } catch (error) {
+          console.error('Error fetching interrupt responses:', error);
+          return { responses: {} };
+        }
+      },
+
+      // ── Weekly Reflection ──────────────────────────────────────────────
+      saveWeeklyReflection: async (weekId, answers) => {
+        const { user } = get();
+        if (!user) return { success: false, error: 'Not authenticated' };
+        try {
+          const id = `${user.uid}_${weekId}`;
+          const ref = doc(db, 'weeklyReflections', id);
+          const exists = await getDoc(ref);
+          const payload = {
+            userId: user.uid,
+            weekId,
+            answers,
+            updatedAt: serverTimestamp(),
+          };
+          if (exists.exists()) {
+            await updateDoc(ref, payload);
+          } else {
+            await setDoc(ref, { ...payload, createdAt: serverTimestamp() });
+          }
+          return { success: true, id };
+        } catch (error) {
+          console.error('Error saving weekly reflection:', error);
+          return { success: false, error: error.message };
+        }
+      },
+
+      fetchWeeklyReflection: async (weekId) => {
+        const { user } = get();
+        if (!user) return { reflection: null };
+        try {
+          const id = `${user.uid}_${weekId}`;
+          const snap = await getDoc(doc(db, 'weeklyReflections', id));
+          if (!snap.exists()) return { reflection: null };
+          return { reflection: { id: snap.id, ...snap.data() } };
+        } catch (error) {
+          console.error('Error fetching weekly reflection:', error);
+          return { reflection: null };
+        }
+      },
+
+      fetchWeeklyReflections: async (limit_ = 12) => {
+        const { user } = get();
+        if (!user) return { reflections: [] };
+        try {
+          const q = query(
+            collection(db, 'weeklyReflections'),
+            where('userId', '==', user.uid)
+          );
+          const snap = await getDocs(q);
+          const reflections = [];
+          snap.forEach(d => reflections.push({ id: d.id, ...d.data() }));
+          reflections.sort((a, b) => (b.weekId || '').localeCompare(a.weekId || ''));
+          return { reflections: reflections.slice(0, limit_) };
+        } catch (error) {
+          console.error('Error fetching weekly reflections:', error);
+          return { reflections: [] };
+        }
+      },
+
+      // ── Subscription / Lemonsqueezy ─────────────────────────────────────
+      // Calls our serverless API which authenticates with Firebase ID token,
+      // then creates a fresh checkout via the LS API with custom_data.uid attached.
+      _checkoutLoading: false,
+      openCheckout: async () => {
+        if (get()._checkoutLoading) return;
+        const fbUser = auth.currentUser;
+        if (!fbUser) {
+          get().showError('Please sign in to upgrade.');
+          return;
+        }
+        set({ _checkoutLoading: true });
+        try {
+          const idToken = await fbUser.getIdToken();
+          const resp = await fetch('/api/create-checkout', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${idToken}`,
+              'Content-Type':  'application/json',
+            },
+            body: JSON.stringify({
+              email: fbUser.email || undefined,
+              name:  fbUser.displayName || undefined,
+            }),
+          });
+          if (!resp.ok) {
+            const text = await resp.text().catch(() => '');
+            throw new Error(text || `Checkout failed (${resp.status})`);
+          }
+          const { url } = await resp.json();
+          if (!url) throw new Error('No checkout URL returned');
+
+          // Prefer Lemon.js overlay when loaded; fallback to new tab.
+          const Lemon = typeof window !== 'undefined' ? window.LemonSqueezy : null;
+          if (Lemon?.Url?.Open) {
+            Lemon.Url.Open(url);
+          } else {
+            window.open(url, '_blank', 'noopener,noreferrer');
+          }
+        } catch (e) {
+          console.error('openCheckout error:', e);
+          get().showError(e.message || 'Could not open checkout.');
+        } finally {
+          set({ _checkoutLoading: false });
+        }
+      },
+
+      openCustomerPortal: async () => {
+        const { user } = get();
+        if (!user) return;
+        // The webhook stores the customer portal URL on the user doc as the
+        // subscription comes through. Until then, fall back to email instructions.
+        const portalUrl = user.lemonsqueezyCustomerPortalUrl;
+        if (portalUrl) {
+          window.open(portalUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          get().showInfo('Manage your subscription via the email Lemonsqueezy sent after signup.');
         }
       },
     }),
