@@ -519,7 +519,14 @@
       "reflect": "Weekly Reflect",
       "foundation": "Foundation"
     },
-    "visionsManifested": "{{count}} of {{total}} visions manifested"
+    "visionsManifested": "{{count}} of {{total}} visions manifested",
+    "lensSnapshot": "Vision Lenses",
+    "todaysPractice": "Today's Practice",
+    "practiceFor": "Practice for",
+    "manageVisions": "Manage visions on the board →",
+    "pickDateInCalendar": "pick a date on the calendar below",
+    "checkedInShort": "checked in",
+    "gratitudeShort": "gratitude"
   },
   "goals": {
     "myGoals": "My Goals",

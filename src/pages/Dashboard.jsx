@@ -12,6 +12,7 @@ import IndexNotification from '../components/IndexNotification';
 import useToast from '../hooks/useToast';
 import useSubscription from '../hooks/useSubscription';
 import Skeleton from '../components/common/Skeleton';
+import { LENS_LEVELS } from '../utils/manifestProtocol';
 
 /* ─── Affirmation emojis (text/visualization come from i18n or foundation) ─── */
 const AFF_EMOJIS = ['✨','🎯','⚡','🌟','🦋'];
@@ -371,20 +372,30 @@ const Dashboard = () => {
     { icon: <FiZap />,       label: t('dashboard.currentStreak'),value: streakCount, colorClass: 'text-amber-500', bgClass: 'bg-amber-50 dark:bg-amber-900/20' },
   ];
 
+  // Per-level lens stats — mirrors the Vision Board's four-level hierarchy.
+  const lensStats = LENS_LEVELS.map((l) => {
+    const items = visionBoard.filter((v) => (v.level || 'month') === l.id);
+    const progress = items.length
+      ? Math.round(items.reduce((a, i) => a + (i.progress || 0), 0) / items.length)
+      : 0;
+    return { ...l, count: items.length, progress };
+  });
+  const selectedMoodDef = MOOD_DEFS.find((m) => t(`dashboard.moods.${m.key}`) === dayLog.mood);
+
   if (isLoading) return (
     <div className="animate-fade-in max-w-7xl mx-auto">
       <IndexNotification />
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('dashboard.loading', { defaultValue: 'Loading your manifestation hub…' })}</p>
       <div className="space-y-5">
         <Skeleton className="h-24 w-full" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-5">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-5 space-y-5">
+            <Skeleton className="h-40 w-full" />
+            <Skeleton className="h-40 w-full" />
           </div>
-          <div className="lg:col-span-2 space-y-5">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
+          <div className="lg:col-span-7 space-y-5">
+            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-48 w-full" />
           </div>
         </div>
       </div>
@@ -475,22 +486,23 @@ const Dashboard = () => {
         {stats.map((s, i) => <StatCard key={i} {...s} />)}
       </div>
 
-      {/* ── Main grid ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* ── Main grid: vision reflection (left) · today's practice + history (right) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        {/* ────── LEFT ────── */}
-        <div className="lg:col-span-1 flex flex-col gap-5">
+        {/* ────── LEFT — Identity Lens + Vision Lenses snapshot (5/12) ────── */}
+        <div className="lg:col-span-5 flex flex-col gap-5">
 
-          {/* Affirmation carousel */}
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-5 shadow-lg shadow-purple-500/20 min-h-[200px] flex flex-col"
+          {/* Identity Lens — affirmation carousel */}
+          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-5 shadow-lg shadow-purple-500/20 min-h-[170px] flex flex-col"
             onMouseEnter={() => { hoverRef.current = true; syncCarouselPaused(); }}
             onMouseLeave={() => { hoverRef.current = false; syncCarouselPaused(); }}
             onFocus={() => { focusRef.current = true; syncCarouselPaused(); }}
             onBlur={() => { focusRef.current = false; syncCarouselPaused(); }}>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8 blur-2xl pointer-events-none" />
-            <div className="flex items-center justify-between mb-4 relative z-10">
-              <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest">
-                {user?.foundation ? t('dashboard.aff.identityLens') : '✨ ' + t('dashboard.affirmation')}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-6 translate-x-6 blur-2xl pointer-events-none" />
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest inline-flex items-center gap-1.5">
+                {t('dashboard.aff.identityLens')}
+                <span className="text-sm leading-none" aria-hidden="true">{affirmDeck[affirmIdx]?.emoji || ''}</span>
               </h2>
               {!user?.foundation && (
                 <Link
@@ -506,14 +518,16 @@ const Dashboard = () => {
               {affirmDeck.map((card, i) => (
                 <div key={i} className="absolute inset-0 flex flex-col justify-center transition-opacity duration-700"
                   style={{ opacity: i === affirmIdx ? 1 : 0, pointerEvents: i === affirmIdx ? 'auto' : 'none' }}>
-                  <p className="text-3xl mb-2">{card.emoji}</p>
-                  <p className="text-white font-semibold text-base leading-snug mb-3 italic">"{card.text}"</p>
+                  <p className="text-white font-semibold text-base leading-snug mb-3 italic flex items-start gap-2">
+                    <span className="text-lg leading-none mt-0.5" aria-hidden="true">{card.emoji}</span>
+                    <span>"{card.text}"</span>
+                  </p>
                   <p className="text-white/85 text-xs leading-relaxed">{card.caption}</p>
                 </div>
               ))}
             </div>
             <div role="tablist" aria-label={t('dashboard.aff.tablistLabel', { defaultValue: 'Affirmation carousel' })}
-              className="relative z-10 flex gap-0.5 mt-auto pt-8">
+              className="relative z-10 flex gap-0.5 mt-auto pt-6">
               {affirmDeck.map((_, i) => (
                 <button key={i} role="tab" aria-selected={i === affirmIdx}
                   aria-label={t('dashboard.aff.goTo', { defaultValue: 'Go to affirmation {{n}}', n: i + 1 })}
@@ -526,119 +540,225 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Mood */}
+          {/* Lens Snapshot — mirrors the Vision Board's four-level hierarchy */}
           <div className="card p-5">
-            <h2 className="section-title mb-1 flex items-center gap-2"><FiSmile className="text-purple-500" />{t('dashboard.howAreYouFeeling')}</h2>
-            <p className="text-xs text-gray-400 mb-1">{isToday ? t('dashboard.moodToday', { defaultValue: 'Today' }) : selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p>
-            <div className={`grid grid-cols-4 gap-2 ${savingMood ? 'pointer-events-none opacity-70' : ''}`}>
-              {MOOD_DEFS.map(mood => {
-                const moodLabel = t(`dashboard.moods.${mood.key}`);
-                const selected = dayLog.mood === moodLabel;
-                return (
-                  <button key={mood.key} onClick={() => isToday && handleSaveMood(moodLabel)}
-                    disabled={!isToday || savingMood}
-                    className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
-                      selected
-                        ? `${mood.bg} ring-2 ring-offset-1 ring-indigo-400 scale-105`
-                        : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                    } ${!isToday ? 'opacity-60 cursor-default' : ''}`}>
-                    <span className="text-2xl leading-none" aria-hidden="true">{mood.icon}</span>
-                    <span className="sr-only">{moodLabel}</span>
-                  </button>
-                );
-              })}
-            </div>
-            {dayLog.mood && !isToday && <p className="mt-2 text-xs text-center text-gray-400">{t('dashboard.feelingOnDay', {mood: dayLog.mood})}</p>}
-            {dayLog.mood && isToday && <p className="mt-2 text-xs text-center text-indigo-500 dark:text-indigo-400 font-medium">{t('dashboard.feelingNote', {mood: dayLog.mood})}</p>}
-          </div>
-
-          {/* Intention */}
-          <div className="card p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="section-title flex items-center gap-2"><FiTarget className="text-indigo-500" />
-                {isToday ? t('dashboard.todayIntention') : t('dashboard.intentionFor', {date: selectedDate.toLocaleDateString()})}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="section-title flex items-center gap-2">
+                <FiTarget className="text-indigo-500" />{t('dashboard.lensSnapshot', { defaultValue: 'Vision Lenses' })}
               </h2>
-              {isToday && !showIntentionInput && (
-                <button onClick={() => { setIntentionDraft(dayLog.intention || ''); setShowIntentionInput(true); }}
-                  aria-label={t('dashboard.editIntention', { defaultValue: 'Edit intention' })}
-                  className="focus-ring p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-500 transition-colors">
-                  <FiEdit3 className="w-4 h-4" />
-                </button>
-              )}
+              <Link to="/visionboard" className="text-xs font-medium text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400 inline-flex items-center gap-1">
+                {t('dashboard.viewAll')}<FiArrowRight className="w-3 h-3" />
+              </Link>
             </div>
-            {showIntentionInput ? (
-              <div className="space-y-2">
-                <input autoFocus value={intentionDraft} onChange={e => setIntentionDraft(e.target.value)}
-                  onKeyDown={e => { if (e.key==='Enter') handleSaveIntention(); if (e.key==='Escape') setShowIntentionInput(false); }}
-                  placeholder={
-                    user?.foundation?.identityStatement
-                      ? t('dashboard.intentionFromIdentity', { defaultValue: 'What would the ideal version of me do today?' })
-                      : t('dashboard.intentionPlaceholder')
-                  }
-                  className="input w-full text-sm" maxLength={140} />
-                <div className="flex gap-2">
-                  <button onClick={handleSaveIntention} disabled={savingIntention}
-                    className="btn btn-primary btn-sm flex-1 text-xs">
-                    {savingIntention ? <FiLoader className="animate-spin" /> : t('dashboard.setIntention')}
-                  </button>
-                  <button onClick={() => setShowIntentionInput(false)} className="btn btn-secondary btn-sm text-xs">{t('common.cancel')}</button>
-                </div>
-              </div>
-            ) : dayLog.intention ? (
-              <div className="flex items-start gap-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
-                <span className="text-lg">🎯</span>
-                <p className="text-sm text-indigo-700 dark:text-indigo-300 italic">"{dayLog.intention}"</p>
+            {visionBoard.length === 0 ? (
+              <div className="text-center py-6">
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('dashboard.visionBoardEmpty')}</p>
+                <Link to="/visionboard" className="mt-3 inline-flex items-center gap-2 btn btn-primary btn-sm">
+                  <FiPlus className="w-4 h-4" />{t('dashboard.createVisionCard')}
+                </Link>
               </div>
             ) : (
-              <button onClick={() => isToday && setShowIntentionInput(true)} disabled={!isToday}
-                className={`w-full flex items-center gap-2 p-3 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 transition-all ${isToday ? 'hover:border-indigo-300 hover:text-indigo-400' : 'opacity-50 cursor-default'}`}>
-                <FiPlus className="w-4 h-4" />
-                {isToday ? t('dashboard.setIntentionPrompt') : t('dashboard.noIntentionRecorded')}
-              </button>
-            )}
-          </div>
-
-          {/* Vision quick-links */}
-          <div className="card overflow-hidden">
-            <div className="p-5 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-800/30 border-b border-gray-100 dark:border-gray-700/50">
-              <h2 className="section-title flex items-center gap-2"><FiBookmark className="text-indigo-500" />{t('dashboard.visionOverview')}</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                {visionBoard.length > 0
-                  ? `${t('dashboard.visionsManifested', {count: visionBoard.filter(v=>v.completed).length, total: visionBoard.length})}`
-                  : t('dashboard.visionBoardEmpty')}
-              </p>
-            </div>
-            {visionBoard.length > 0 && (
-              <div className="px-5 pt-3">
-                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5">
-                  <span>{t('dashboard.overallProgress')}</span>
-                  <span className="font-medium text-indigo-600 dark:text-indigo-400 tnum">
-                    {Math.round(visionBoard.reduce((a,v)=>a+(v.progress||0),0)/visionBoard.length)}%
-                  </span>
-                </div>
-                <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden mb-4">
-                  <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-700"
-                    style={{width:`${Math.round(visionBoard.reduce((a,v)=>a+(v.progress||0),0)/visionBoard.length)}%`}}/>
-                </div>
+              <div className="space-y-3">
+                {lensStats.map((l) => (
+                  <Link key={l.id} to={`/visionboard?level=${l.id}`}
+                    className="group block p-3 rounded-xl border border-gray-100 dark:border-gray-700/60 hover:border-indigo-200 dark:hover:border-indigo-700/60 hover:bg-indigo-50/40 dark:hover:bg-indigo-950/20 transition-all">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+                        <span className="text-base leading-none" aria-hidden="true">{l.emoji}</span>
+                        {t(`lens.${l.id}.label`)}
+                        {l.count > 0 && <span className="text-xs font-normal text-gray-400 tnum">({l.count})</span>}
+                      </span>
+                      <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 tnum">{l.progress}%</span>
+                    </div>
+                    <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className={`h-full rounded-full transition-all duration-500 ${l.progress >= 100 ? 'bg-emerald-400' : 'bg-gradient-to-r from-indigo-400 to-purple-500'}`}
+                        style={{ width: `${l.progress}%` }} />
+                    </div>
+                  </Link>
+                ))}
+                <Link to="/visionboard" className="block text-center text-xs font-medium text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400 pt-1">
+                  {t('dashboard.manageVisions', { defaultValue: 'Manage visions on the board →' })}
+                </Link>
               </div>
             )}
-            <div className="p-5 pt-2 flex flex-col gap-2.5">
-              <Link to="/visionboard" className="btn btn-secondary btn-sm flex items-center justify-center gap-2 text-sm">
-                <FiBookmark className="w-4 h-4" />{t('dashboard.viewAll')}
-              </Link>
-              <Link to="/visionboard" className="btn btn-primary btn-sm flex items-center justify-center gap-2 text-sm">
-                <FiPlus className="w-4 h-4" />{t('dashboard.createVisionCard')}
-              </Link>
-            </div>
           </div>
         </div>
 
-        {/* ────── RIGHT ────── */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
+        {/* ────── RIGHT — Today's Practice + compact calendar (7/12) ────── */}
+        <div className="lg:col-span-7 flex flex-col gap-5">
 
-          {/* Calendar */}
+          {/* Today's Practice — the daily loop in one place */}
+          <div className="card overflow-hidden">
+            <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700/50 flex items-center justify-between gap-3 bg-gradient-to-r from-indigo-50/60 to-purple-50/60 dark:from-indigo-950/30 dark:to-purple-950/30">
+              <h2 className="section-title flex items-center gap-2">
+                <FiZap className="text-amber-400" />
+                {isToday ? t('dashboard.todaysPractice', { defaultValue: "Today's Practice" }) : t('dashboard.practiceFor', { defaultValue: 'Practice for' }) + ' ' + selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+              </h2>
+              {streakCount > 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 font-medium whitespace-nowrap">
+                  🔥 <span className="tnum">{streakCount}</span> {t('dashboard.dayStreak')}
+                </span>
+              )}
+            </div>
+            <div className="p-5 space-y-6">
+
+              {/* Check-in */}
+              {isToday ? (
+                dayLog.checkIn ? (
+                  <div className="flex items-center gap-3 p-3.5 bg-emerald-50 dark:bg-emerald-900/15 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm"><FiCheck className="w-4 h-4 text-white"/></div>
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">{t('dashboard.checkedInToday')}</p>
+                      <p className="text-xs text-emerald-600 dark:text-emerald-500 mt-0.5">{t('dashboard.keepUpGoodWork')}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <button onClick={handleCheckIn} disabled={checkInLoading}
+                    className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all ${
+                      checkInLoading ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
+                      : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-500/25 hover:shadow-lg hover:-translate-y-0.5'
+                    }`}>
+                    {checkInLoading ? <><FiLoader className="animate-spin"/> {t('dashboard.checkingIn', { defaultValue: 'Checking in…' })}</> : <><FiZap className="w-4 h-4"/>{t('dashboard.checkInNow')}</>}
+                  </button>
+                )
+              ) : (
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  {dayLog.checkIn
+                    ? <span className="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-medium"><FiCheck className="w-4 h-4"/> {t('dashboard.checkedInOnDate')}</span>
+                    : <span>{t('dashboard.noCheckInOnDate')}</span>}
+                  <span className="text-xs text-gray-400 ml-auto">{t('dashboard.pickDateInCalendar', { defaultValue: 'pick a date on the calendar below' })}</span>
+                </div>
+              )}
+
+              {/* Mood */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                  <FiSmile className="text-purple-500" />{t('dashboard.howAreYouFeeling')}
+                  {!isToday && dayLog.mood && <span className="text-xs font-normal text-gray-400">· {dayLog.mood}</span>}
+                </h3>
+                <div className={`grid grid-cols-4 gap-2 ${savingMood ? 'pointer-events-none opacity-70' : ''}`}>
+                  {MOOD_DEFS.map(mood => {
+                    const moodLabel = t(`dashboard.moods.${mood.key}`);
+                    const selected = dayLog.mood === moodLabel;
+                    return (
+                      <button key={mood.key} onClick={() => isToday && handleSaveMood(moodLabel)}
+                        disabled={!isToday || savingMood}
+                        className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
+                          selected
+                            ? `${mood.bg} ring-2 ring-offset-1 ring-indigo-400 scale-105`
+                            : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                        } ${!isToday ? 'opacity-60 cursor-default' : ''}`}>
+                        <span className="text-2xl leading-none" aria-hidden="true">{mood.icon}</span>
+                        <span className="sr-only">{moodLabel}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Intention */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                    <FiTarget className="text-indigo-500" />
+                    {isToday ? t('dashboard.todayIntention') : t('dashboard.intentionFor', {date: selectedDate.toLocaleDateString()})}
+                  </h3>
+                  {isToday && !showIntentionInput && (
+                    <button onClick={() => { setIntentionDraft(dayLog.intention || ''); setShowIntentionInput(true); }}
+                      aria-label={t('dashboard.editIntention', { defaultValue: 'Edit intention' })}
+                      className="focus-ring p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-500 transition-colors">
+                      <FiEdit3 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                {showIntentionInput ? (
+                  <div className="space-y-2">
+                    <input autoFocus value={intentionDraft} onChange={e => setIntentionDraft(e.target.value)}
+                      onKeyDown={e => { if (e.key==='Enter') handleSaveIntention(); if (e.key==='Escape') setShowIntentionInput(false); }}
+                      placeholder={
+                        user?.foundation?.identityStatement
+                          ? t('dashboard.intentionFromIdentity', { defaultValue: 'What would the ideal version of me do today?' })
+                          : t('dashboard.intentionPlaceholder')
+                      }
+                      className="input w-full text-sm" maxLength={140} />
+                    <div className="flex gap-2">
+                      <button onClick={handleSaveIntention} disabled={savingIntention}
+                        className="btn btn-primary btn-sm flex-1 text-xs">
+                        {savingIntention ? <FiLoader className="animate-spin" /> : t('dashboard.setIntention')}
+                      </button>
+                      <button onClick={() => setShowIntentionInput(false)} className="btn btn-secondary btn-sm text-xs">{t('common.cancel')}</button>
+                    </div>
+                  </div>
+                ) : dayLog.intention ? (
+                  <div className="flex items-start gap-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
+                    <span className="text-lg" aria-hidden="true">🎯</span>
+                    <p className="text-sm text-indigo-700 dark:text-indigo-300 italic">"{dayLog.intention}"</p>
+                  </div>
+                ) : (
+                  <button onClick={() => isToday && setShowIntentionInput(true)} disabled={!isToday}
+                    className={`w-full flex items-center gap-2 p-3 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 text-sm text-gray-400 transition-all ${isToday ? 'hover:border-indigo-300 hover:text-indigo-400' : 'opacity-50 cursor-default'}`}>
+                    <FiPlus className="w-4 h-4" />
+                    {isToday ? t('dashboard.setIntentionPrompt') : t('dashboard.noIntentionRecorded')}
+                  </button>
+                )}
+              </div>
+
+              {/* Gratitude */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-2">
+                  <FiHeart className="text-pink-500" />{t('dashboard.gratitudeJournal')}
+                  {!isToday && <span className="text-xs font-normal text-gray-400 ml-1">· {selectedDate.toLocaleDateString()}</span>}
+                </h3>
+                <p className="text-xs text-gray-400 mb-3">{t('dashboard.gratitudeRaisesVibration')}</p>
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-300 mb-2 uppercase tracking-wider">
+                  {isToday ? t('dashboard.todayIAmGratefulFor') : t('dashboard.gratefulFor', { date: selectedDate.toLocaleDateString() })}
+                </label>
+                <textarea
+                  value={dayLog.gratitude || ''}
+                  onChange={e => setDayLog(prev => ({ ...prev, gratitude: e.target.value }))}
+                  rows={3}
+                  className="input w-full resize-none text-sm leading-relaxed"
+                  placeholder={isToday ? t('dashboard.enterGratitude') : t('dashboard.enterGratitudeForDate')}
+                />
+                <div className="flex justify-between items-center mt-2.5">
+                  <span className="text-xs">
+                    {gratitudeDirty
+                      ? <span className="text-amber-500 dark:text-amber-400 font-medium">{t('dashboard.unsavedChanges', { defaultValue: 'Unsaved changes' })}</span>
+                      : savedGratitude
+                        ? <span className="text-emerald-500 dark:text-emerald-400">{t('dashboard.saved')}</span>
+                        : <span className="text-gray-400">{t('dashboard.nothingSavedYet')}</span>}
+                  </span>
+                  <button onClick={handleSaveGratitude}
+                    disabled={!dayLog.gratitude?.trim() || savingGratitude}
+                    className={`btn btn-sm text-xs font-semibold transition-all ${
+                      !dayLog.gratitude?.trim() || savingGratitude
+                        ? 'btn-disabled bg-gray-100 dark:bg-gray-800 text-gray-400'
+                        : 'btn-primary shadow-sm hover:shadow-md hover:shadow-indigo-500/20'
+                    }`}>
+                    {savingGratitude
+                      ? <><FiLoader className="animate-spin mr-1.5 w-3 h-3"/>{t('dashboard.saving', { defaultValue: 'Saving…' })}</>
+                      : <><FiHeart className="mr-1.5 w-3 h-3"/>
+                          {monthLogs[selectedStr]?.gratitude ? t('dashboard.updateGratitude') : t('dashboard.saveGratitude')}
+                        </>}
+                  </button>
+                </div>
+                {recentEntries.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                      <FiStar className="text-amber-400 w-3.5 h-3.5"/>{t('dashboard.recentGratitude')}
+                    </h4>
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-0.5">
+                      {recentEntries.map((entry, i) => <GratitudeEntry key={i} entry={entry}/>)}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Calendar — compact history track */}
           <div className="card p-5">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-4">
               <h2 className="section-title flex items-center gap-2"><FiCalendar className="text-indigo-500" />{t('dashboard.calendarAndProgress')}</h2>
               <div className="flex items-center gap-1">
                 <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()-1))}
@@ -667,160 +787,69 @@ const Dashboard = () => {
               <div className="space-y-3">
                 <Skeleton className="h-3 w-20" />
                 <div className="grid grid-cols-7 gap-1">
-                  {Array.from({ length: 21 }).map((_, i) => <Skeleton key={i} className="h-10 w-full rounded-xl" />)}
+                  {Array.from({ length: 21 }).map((_, i) => <Skeleton key={i} className="h-9 w-full rounded-xl" />)}
                 </div>
-                <Skeleton className="h-10 w-full" />
               </div>
             ) : (
               <>
-            {/* Day headers */}
-            <div className="grid grid-cols-7 mb-1">
-              {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>(
-                <div key={d} className="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 py-1">{d}</div>
-              ))}
-            </div>
-
-            {/* Cells */}
-            <div className="grid grid-cols-7 gap-0.5 mb-4">
-              {getCalendarDays().map((day, i) => {
-                const ds  = toDateStr(day.date);
-                const log = monthLogs[ds] || {};
-                const isT = ds === todayStr;
-                const isSel = ds === selectedStr;
-                return (
-                  <button key={i} onClick={() => { setSelectedDate(day.date); if (!day.isCurrentMonth) setCurrentDate(day.date); }}
-                    aria-label={day.date.toLocaleDateString()}
-                    className={`focus-ring relative flex flex-col items-center justify-center aspect-square rounded-xl text-xs font-medium transition-all ${
-                      !day.isCurrentMonth ? 'text-gray-300 dark:text-gray-600'
-                      : isSel ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-300 dark:shadow-indigo-900'
-                      : isT   ? 'ring-2 ring-indigo-400 ring-offset-1 dark:ring-offset-gray-900 text-indigo-600 dark:text-indigo-400 font-bold'
-                      :         'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60'
-                    }`}>
-                    <span className="tnum">{day.date.getDate()}</span>
-                    <div className="absolute bottom-0.5 flex gap-0.5">
-                      {log.checkIn   && <span className={`w-1.5 h-1.5 rounded-full ${isSel?'bg-white/80':'bg-emerald-400'}`}/>}
-                      {log.gratitude && <span className={`w-1.5 h-1.5 rounded-full ${isSel?'bg-white/60':'bg-purple-400'}`}/>}
-                      {log.mood      && <span className={`w-1.5 h-1.5 rounded-full ${isSel?'bg-white/50':'bg-amber-400'}`}/>}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Legend */}
-            <div className="flex items-center justify-center gap-5 text-xs text-gray-400 border-t border-gray-100 dark:border-gray-700/50 pt-3 mb-4">
-              {[['bg-emerald-400', t('dashboard.dailyCheckIn')],['bg-purple-400', t('dashboard.gratitudeJournal')],['bg-amber-400', t('dashboard.howAreYouFeeling')]].map(([c,l])=>(
-                <div key={l} className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${c}`}/>{l}</div>
-              ))}
-            </div>
-
-            {/* Date label */}
-            <div className="mb-3">
-              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                {isToday ? t('dashboard.today') : selectedDate.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
-              </p>
-            </div>
-
-            {/* Check-in */}
-            {isToday ? (
-              <div className="border-t border-gray-100 dark:border-gray-700/50 pt-4">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
-                    <FiZap className="text-amber-400"/>{t('dashboard.dailyCheckIn')}
-                  </h3>
-                  {streakCount > 0 && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 font-medium">
-                      🔥 <span className="tnum">{streakCount}</span> {t('dashboard.dayStreak')}
-                    </span>
-                  )}
+                {/* Day headers */}
+                <div className="grid grid-cols-7 mb-1">
+                  {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>(
+                    <div key={d} className="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 py-1">{d}</div>
+                  ))}
                 </div>
-                {dayLog.checkIn ? (
-                  <div className="flex items-center gap-3 p-3.5 bg-emerald-50 dark:bg-emerald-900/15 rounded-xl border border-emerald-100 dark:border-emerald-800/50">
-                    <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm"><FiCheck className="w-4 h-4 text-white"/></div>
-                    <div>
-                      <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">{t('dashboard.checkedInToday')}</p>
-                      <p className="text-xs text-emerald-600 dark:text-emerald-500 mt-0.5">{t('dashboard.keepUpGoodWork')}</p>
-                    </div>
+
+                {/* Cells — compact h-9 */}
+                <div className="grid grid-cols-7 gap-0.5 mb-3">
+                  {getCalendarDays().map((day, i) => {
+                    const ds  = toDateStr(day.date);
+                    const log = monthLogs[ds] || {};
+                    const isT = ds === todayStr;
+                    const isSel = ds === selectedStr;
+                    return (
+                      <button key={i} onClick={() => { setSelectedDate(day.date); if (!day.isCurrentMonth) setCurrentDate(day.date); }}
+                        aria-label={day.date.toLocaleDateString()}
+                        className={`focus-ring relative flex items-center justify-center h-9 rounded-lg text-xs font-medium transition-all ${
+                          !day.isCurrentMonth ? 'text-gray-300 dark:text-gray-600'
+                          : isSel ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-300 dark:shadow-indigo-900'
+                          : isT   ? 'ring-2 ring-indigo-400 ring-offset-1 dark:ring-offset-gray-900 text-indigo-600 dark:text-indigo-400 font-bold'
+                          :         'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60'
+                        }`}>
+                        <span className="tnum">{day.date.getDate()}</span>
+                        <div className="absolute bottom-1 flex gap-0.5">
+                          {log.checkIn   && <span className={`w-1 h-1 rounded-full ${isSel?'bg-white/80':'bg-emerald-400'}`}/>}
+                          {log.gratitude && <span className={`w-1 h-1 rounded-full ${isSel?'bg-white/60':'bg-purple-400'}`}/>}
+                          {log.mood      && <span className={`w-1 h-1 rounded-full ${isSel?'bg-white/50':'bg-amber-400'}`}/>}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Legend */}
+                <div className="flex items-center justify-center gap-5 text-xs text-gray-400 border-t border-gray-100 dark:border-gray-700/50 pt-3 mb-3">
+                  {[['bg-emerald-400', t('dashboard.dailyCheckIn')],['bg-purple-400', t('dashboard.gratitudeJournal')],['bg-amber-400', t('dashboard.howAreYouFeeling')]].map(([c,l])=>(
+                    <div key={l} className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${c}`}/>{l}</div>
+                  ))}
+                </div>
+
+                {/* Selected-day summary */}
+                <div className="flex items-center justify-between gap-2 border-t border-gray-100 dark:border-gray-700/50 pt-3">
+                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    {isToday ? t('dashboard.today') : selectedDate.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+                  </p>
+                  <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    {dayLog.checkIn && <span className="inline-flex items-center gap-1"><FiCheck className="w-3.5 h-3.5 text-emerald-500"/> {t('dashboard.checkedInShort', { defaultValue: 'checked in' })}</span>}
+                    {selectedMoodDef && <span aria-hidden="true" className="text-base leading-none">{selectedMoodDef.icon}</span>}
+                    {dayLog.gratitude && <span className="inline-flex items-center gap-1"><FiHeart className="w-3.5 h-3.5 text-pink-400"/> {t('dashboard.gratitudeShort', { defaultValue: 'gratitude' })}</span>}
                   </div>
-                ) : (
-                  <button onClick={handleCheckIn} disabled={checkInLoading}
-                    className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all ${
-                      checkInLoading ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                      : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-500/25 hover:shadow-lg hover:-translate-y-0.5'
-                    }`}>
-                    {checkInLoading ? <><FiLoader className="animate-spin"/> {t('dashboard.checkingIn', { defaultValue: 'Checking in…' })}</> : <><FiZap className="w-4 h-4"/>{t('dashboard.checkInNow')}</>}
-                  </button>
-                )}
-              </div>
-            ) : (
-              <div className="border-t border-gray-100 dark:border-gray-700/50 pt-4">
-                {dayLog.checkIn
-                  ? <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium"><FiCheck className="w-4 h-4"/> {t('dashboard.checkedInOnDate')}</div>
-                  : <p className="text-sm text-gray-400">{t('dashboard.noCheckInOnDate')}</p>}
-              </div>
-            )}
+                </div>
               </>
             )}
           </div>
-
-          {/* Gratitude Journal */}
-          <div className="card p-5">
-            <h2 className="section-title mb-1 flex items-center gap-2">
-              <FiHeart className="text-pink-500"/>{t('dashboard.gratitudeJournal')}
-              {!isToday && <span className="text-xs font-normal text-gray-400 ml-1">· {selectedDate.toLocaleDateString()}</span>}
-            </h2>
-            <p className="text-xs text-gray-400 mb-4">{t('dashboard.gratitudeRaisesVibration')}</p>
-
-            <div className="mb-4">
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2 uppercase tracking-wider">
-                {isToday ? t('dashboard.todayIAmGratefulFor') : t('dashboard.gratefulFor', { date: selectedDate.toLocaleDateString() })}
-              </label>
-              <textarea
-                value={dayLog.gratitude || ''}
-                onChange={e => setDayLog(prev => ({ ...prev, gratitude: e.target.value }))}
-                rows={4}
-                className="input w-full resize-none text-sm leading-relaxed"
-                placeholder={isToday ? t('dashboard.enterGratitude') : t('dashboard.enterGratitudeForDate')}
-              />
-              <div className="flex justify-between items-center mt-2.5">
-                <span className="text-xs">
-                  {gratitudeDirty
-                    ? <span className="text-amber-500 dark:text-amber-400 font-medium">{t('dashboard.unsavedChanges', { defaultValue: 'Unsaved changes' })}</span>
-                    : savedGratitude
-                      ? <span className="text-emerald-500 dark:text-emerald-400">{t('dashboard.saved')}</span>
-                      : <span className="text-gray-400">{t('dashboard.nothingSavedYet')}</span>}
-                </span>
-                <button onClick={handleSaveGratitude}
-                  disabled={!dayLog.gratitude?.trim() || savingGratitude}
-                  className={`btn btn-sm text-xs font-semibold transition-all ${
-                    !dayLog.gratitude?.trim() || savingGratitude
-                      ? 'btn-disabled bg-gray-100 dark:bg-gray-800 text-gray-400'
-                      : 'btn-primary shadow-sm hover:shadow-md hover:shadow-indigo-500/20'
-                  }`}>
-                  {savingGratitude
-                    ? <><FiLoader className="animate-spin mr-1.5 w-3 h-3"/>{t('dashboard.saving', { defaultValue: 'Saving…' })}</>
-                    : <><FiHeart className="mr-1.5 w-3 h-3"/>
-                        {monthLogs[selectedStr]?.gratitude ? t('dashboard.updateGratitude') : t('dashboard.saveGratitude')}
-                      </>}
-                </button>
-              </div>
-            </div>
-
-            {/* Recent entries */}
-            {recentEntries.length > 0 && (
-              <div>
-                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <FiStar className="text-amber-400 w-3.5 h-3.5"/>{t('dashboard.recentGratitude')}
-                </h3>
-                <div className="space-y-2 max-h-56 overflow-y-auto pr-0.5">
-                  {recentEntries.map((entry, i) => <GratitudeEntry key={i} entry={entry}/>)}
-                </div>
-              </div>
-            )}
-          </div>
-
         </div>
       </div>
+
     </div>
   );
 };

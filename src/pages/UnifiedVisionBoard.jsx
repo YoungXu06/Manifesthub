@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   FiPlus, FiFilter, FiSearch, FiX, FiCalendar,
   FiGrid, FiList, FiChevronUp, FiChevronDown, FiLayout,
@@ -255,6 +255,15 @@ const UnifiedVisionBoard = () => {
   const { isPaid } = useSubscription();
   const { showSuccess, showError, showWarning } = useToast();
   const [confirm, confirmEl] = useConfirm();
+
+  // Support deep-linking from the dashboard's Lens Snapshot (?level=year|month|week|day).
+  const location = useLocation();
+  useEffect(() => {
+    const level = new URLSearchParams(location.search).get('level');
+    if (level && ['year', 'month', 'week', 'day'].includes(level)) {
+      setFilterLevel(level);
+    }
+  }, []); // run once on mount
 
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);

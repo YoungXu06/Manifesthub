@@ -177,7 +177,14 @@
       "reflect": "周度复盘",
       "foundation": "身份地基"
     },
-    "visionsManifested": "{{total}}个愿景中已实现{{count}}个"
+    "visionsManifested": "{{total}}个愿景中已实现{{count}}个",
+    "lensSnapshot": "愿景镜头",
+    "todaysPractice": "今日练习",
+    "practiceFor": "练习记录",
+    "manageVisions": "在愿景板上管理 →",
+    "pickDateInCalendar": "在下方日历中选择日期",
+    "checkedInShort": "已签到",
+    "gratitudeShort": "感恩"
   },
   "goals": {
     "myGoals": "我的目标",
