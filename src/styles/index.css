@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Reduced motion — respect user preference ─────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 :root {
   /* 主题颜色 */
   --color-primary-rgb: 79, 70, 229; /* indigo-600 */
@@ -188,6 +198,16 @@
     @apply text-lg font-semibold text-gray-900 dark:text-white;
   }
 
+  /* Numeric alignment for data-heavy numbers (stats, progress, dates) */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Consistent focus ring for custom buttons / links */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900;
+  }
+
   /* Badge */
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
@@ -312,6 +332,11 @@
 ───────────────────────────────── */
 .animate-fade-in {
   animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Toast slide-in (from the right, matching the app's motion language) */
+.toast-enter {
+  animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes fadeIn {

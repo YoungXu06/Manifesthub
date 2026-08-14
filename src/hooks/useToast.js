@@ -1,47 +1,20 @@
-import { useState, useCallback } from 'react';
+import useStore from '../store';
 
+/**
+ * Toast facade — stable API over the store's global notification channel.
+ * Single source of truth: store.notifications + one renderer mounted at App
+ * root (GlobalToastNotifications). Page-level toast containers were removed
+ * to avoid overlapping stacks / duplicate toasts.
+ */
 const useToast = () => {
-  const [toasts, setToasts] = useState([]);
+  const toasts = useStore((s) => s.notifications);
+  const removeToast = useStore((s) => s.removeNotification);
+  const showSuccess = useStore((s) => s.showSuccess);
+  const showError = useStore((s) => s.showError);
+  const showWarning = useStore((s) => s.showWarning);
+  const showInfo = useStore((s) => s.showInfo);
 
-  const addToast = useCallback((message, type = 'success', duration = 3000) => {
-    const id = Date.now() + Math.random();
-    const newToast = {
-      id,
-      message,
-      type,
-      duration
-    };
-    
-    setToasts(prev => [...prev, newToast]);
-    
-    return id;
-  }, []);
-
-  const removeToast = useCallback((id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  }, []);
-
-  const showSuccess = useCallback((message, duration) => 
-    addToast(message, 'success', duration), [addToast]);
-  
-  const showError = useCallback((message, duration) => 
-    addToast(message, 'error', duration), [addToast]);
-  
-  const showWarning = useCallback((message, duration) => 
-    addToast(message, 'warning', duration), [addToast]);
-  
-  const showInfo = useCallback((message, duration) => 
-    addToast(message, 'info', duration), [addToast]);
-
-  return {
-    toasts,
-    addToast,
-    removeToast,
-    showSuccess,
-    showError,
-    showWarning,
-    showInfo
-  };
+  return { toasts, removeToast, showSuccess, showError, showWarning, showInfo };
 };
 
-export default useToast; 
+export default useToast;

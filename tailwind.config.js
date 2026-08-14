@@ -28,8 +28,9 @@ module.exports = {
         serif: ['Merriweather', 'serif'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'slide-up': 'slideUp 0.5s ease-out',
+        // NOTE: 'fade-in' lives in src/styles/index.css (.animate-fade-in,
+        // 0.45s) to avoid duplicate definitions winning by cascade order.
+        'slide-up': 'slideUp 0.5s cubic-bezier(0.16,1,0.3,1)',
         'pulse-slow': 'pulse 3s infinite',
         'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16,1,0.3,1)',
       },
