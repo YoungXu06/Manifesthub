@@ -499,7 +499,7 @@ const Dashboard = () => {
             onFocus={() => { focusRef.current = true; syncCarouselPaused(); }}
             onBlur={() => { focusRef.current = false; syncCarouselPaused(); }}>
             <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-6 translate-x-6 blur-2xl pointer-events-none" />
-            <div className="flex items-center justify-between mb-3 relative z-10">
+            <div className="flex items-center justify-between mb-3 relative z-20">
               <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest inline-flex items-center gap-1.5">
                 {t('dashboard.aff.identityLens')}
                 <span className="text-sm leading-none" aria-hidden="true">{affirmDeck[affirmIdx]?.emoji || ''}</span>
@@ -514,20 +514,17 @@ const Dashboard = () => {
                 </Link>
               )}
             </div>
-            <div className="flex-1 relative z-10">
+            <div className="flex-1 relative z-10 overflow-hidden min-h-0">
               {affirmDeck.map((card, i) => (
-                <div key={i} className="absolute inset-0 flex flex-col justify-center transition-opacity duration-700"
+                <div key={i} className="absolute inset-0 flex flex-col justify-center overflow-hidden transition-opacity duration-700"
                   style={{ opacity: i === affirmIdx ? 1 : 0, pointerEvents: i === affirmIdx ? 'auto' : 'none' }}>
-                  <p className="text-white font-semibold text-base leading-snug mb-3 italic flex items-start gap-2">
-                    <span className="text-lg leading-none mt-0.5" aria-hidden="true">{card.emoji}</span>
-                    <span>"{card.text}"</span>
-                  </p>
-                  <p className="text-white/85 text-xs leading-relaxed">{card.caption}</p>
+                  <p className="text-white font-semibold text-base leading-snug italic line-clamp-3">{card.text}</p>
+                  <p className="text-white/85 text-xs leading-relaxed mt-2 line-clamp-2">{card.caption}</p>
                 </div>
               ))}
             </div>
             <div role="tablist" aria-label={t('dashboard.aff.tablistLabel', { defaultValue: 'Affirmation carousel' })}
-              className="relative z-10 flex gap-0.5 mt-auto pt-6">
+              className="relative z-20 flex gap-0.5 mt-auto pt-6">
               {affirmDeck.map((_, i) => (
                 <button key={i} role="tab" aria-selected={i === affirmIdx}
                   aria-label={t('dashboard.aff.goTo', { defaultValue: 'Go to affirmation {{n}}', n: i + 1 })}
