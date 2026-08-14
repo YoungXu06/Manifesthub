@@ -58,7 +58,8 @@ const Toast = ({ type = 'success', message, duration = 3000, onClose }) => {
 // Single global container — rendered once from App root (GlobalToastNotifications).
 export const ToastContainer = ({ toasts, removeToast }) => {
   return (
-    <div className="fixed top-16 right-4 z-[100] flex flex-col items-end gap-2 w-full max-w-sm pointer-events-none">
+    // Above app modals (z-[9999]) so in-modal feedback stays visible; below ConfirmDialog (z-[10001]).
+    <div className="fixed top-16 right-4 z-[10000] flex flex-col items-end gap-2 w-full max-w-sm pointer-events-none">
       {toasts.slice(-5).map((toast) => (
         <Toast
           key={toast.id}

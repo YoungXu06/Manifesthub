@@ -14,7 +14,8 @@ const ConfirmDialog = ({ title, message, confirmLabel, cancelLabel, danger = fal
   }, [onCancel]);
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    // Above app modals (z-[9999]) so confirm prompts never hide behind them.
+    <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onCancel} />
       <div
         role="alertdialog"
