@@ -59,8 +59,20 @@ export function getNextPrompt(answers, now = new Date()) {
   return null;
 }
 
+// ── Notification scheduling (deduplicated) ──────────────────────────────────
+let lastHandles = [];
+
+/** Clear all previously scheduled notification timers for today. */
+export function cancelTodayNotifications() {
+  if (!lastHandles.length) return;
+  lastHandles.forEach((h) => clearTimeout(h));
+  lastHandles = [];
+}
+
 /** Schedule notifications for the rest of the day in the current tab. */
 export function scheduleTodayNotifications(answers) {
+  // Deduplicate: tear down any previous schedule before creating a new one.
+  cancelTodayNotifications();
   const settings = getInterruptSettings();
   if (!settings.enabled) return [];
   if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return [];
@@ -83,13 +95,16 @@ export function scheduleTodayNotifications(answers) {
           tag: `mh-${p.key}-${toDateStr(now)}`,
         });
         n.onclick = () => {
+          // SPA navigation: dispatch an event that MainLayout listens for and
+          // routes on — no full page load.
           window.focus();
-          window.location.href = `/interrupt?slot=${p.key}`;
+          window.dispatchEvent(new CustomEvent('mh:open-interrupt', { detail: { slot: p.key } }));
         };
       } catch (e) { /* ignore */ }
     }, ms);
     handles.push(handle);
   }
+  lastHandles = handles;
   return handles;
 }
 
@@ -104,4 +119,36 @@ export async function requestNotificationPermission() {
   } catch {
     return 'denied';
   }
+}
+
+// ── Draft persistence (per day + slot) ──────────────────────────────────────
+export function saveInterruptDraft(dateStr, slot, answer) {
+  try {
+    localStorage.setItem(
+      `manifestHub:interruptDraft:${dateStr}:${slot}`,
+      JSON.stringify({ answer, savedAt: Date.now() })
+    );
+  } catch { /* ignore */ }
+}
+
+export function loadInterruptDraft(dateStr, slot) {
+  try {
+    const raw = localStorage.getItem(`manifestHub:interruptDraft:${dateStr}:${slot}`);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed.answer === 'string' ? parsed.answer : null;
+  } catch { return null; }
+}
+
+export function clearInterruptDraft(dateStr, slot) {
+  try { localStorage.removeItem(`manifestHub:interruptDraft:${dateStr}:${slot}`); } catch { /* ignore */ }
+}
+
+// ── Dismissal persistence (per day) ─────────────────────────────────────────
+export function isInterruptDismissed(dateStr) {
+  try { return localStorage.getItem(`manifestHub:interruptDismissed:${dateStr}`) === 'true'; } catch { return false; }
+}
+
+export function dismissInterrupts(dateStr) {
+  try { localStorage.setItem(`manifestHub:interruptDismissed:${dateStr}`, 'true'); } catch { /* ignore */ }
 }

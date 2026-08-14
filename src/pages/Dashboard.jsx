@@ -9,9 +9,9 @@ import {
 } from 'react-icons/fi';
 import useStore from '../store';
 import IndexNotification from '../components/IndexNotification';
-import { ToastContainer } from '../components/Toast';
 import useToast from '../hooks/useToast';
 import useSubscription from '../hooks/useSubscription';
+import Skeleton from '../components/common/Skeleton';
 
 /* ─── Affirmation emojis (text/visualization come from i18n or foundation) ─── */
 const AFF_EMOJIS = ['✨','🎯','⚡','🌟','🦋'];
@@ -86,7 +86,7 @@ const StatCard = ({ icon, label, value, colorClass, bgClass }) => (
     </div>
     <div className="min-w-0">
       <p className="text-xs font-medium text-gray-500 dark:text-gray-400 truncate">{label}</p>
-      <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none mt-0.5">{value}</p>
+      <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none mt-0.5 tnum">{value}</p>
     </div>
   </div>
 );
@@ -119,7 +119,7 @@ const Dashboard = () => {
     saveDailyLog, fetchDailyLog, fetchMonthDailyLogs,
   } = useStore();
 
-  const { toasts, removeToast, showSuccess, showError } = useToast();
+  const { showSuccess, showError } = useToast();
   const { isPaid, openCheckout } = useSubscription();
   const greetingHour = getGreetingHour();
   const greeting = greetingHour < 12
@@ -158,6 +158,8 @@ const Dashboard = () => {
   const [savingIntention, setSavingIntention] = useState(false);
   const [showIntentionInput, setShowIntentionInput] = useState(false);
   const [intentionDraft, setIntentionDraft]   = useState('');
+  const [savingMood, setSavingMood]           = useState(false);
+  const [monthLoading, setMonthLoading]       = useState(false);
 
   /* ── recent entries for "Recent Gratitude" list ── */
   const [recentEntries, setRecentEntries] = useState([]);
@@ -165,11 +167,22 @@ const Dashboard = () => {
   /* ── affirmation carousel ── */
   const [affirmIdx, setAffirmIdx] = useState(0);
   const affirmTimer = useRef(null);
+  const hoverRef = useRef(false);
+  const focusRef = useRef(false);
+  const pausedRef = useRef(false);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  /* ── request race guards ── */
+  const fetchTokenRef = useRef(0);
+  const monthTokenRef = useRef(0);
 
   /* ── derived ── */
   const todayStr    = toDateStr(new Date());
   const selectedStr = toDateStr(selectedDate);
   const isToday     = selectedStr === todayStr;
+  const isCurrentMonth = todayStr.slice(0, 7) === toDateStr(currentDate).slice(0, 7);
+  const savedGratitude = (monthLogs[selectedStr]?.gratitude || '').trim();
+  const gratitudeDirty = (dayLog.gratitude || '').trim() !== savedGratitude;
+  const goToToday = () => { const now = new Date(); setCurrentDate(now); setSelectedDate(now); };
 
   /* ════════════════════════════ init load ════════════════════════════ */
   useEffect(() => {
@@ -180,18 +193,36 @@ const Dashboard = () => {
       setIsLoading(false);
     };
     load();
-
-    affirmTimer.current = setInterval(() => setAffirmIdx(p => (p + 1) % affCount), 5500);
-    return () => clearInterval(affirmTimer.current);
   }, [affCount]);
+
+  /* ═══════════ affirmation carousel timer — paused on hover / focus / hidden tab ═══════════ */
+  const syncCarouselPaused = () => {
+    const p = hoverRef.current || focusRef.current || document.hidden;
+    pausedRef.current = p;
+    setCarouselPaused(p);
+  };
+
+  useEffect(() => {
+    if (carouselPaused) return;
+    affirmTimer.current = setInterval(() => setAffirmIdx(p => (p + 1) % affCount), 5500);
+    return () => { clearInterval(affirmTimer.current); affirmTimer.current = null; };
+  }, [affCount, carouselPaused]);
+
+  useEffect(() => {
+    const onVisibility = () => syncCarouselPaused();
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
 
   /* ════════════════════════════ month change ════════════════════════════ */
   useEffect(() => {
+    setMonthLogs({});
     loadMonth(currentDate.getFullYear(), currentDate.getMonth() + 1);
   }, [currentDate]);
 
   /* ════════════════════════════ selected date change ════════════════════════════ */
   useEffect(() => {
+    const token = ++fetchTokenRef.current; // invalidates any in-flight fetch for a previous date
     // First apply whatever we already have in monthLogs (instant render)
     const cached = monthLogs[selectedStr];
     if (cached) {
@@ -205,6 +236,7 @@ const Dashboard = () => {
 
     // Then fetch the full dailyLog for this date from Firestore (gets mood + intention)
     fetchDailyLog(selectedDate).then(({ log }) => {
+      if (token !== fetchTokenRef.current) return; // stale — a newer date was selected meanwhile
       if (log) {
         setDayLog(prev => ({ ...prev, ...log }));
         setIntentionDraft(log.intention || '');
@@ -219,16 +251,23 @@ const Dashboard = () => {
 
   /* ─── loaders ─── */
   async function loadMonth(year, month) {
-    const { logs } = await fetchMonthDailyLogs(year, month);
-    // Also merge legacy data (checkIns + gratitudeEntries) for backward compat
-    const { data: legacyData } = await fetchMonthCalendarData(year, month);
-    const merged = { ...logs };
-    Object.entries(legacyData || {}).forEach(([dateStr, v]) => {
-      if (!merged[dateStr]) merged[dateStr] = {};
-      if (v.checkIn)   merged[dateStr].checkIn   = merged[dateStr].checkIn   || true;
-      if (v.gratitude) merged[dateStr].gratitude = merged[dateStr].gratitude || v.gratitude;
-    });
-    setMonthLogs(merged);
+    const token = ++monthTokenRef.current; // invalidates any in-flight load for a previous month
+    setMonthLoading(true);
+    try {
+      const { logs } = await fetchMonthDailyLogs(year, month);
+      // Also merge legacy data (checkIns + gratitudeEntries) for backward compat
+      const { data: legacyData } = await fetchMonthCalendarData(year, month);
+      if (token !== monthTokenRef.current) return; // stale — a newer month was requested meanwhile
+      const merged = { ...logs };
+      Object.entries(legacyData || {}).forEach(([dateStr, v]) => {
+        if (!merged[dateStr]) merged[dateStr] = {};
+        if (v.checkIn)   merged[dateStr].checkIn   = merged[dateStr].checkIn   || true;
+        if (v.gratitude) merged[dateStr].gratitude = merged[dateStr].gratitude || v.gratitude;
+      });
+      setMonthLogs(merged);
+    } finally {
+      if (token === monthTokenRef.current) setMonthLoading(false);
+    }
   }
 
   async function loadRecentEntries() {
@@ -261,11 +300,24 @@ const Dashboard = () => {
   };
 
   const handleSaveMood = async (moodLabel) => {
+    if (savingMood) return;
+    const prevMood = dayLog.mood;
     const updated = { ...dayLog, mood: moodLabel };
     setDayLog(updated);
     setMonthLogs(prev => ({ ...prev, [selectedStr]: updated }));
-    await saveDailyLog(selectedDate, { mood: moodLabel });
-    showSuccess(t('dashboard.moodSaved'), 1500);
+    setSavingMood(true);
+    try {
+      const result = await saveDailyLog(selectedDate, { mood: moodLabel });
+      if (!result.success) throw new Error(result.error || 'save failed');
+      // success: no toast — the selected ring on the mood button is feedback enough
+    } catch {
+      // rollback the optimistic mood on failure
+      setDayLog(prev => ({ ...prev, mood: prevMood }));
+      setMonthLogs(prev => ({ ...prev, [selectedStr]: { ...(prev[selectedStr] || {}), mood: prevMood } }));
+      showError(t('dashboard.moodSaveFailed', { defaultValue: 'Could not save your mood. Try again.' }));
+    } finally {
+      setSavingMood(false);
+    }
   };
 
   const handleSaveIntention = async () => {
@@ -320,15 +372,28 @@ const Dashboard = () => {
   ];
 
   if (isLoading) return (
-    <div className="flex flex-col justify-center items-center h-64 gap-3">
-      <div className="w-10 h-10 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
-      <p className="text-sm text-gray-500 dark:text-gray-400">Loading your manifestation hub…</p>
+    <div className="animate-fade-in max-w-7xl mx-auto">
+      <IndexNotification />
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('dashboard.loading', { defaultValue: 'Loading your manifestation hub…' })}</p>
+      <div className="space-y-5">
+        <Skeleton className="h-24 w-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1 space-y-5">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+          <div className="lg:col-span-2 space-y-5">
+            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-24 w-full" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 
   return (
     <div className="animate-fade-in max-w-7xl mx-auto">
-      <ToastContainer toasts={toasts} removeToast={removeToast} />
+      
       <IndexNotification />
 
       {/* ── Welcome ── */}
@@ -338,12 +403,6 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{user?.displayName || 'Manifestor'} ✨</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t('dashboard.manifestationJourney')}</p>
         </div>
-        {streakCount > 0 && (
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border border-amber-200 dark:border-amber-800/50 shadow-sm">
-            <span className="text-xl">🔥</span>
-            <div><p className="text-xs text-amber-600 dark:text-amber-400 font-medium">Day Streak</p><p className="text-xl font-bold text-amber-700 dark:text-amber-300 leading-none">{streakCount}</p></div>
-          </div>
-        )}
       </div>
 
       {/* ── Identity hero (or onboarding nudge) ── */}
@@ -352,7 +411,7 @@ const Dashboard = () => {
           to="/foundation"
           className="block mb-7 group"
         >
-          <div className="relative rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-indigo-950/40 dark:via-gray-900 dark:to-purple-950/40 border border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-colors shadow-sm">
+          <div className="relative rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-indigo-950/40 dark:via-gray-900 dark:to-purple-950/40 border border-indigo-100 dark:border-indigo-900/40 border-l-4 border-l-indigo-400 dark:border-l-indigo-500 hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-colors shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
                 <FiUser className="w-3 h-3" />
@@ -360,7 +419,7 @@ const Dashboard = () => {
               </span>
               <FiEdit3 className="w-3.5 h-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <p className="mt-2 text-base sm:text-lg font-serif italic text-gray-900 dark:text-white leading-snug">
+            <p className="mt-2 text-lg sm:text-xl font-serif italic text-gray-900 dark:text-white leading-snug">
               "{user.foundation.identityStatement}"
             </p>
             {user.foundation.oneMonthProject && (
@@ -423,7 +482,11 @@ const Dashboard = () => {
         <div className="lg:col-span-1 flex flex-col gap-5">
 
           {/* Affirmation carousel */}
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-5 shadow-lg shadow-purple-500/20 min-h-[200px] flex flex-col">
+          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 p-5 shadow-lg shadow-purple-500/20 min-h-[200px] flex flex-col"
+            onMouseEnter={() => { hoverRef.current = true; syncCarouselPaused(); }}
+            onMouseLeave={() => { hoverRef.current = false; syncCarouselPaused(); }}
+            onFocus={() => { focusRef.current = true; syncCarouselPaused(); }}
+            onBlur={() => { focusRef.current = false; syncCarouselPaused(); }}>
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-8 translate-x-8 blur-2xl pointer-events-none" />
             <div className="flex items-center justify-between mb-4 relative z-10">
               <h2 className="text-xs font-semibold text-white/70 uppercase tracking-widest">
@@ -445,36 +508,42 @@ const Dashboard = () => {
                   style={{ opacity: i === affirmIdx ? 1 : 0, pointerEvents: i === affirmIdx ? 'auto' : 'none' }}>
                   <p className="text-3xl mb-2">{card.emoji}</p>
                   <p className="text-white font-semibold text-base leading-snug mb-3 italic">"{card.text}"</p>
-                  <p className="text-white/70 text-xs leading-relaxed">{card.caption}</p>
+                  <p className="text-white/85 text-xs leading-relaxed">{card.caption}</p>
                 </div>
               ))}
             </div>
-            <div className="relative z-10 flex gap-1.5 mt-auto pt-8">
+            <div role="tablist" aria-label={t('dashboard.aff.tablistLabel', { defaultValue: 'Affirmation carousel' })}
+              className="relative z-10 flex gap-0.5 mt-auto pt-8">
               {affirmDeck.map((_, i) => (
-                <button key={i} onClick={() => setAffirmIdx(i)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${i === affirmIdx ? 'bg-white w-5' : 'bg-white/35 w-1.5'}`} />
+                <button key={i} role="tab" aria-selected={i === affirmIdx}
+                  aria-label={t('dashboard.aff.goTo', { defaultValue: 'Go to affirmation {{n}}', n: i + 1 })}
+                  onClick={() => setAffirmIdx(i)}
+                  className="focus-ring p-2 rounded-full outline-none group"
+                >
+                  <span className={`block h-1.5 rounded-full transition-all duration-300 ${i === affirmIdx ? 'bg-white w-5' : 'bg-white/50 w-1.5'}`} />
+                </button>
               ))}
             </div>
           </div>
 
           {/* Mood */}
           <div className="card p-5">
-            <h2 className="section-title mb-1 flex items-center gap-2"><FiSmile className="text-purple-500" />How are you feeling?</h2>
-            <p className="text-xs text-gray-400 mb-1">{isToday ? 'Today' : selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p>
-            <div className="grid grid-cols-4 gap-2">
+            <h2 className="section-title mb-1 flex items-center gap-2"><FiSmile className="text-purple-500" />{t('dashboard.howAreYouFeeling')}</h2>
+            <p className="text-xs text-gray-400 mb-1">{isToday ? t('dashboard.moodToday', { defaultValue: 'Today' }) : selectedDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</p>
+            <div className={`grid grid-cols-4 gap-2 ${savingMood ? 'pointer-events-none opacity-70' : ''}`}>
               {MOOD_DEFS.map(mood => {
                 const moodLabel = t(`dashboard.moods.${mood.key}`);
                 const selected = dayLog.mood === moodLabel;
                 return (
                   <button key={mood.key} onClick={() => isToday && handleSaveMood(moodLabel)}
-                    disabled={!isToday}
+                    disabled={!isToday || savingMood}
                     className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
                       selected
                         ? `${mood.bg} ring-2 ring-offset-1 ring-indigo-400 scale-105`
                         : 'border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
                     } ${!isToday ? 'opacity-60 cursor-default' : ''}`}>
-                    <span className="text-2xl leading-none">{mood.icon}</span>
-                    <span className={`text-xs font-medium ${selected ? mood.color : 'text-gray-500 dark:text-gray-400'}`}>{moodLabel}</span>
+                    <span className="text-2xl leading-none" aria-hidden="true">{mood.icon}</span>
+                    <span className="sr-only">{moodLabel}</span>
                   </button>
                 );
               })}
@@ -491,7 +560,8 @@ const Dashboard = () => {
               </h2>
               {isToday && !showIntentionInput && (
                 <button onClick={() => { setIntentionDraft(dayLog.intention || ''); setShowIntentionInput(true); }}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-500 transition-colors">
+                  aria-label={t('dashboard.editIntention', { defaultValue: 'Edit intention' })}
+                  className="focus-ring p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-indigo-500 transition-colors">
                   <FiEdit3 className="w-4 h-4" />
                 </button>
               )}
@@ -534,7 +604,7 @@ const Dashboard = () => {
               <h2 className="section-title flex items-center gap-2"><FiBookmark className="text-indigo-500" />{t('dashboard.visionOverview')}</h2>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 {visionBoard.length > 0
-                  ? `${t('dashboard.visionsManiifested', {count: visionBoard.filter(v=>v.completed).length, total: visionBoard.length})}`
+                  ? `${t('dashboard.visionsManifested', {count: visionBoard.filter(v=>v.completed).length, total: visionBoard.length})}`
                   : t('dashboard.visionBoardEmpty')}
               </p>
             </div>
@@ -542,7 +612,7 @@ const Dashboard = () => {
               <div className="px-5 pt-3">
                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                   <span>{t('dashboard.overallProgress')}</span>
-                  <span className="font-medium text-indigo-600 dark:text-indigo-400">
+                  <span className="font-medium text-indigo-600 dark:text-indigo-400 tnum">
                     {Math.round(visionBoard.reduce((a,v)=>a+(v.progress||0),0)/visionBoard.length)}%
                   </span>
                 </div>
@@ -572,17 +642,37 @@ const Dashboard = () => {
               <h2 className="section-title flex items-center gap-2"><FiCalendar className="text-indigo-500" />{t('dashboard.calendarAndProgress')}</h2>
               <div className="flex items-center gap-1">
                 <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()-1))}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 transition-colors">
+                  aria-label={t('dashboard.prevMonth', { defaultValue: 'Previous month' })}
+                  className="focus-ring p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 transition-colors">
                   <FiChevronLeft className="h-4 w-4"/>
                 </button>
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-2 min-w-[140px] text-center">{getMonthName(currentDate)}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-2 min-w-[140px] text-center">{getMonthName(currentDate)}</span>
+                  {!isCurrentMonth && (
+                    <button onClick={goToToday}
+                      className="focus-ring text-xs text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium whitespace-nowrap">
+                      {t('dashboard.goToday', { defaultValue: 'Today' })}
+                    </button>
+                  )}
+                </div>
                 <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()+1))}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 transition-colors">
+                  aria-label={t('dashboard.nextMonth', { defaultValue: 'Next month' })}
+                  className="focus-ring p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 transition-colors">
                   <FiChevronRight className="h-4 w-4"/>
                 </button>
               </div>
             </div>
 
+            {monthLoading ? (
+              <div className="space-y-3">
+                <Skeleton className="h-3 w-20" />
+                <div className="grid grid-cols-7 gap-1">
+                  {Array.from({ length: 21 }).map((_, i) => <Skeleton key={i} className="h-10 w-full rounded-xl" />)}
+                </div>
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ) : (
+              <>
             {/* Day headers */}
             <div className="grid grid-cols-7 mb-1">
               {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>(
@@ -598,14 +688,15 @@ const Dashboard = () => {
                 const isT = ds === todayStr;
                 const isSel = ds === selectedStr;
                 return (
-                  <button key={i} onClick={() => setSelectedDate(day.date)}
-                    className={`relative flex flex-col items-center justify-center aspect-square rounded-xl text-xs font-medium transition-all ${
-                      !day.isCurrentMonth ? 'text-gray-300 dark:text-gray-700'
+                  <button key={i} onClick={() => { setSelectedDate(day.date); if (!day.isCurrentMonth) setCurrentDate(day.date); }}
+                    aria-label={day.date.toLocaleDateString()}
+                    className={`focus-ring relative flex flex-col items-center justify-center aspect-square rounded-xl text-xs font-medium transition-all ${
+                      !day.isCurrentMonth ? 'text-gray-300 dark:text-gray-600'
                       : isSel ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-300 dark:shadow-indigo-900'
                       : isT   ? 'ring-2 ring-indigo-400 ring-offset-1 dark:ring-offset-gray-900 text-indigo-600 dark:text-indigo-400 font-bold'
                       :         'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/60'
                     }`}>
-                    <span>{day.date.getDate()}</span>
+                    <span className="tnum">{day.date.getDate()}</span>
                     <div className="absolute bottom-0.5 flex gap-0.5">
                       {log.checkIn   && <span className={`w-1.5 h-1.5 rounded-full ${isSel?'bg-white/80':'bg-emerald-400'}`}/>}
                       {log.gratitude && <span className={`w-1.5 h-1.5 rounded-full ${isSel?'bg-white/60':'bg-purple-400'}`}/>}
@@ -639,7 +730,7 @@ const Dashboard = () => {
                   </h3>
                   {streakCount > 0 && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 font-medium">
-                      🔥 {streakCount} {t('dashboard.dayStreak')}
+                      🔥 <span className="tnum">{streakCount}</span> {t('dashboard.dayStreak')}
                     </span>
                   )}
                 </div>
@@ -655,18 +746,20 @@ const Dashboard = () => {
                   <button onClick={handleCheckIn} disabled={checkInLoading}
                     className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all ${
                       checkInLoading ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 shadow-md shadow-indigo-500/25 hover:shadow-lg hover:-translate-y-0.5'
+                      : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-500/25 hover:shadow-lg hover:-translate-y-0.5'
                     }`}>
-                    {checkInLoading ? <><FiLoader className="animate-spin"/> Checking in…</> : <><FiZap className="w-4 h-4"/>{t('dashboard.checkInNow')}</>}
+                    {checkInLoading ? <><FiLoader className="animate-spin"/> {t('dashboard.checkingIn', { defaultValue: 'Checking in…' })}</> : <><FiZap className="w-4 h-4"/>{t('dashboard.checkInNow')}</>}
                   </button>
                 )}
               </div>
             ) : (
               <div className="border-t border-gray-100 dark:border-gray-700/50 pt-4">
                 {dayLog.checkIn
-                  ? <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium"><FiCheck className="w-4 h-4"/> Checked in this day</div>
-                  : <p className="text-sm text-gray-400">No check-in recorded for this day</p>}
+                  ? <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium"><FiCheck className="w-4 h-4"/> {t('dashboard.checkedInOnDate')}</div>
+                  : <p className="text-sm text-gray-400">{t('dashboard.noCheckInOnDate')}</p>}
               </div>
+            )}
+              </>
             )}
           </div>
 
@@ -676,11 +769,11 @@ const Dashboard = () => {
               <FiHeart className="text-pink-500"/>{t('dashboard.gratitudeJournal')}
               {!isToday && <span className="text-xs font-normal text-gray-400 ml-1">· {selectedDate.toLocaleDateString()}</span>}
             </h2>
-            <p className="text-xs text-gray-400 mb-4">Gratitude raises your vibration and amplifies your manifestation power.</p>
+            <p className="text-xs text-gray-400 mb-4">{t('dashboard.gratitudeRaisesVibration')}</p>
 
             <div className="mb-4">
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2 uppercase tracking-wider">
-                {isToday ? '✨ Today I am grateful for...' : `Grateful for on ${selectedDate.toLocaleDateString()}...`}
+                {isToday ? t('dashboard.todayIAmGratefulFor') : t('dashboard.gratefulFor', { date: selectedDate.toLocaleDateString() })}
               </label>
               <textarea
                 value={dayLog.gratitude || ''}
@@ -690,8 +783,12 @@ const Dashboard = () => {
                 placeholder={isToday ? t('dashboard.enterGratitude') : t('dashboard.enterGratitudeForDate')}
               />
               <div className="flex justify-between items-center mt-2.5">
-                <span className="text-xs text-gray-400">
-                  {monthLogs[selectedStr]?.gratitude ? t('dashboard.saved') : t('dashboard.unsaved')}
+                <span className="text-xs">
+                  {gratitudeDirty
+                    ? <span className="text-amber-500 dark:text-amber-400 font-medium">{t('dashboard.unsavedChanges', { defaultValue: 'Unsaved changes' })}</span>
+                    : savedGratitude
+                      ? <span className="text-emerald-500 dark:text-emerald-400">{t('dashboard.saved')}</span>
+                      : <span className="text-gray-400">{t('dashboard.nothingSavedYet')}</span>}
                 </span>
                 <button onClick={handleSaveGratitude}
                   disabled={!dayLog.gratitude?.trim() || savingGratitude}
@@ -701,7 +798,7 @@ const Dashboard = () => {
                       : 'btn-primary shadow-sm hover:shadow-md hover:shadow-indigo-500/20'
                   }`}>
                   {savingGratitude
-                    ? <><FiLoader className="animate-spin mr-1.5 w-3 h-3"/>Saving…</>
+                    ? <><FiLoader className="animate-spin mr-1.5 w-3 h-3"/>{t('dashboard.saving', { defaultValue: 'Saving…' })}</>
                     : <><FiHeart className="mr-1.5 w-3 h-3"/>
                         {monthLogs[selectedStr]?.gratitude ? t('dashboard.updateGratitude') : t('dashboard.saveGratitude')}
                       </>}

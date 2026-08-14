@@ -2,15 +2,18 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  FiX, FiHome, FiUser, FiLogOut, FiImage, FiZap, FiCompass, FiCalendar
+  FiX, FiHome, FiUser, FiLogOut, FiImage, FiZap, FiCompass, FiCalendar, FiBell
 } from 'react-icons/fi';
 import useStore from '../../store';
 import useSubscription from '../../hooks/useSubscription';
+import ThemeToggle from '../common/ThemeToggle';
+import LanguageSelector from '../common/LanguageSelector';
+import { formatHuman } from '../../utils/dateUtils';
 
 const Sidebar = ({ open, setOpen, isMobile }) => {
   const { t } = useTranslation();
   const { user, logout, streakCount } = useStore();
-  const { isPaid, openCheckout } = useSubscription();
+  const { isPaid, expiresAt, openCheckout, openPortal } = useSubscription();
 
   const handleLogout = async () => { await logout(); };
 
@@ -19,6 +22,7 @@ const Sidebar = ({ open, setOpen, isMobile }) => {
     { name: t('nav.foundation', { defaultValue: 'Foundation' }), to: '/foundation', icon: <FiCompass className="h-5 w-5" /> },
     { name: t('nav.visionboard'), to: '/visionboard', icon: <FiImage className="h-5 w-5" /> },
     { name: t('nav.reset', { defaultValue: 'Reset' }), to: '/reset', icon: <FiZap className="h-5 w-5" /> },
+    { name: t('nav.interrupt', { defaultValue: 'Interrupts' }), to: '/interrupt', icon: <FiBell className="h-5 w-5" /> },
     { name: t('nav.reflect', { defaultValue: 'Reflect' }), to: '/reflect/weekly', icon: <FiCalendar className="h-5 w-5" /> },
     { name: t('nav.profile'), to: '/profile', icon: <FiUser className="h-5 w-5" /> },
   ];
@@ -87,6 +91,14 @@ const Sidebar = ({ open, setOpen, isMobile }) => {
           )}
         </div>
 
+        {/* Mobile-only theme & language */}
+        {isMobile && (
+          <div className="flex items-center gap-1 px-3 py-2 border-b border-gray-100 dark:border-gray-800/70">
+            <ThemeToggle />
+            <LanguageSelector variant="full" />
+          </div>
+        )}
+
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           <p className="px-3 mb-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">
@@ -114,12 +126,22 @@ const Sidebar = ({ open, setOpen, isMobile }) => {
         {/* Footer — same height as app Footer to keep border aligned */}
         <div className="px-3 border-t border-gray-100 dark:border-gray-800/70 flex flex-col gap-1.5 py-2.5">
           {isPaid ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-100 dark:border-indigo-800/40">
+            <button
+              onClick={openPortal}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-100 dark:border-indigo-800/40 transition-colors group text-left"
+            >
               <span className="text-base">⚡</span>
-              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
-                {t('sidebar.annualMember', { defaultValue: 'Annual Member' })}
+              <span className="flex-1 min-w-0">
+                <span className="block text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                  {t('sidebar.annualMember', { defaultValue: 'Annual Member' })}
+                </span>
+                {expiresAt && (
+                  <span className="block text-[10px] text-indigo-500/80 dark:text-indigo-400/60 truncate">
+                    {formatHuman(expiresAt)}
+                  </span>
+                )}
               </span>
-            </div>
+            </button>
           ) : (
             <button
               onClick={openCheckout}

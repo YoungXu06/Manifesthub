@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowLeft, FiMail, FiMessageSquare, FiZap, FiCheck, FiLoader } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
+import { SITE_EMAIL } from '../utils/constants';
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -9,14 +10,40 @@ const Contact = () => {
   const [status, setStatus] = useState('idle');
 
   const subjects = t('contact.subjects', { returnObjects: true }) || [];
+  const otherOption = t('contact.other', { defaultValue: 'Other' });
 
   const handleChange = (e) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { name, email, subject, message } = form;
     setStatus('sending');
     await new Promise(r => setTimeout(r, 1200));
-    setStatus('sent');
+
+    // Build a prefilled mailto draft instead of faking a server send.
+    const subjectLine = subject.trim();
+    const bodyText = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      '',
+      message,
+    ].join('\n');
+    const mailtoUrl = `mailto:${SITE_EMAIL}?subject=${encodeURIComponent(subjectLine)}&body=${encodeURIComponent(bodyText)}`;
+
+    // Try opening the mail client; fall back to in-tab navigation if the
+    // popup was blocked, and surface an error if neither works.
+    let win = null;
+    try { win = window.open(mailtoUrl, '_blank'); } catch (err) { win = null; }
+    if (win) {
+      setStatus('sent');
+      return;
+    }
+    try {
+      window.location.href = mailtoUrl;
+      setStatus('sent');
+    } catch (err) {
+      setStatus('error');
+    }
   };
 
   return (
@@ -42,7 +69,7 @@ const Contact = () => {
               <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">{t('contact.getInTouch')}</h2>
               <div className="space-y-3">
                 {[
-                  { icon: <FiMail className="w-4 h-4" />, label: t('contact.emailLabel'), value: 'sunluvrainbow@gmail.com', href: 'mailto:sunluvrainbow@gmail.com' },
+                  { icon: <FiMail className="w-4 h-4" />, label: t('contact.emailLabel'), value: SITE_EMAIL, href: `mailto:${SITE_EMAIL}` },
                   { icon: <FiZap className="w-4 h-4" />, label: t('contact.responseTime'), value: t('contact.responseTimeValue') },
                 ].map(item => (
                   <div key={item.label} className="flex items-start gap-3">
@@ -70,12 +97,12 @@ const Contact = () => {
           <div className="md:col-span-3">
             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
               {status === 'sent' ? (
-                <div className="flex flex-col items-center justify-center py-10 text-center">
+                <div role="status" className="flex flex-col items-center justify-center py-10 text-center">
                   <div className="w-14 h-14 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center mb-4">
                     <FiCheck className="w-7 h-7 text-emerald-500" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{t('contact.successTitle')}</h3>
-                  <p className="text-sm text-gray-400">{t('contact.successDesc')}</p>
+                  <p className="text-sm text-gray-400">{t('contact.mailtoHint', { defaultValue: 'Your email app opened — hit send to reach us.' })}</p>
                   <button
                     onClick={() => { setStatus('idle'); setForm({ name: '', email: '', subject: '', message: '' }); }}
                     className="mt-6 text-sm text-indigo-500 hover:underline"
@@ -85,28 +112,39 @@ const Contact = () => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  {status === 'error' && (
+                    <div role="alert" className="p-3.5 bg-red-50 dark:bg-red-900/15 border border-red-100 dark:border-red-900/30 rounded-xl">
+                      <p className="text-sm text-red-600 dark:text-red-400">
+                        {t('contact.mailtoError', { defaultValue: "Couldn't open your email app. Please email us directly at {{email}}.", email: SITE_EMAIL })}
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.name')}</label>
-                      <input name="name" value={form.name} onChange={handleChange} required placeholder={t('contact.namePlaceholder')} className="input w-full text-sm" />
+                      <label htmlFor="contact-name" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.name')}</label>
+                      <input id="contact-name" name="name" value={form.name} onChange={handleChange} required placeholder={t('contact.namePlaceholder')} className="input w-full text-sm" />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.email')}</label>
-                      <input name="email" type="email" value={form.email} onChange={handleChange} required placeholder={t('contact.emailPlaceholder')} className="input w-full text-sm" />
+                      <label htmlFor="contact-email" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.email')}</label>
+                      <input id="contact-email" name="email" type="email" value={form.email} onChange={handleChange} required placeholder={t('contact.emailPlaceholder')} className="input w-full text-sm" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.subject')}</label>
-                    <select name="subject" value={form.subject} onChange={handleChange} required className="input w-full text-sm bg-transparent">
+                    <label htmlFor="contact-subject" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.subject')}</label>
+                    <select id="contact-subject" name="subject" value={form.subject} onChange={handleChange} required className="input w-full text-sm bg-transparent">
                       <option value="" disabled>{t('contact.subjectPlaceholder')}</option>
                       {Array.isArray(subjects) && subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                      {(!Array.isArray(subjects) || !subjects.includes(otherOption)) && (
+                        <option value={otherOption}>{otherOption}</option>
+                      )}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.message')}</label>
-                    <textarea name="message" value={form.message} onChange={handleChange} required rows={5} placeholder={t('contact.messagePlaceholder')} className="input w-full text-sm resize-none" />
+                    <label htmlFor="contact-message" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">{t('contact.message')}</label>
+                    <textarea id="contact-message" name="message" value={form.message} onChange={handleChange} required rows={5} placeholder={t('contact.messagePlaceholder')} className="input w-full text-sm resize-none" />
                   </div>
 
                   <button

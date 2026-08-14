@@ -39,7 +39,7 @@ const LanguageSelector = ({ variant = 'icon' }) => {
         aria-label={t('language.changeLanguage')}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className="flex items-center gap-1.5 p-2 rounded-xl text-gray-500 dark:text-gray-400
+        className="flex items-center gap-1.5 p-2 min-h-[40px] min-w-[40px] rounded-xl text-gray-500 dark:text-gray-400
                    hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800
                    transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
       >

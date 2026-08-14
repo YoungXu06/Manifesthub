@@ -3,14 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { FiEdit2, FiTrash2, FiCalendar, FiTarget, FiStar, FiDollarSign,
          FiHome, FiUsers, FiBook, FiAward, FiGlobe, FiActivity, FiSun,
          FiImage, FiSmile } from 'react-icons/fi';
-import { motion } from 'framer-motion';
 import useStore from '../../store';
 import { useNavigate } from 'react-router-dom';
+import { useConfirm } from '../../hooks/useConfirm';
 
 const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning }) => {
   const { t } = useTranslation();
   const { deleteVisionBoardItem, updateVisionBoardItem } = useStore();
   const navigate = useNavigate();
+  const [confirm, confirmEl] = useConfirm();
   
   // Helper function to ensure priority is a number for comparison
   const getPriorityValue = () => {
@@ -21,33 +22,38 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
   
   const handleDelete = async (e) => {
     e.stopPropagation();
-    if (window.confirm(t('visionboard.deleteConfirm'))) {
-      try {
-        const isGoal = item.id.toString().startsWith('goal-');
+    const ok = await confirm({
+      title: t('visionboard.confirmDeleteTitle', { defaultValue: 'Delete this vision?' }),
+      message: t('visionboard.confirmDeleteMessage', { defaultValue: 'This action cannot be undone.' }),
+      confirmLabel: t('common.delete', { defaultValue: 'Delete' }),
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      const isGoal = item.id.toString().startsWith('goal-');
+      
+      if (isGoal) {
+        const goalId = item.id.replace('goal-', '');
+        const result = await useStore.getState().deleteGoal(goalId);
         
-        if (isGoal) {
-          const goalId = item.id.replace('goal-', '');
-          const result = await useStore.getState().deleteGoal(goalId);
-          
-          if (result.success) {
-            showSuccess?.(t('visionboard.visionDeleted'), 3000);
-          } else {
-            showError?.(result.error || t('visionboard.failedDelete'));
-          }
+        if (result.success) {
+          showSuccess?.(t('visionboard.visionDeleted'), 3000);
         } else {
-          const idToDelete = item.id;
-          const result = await deleteVisionBoardItem(idToDelete);
-          
-          if (result.success) {
-            showSuccess?.(t('visionboard.visionDeleted'), 3000);
-          } else {
-            showError?.(result.error || t('visionboard.failedDelete'));
-          }
+          showError?.(result.error || t('visionboard.failedDelete'));
         }
-      } catch (error) {
-        console.error('Error deleting item:', error);
-        showError?.(t('visionboard.deleteError'));
+      } else {
+        const idToDelete = item.id;
+        const result = await deleteVisionBoardItem(idToDelete);
+        
+        if (result.success) {
+          showSuccess?.(t('visionboard.visionDeleted'), 3000);
+        } else {
+          showError?.(result.error || t('visionboard.failedDelete'));
+        }
       }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      showError?.(t('visionboard.deleteError'));
     }
   };
   
@@ -148,15 +154,10 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.2 }}
-      className="group"
-    >
+    <div className="group">
+      {confirmEl}
       <div
-        className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer"
+        className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-[transform,box-shadow] duration-200 cursor-pointer"
         onClick={handleCardClick}
       >
         {/* Desktop table layout — columns match header: [1fr_80px_90px_72px_80px] */}
@@ -182,39 +183,39 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
                 {getContentPreview(item.content)}
               </p>
             )}
+            {/* Identity link — consistent with grid cards */}
+            {item.identityLink && (
+              <p className="text-[11px] italic text-indigo-500 dark:text-indigo-400 line-clamp-1 pl-8 mt-0.5">
+                ↳ {item.identityLink}
+              </p>
+            )}
           </div>
 
-          {/* Progress column — 80px */}
+          {/* Progress column — 80px, always shown */}
           <div className="flex flex-col items-center justify-center gap-1">
-            {item.progress !== undefined ? (
-              <>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                  {item.progress || 0}%
-                </span>
-                <div className="relative w-14">
-                  <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-300 ${
-                        item.completed
-                          ? 'bg-emerald-500'
-                          : 'bg-indigo-500'
-                      }`}
-                      style={{ width: `${item.progress || 0}%` }}
-                    />
-                  </div>
-                  <input
-                    type="range"
-                    min="0" max="100" step="5"
-                    value={item.progress || 0}
-                    onChange={(e) => { e.stopPropagation(); handleProgressUpdate(parseInt(e.target.value)); }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="absolute inset-0 w-full opacity-0 cursor-pointer"
-                  />
-                </div>
-              </>
-            ) : (
-              <span className="text-xs text-gray-300 dark:text-gray-600">—</span>
-            )}
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+              {item.progress || 0}%
+            </span>
+            <div className="relative w-14">
+              <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-300 ${
+                    item.completed
+                      ? 'bg-emerald-500'
+                      : 'bg-indigo-500'
+                  }`}
+                  style={{ width: `${item.progress || 0}%` }}
+                />
+              </div>
+              <input
+                type="range"
+                min="0" max="100" step="5"
+                value={item.progress || 0}
+                onChange={(e) => { e.stopPropagation(); handleProgressUpdate(parseInt(e.target.value)); }}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute inset-0 w-full opacity-0 cursor-pointer"
+              />
+            </div>
           </div>
 
           {/* Due Date column — 90px */}
@@ -328,6 +329,13 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
                 </p>
               )}
 
+              {/* Identity link - mobile */}
+              {item.identityLink && (
+                <p className="text-[11px] italic text-indigo-500 dark:text-indigo-400 line-clamp-1 mt-1">
+                  ↳ {item.identityLink}
+                </p>
+              )}
+
               {/* Visualization prompt preview - mobile */}
               {item.visualization && (
                 <p className="text-xs text-purple-600 dark:text-purple-400 italic truncate mt-1">
@@ -337,9 +345,7 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
 
               {/* Mobile compact info */}
               <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mt-2">
-                {(item.progress !== undefined || item.dueDate) && (
-                  <span>{item.progress || 0}%</span>
-                )}
+                <span>{item.progress || 0}%</span>
                 {item.dueDate && (
                   <>
                     <span>•</span>
@@ -387,7 +393,7 @@ const VisionBoardListItem = ({ item, onEdit, showSuccess, showError, showWarning
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

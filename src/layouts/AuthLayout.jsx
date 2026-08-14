@@ -4,37 +4,43 @@ import { useTranslation } from 'react-i18next';
 import ThemeToggle from '../components/common/ThemeToggle';
 import LanguageSelector from '../components/common/LanguageSelector';
 
-/* Left-panel quote rotation */
-const QUOTES = [
-  { text: "Whatever the mind can conceive and believe, it can achieve.", author: "Napoleon Hill" },
-  { text: "Imagination is everything. It is the preview of life's coming attractions.", author: "Albert Einstein" },
-  { text: "You become what you think about most of the time.", author: "Brian Tracy" },
-];
-
 const AuthLayout = () => {
   const { t } = useTranslation();
+
+  /* Left-panel quote rotation (localized) */
+  const QUOTES = React.useMemo(() => [
+    { text: t('auth.quote1', { defaultValue: "Whatever the mind can conceive and believe, it can achieve." }), author: 'Napoleon Hill' },
+    { text: t('auth.quote2', { defaultValue: "Imagination is everything. It is the preview of life's coming attractions." }), author: 'Albert Einstein' },
+    { text: t('auth.quote3', { defaultValue: 'You become what you think about most of the time.' }), author: 'Brian Tracy' },
+  ], [t]);
+
   const [quoteIdx] = React.useState(() => Math.floor(Math.random() * QUOTES.length));
   const quote = QUOTES[quoteIdx];
+
+  /* Lazy-init the star field once so re-renders don't shuffle it */
+  const [stars] = React.useState(() =>
+    Array.from({ length: 60 }, () => ({
+      width: `${Math.random() * 2 + 1}px`,
+      height: `${Math.random() * 2 + 1}px`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      opacity: Math.random() * 0.6 + 0.1,
+      animation: `twinkle ${Math.random() * 3 + 2}s infinite ${Math.random() * 4}s`,
+    }))
+  );
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-gray-950">
 
       {/* ── Left decorative panel (hidden on mobile) ── */}
-      <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-700 to-violet-900 flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:w-[42%] relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-700 to-violet-900 flex-col justify-between p-12">
         {/* Background stars */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {Array.from({ length: 60 }).map((_, i) => (
+          {stars.map((s, i) => (
             <div
               key={i}
               className="absolute rounded-full bg-white"
-              style={{
-                width: `${Math.random() * 2 + 1}px`,
-                height: `${Math.random() * 2 + 1}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                opacity: Math.random() * 0.6 + 0.1,
-                animation: `twinkle ${Math.random() * 3 + 2}s infinite ${Math.random() * 4}s`,
-              }}
+              style={s}
             />
           ))}
         </div>
@@ -45,9 +51,8 @@ const AuthLayout = () => {
           }
         `}</style>
 
-        {/* Glow blobs */}
+        {/* Glow blob */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-indigo-400/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-purple-400/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-2">
@@ -71,7 +76,7 @@ const AuthLayout = () => {
         {/* Bottom tagline */}
         <div className="relative z-10">
           <p className="text-white/40 text-xs leading-relaxed">
-            Manifest your dreams into reality with the power of focused intention and daily practice.
+            {t('auth.tagline', { defaultValue: 'Manifest your dreams into reality with the power of focused intention and daily practice.' })}
           </p>
         </div>
       </div>

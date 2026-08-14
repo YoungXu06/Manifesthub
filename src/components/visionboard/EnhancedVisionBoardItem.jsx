@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FiEdit2, FiTrash2, FiX, FiMaximize2, FiMinimize2, 
          FiCheck, FiCalendar, FiTarget, FiClock, FiImage, FiStar, FiDollarSign, FiHome, FiUsers,
          FiBook, FiAward, FiGlobe, FiActivity, FiSun, FiSmile, FiSend } from 'react-icons/fi';
-import { motion } from 'framer-motion';
 import useStore from '../../store';
 import { useNavigate } from 'react-router-dom';
+import { useConfirm } from '../../hooks/useConfirm';
+import { sanitizeHTML } from '../../utils/sanitize';
 
 const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError, showWarning }) => {
+  const { t } = useTranslation();
   const { deleteVisionBoardItem, updateVisionBoardItem } = useStore();
   const navigate = useNavigate();
+  const [confirm, confirmEl] = useConfirm();
   
   // Helper function to ensure priority is a number for comparison
   const getPriorityValue = () => {
     const priority = item.priority;
     if (priority === null || priority === undefined) return null;
     return typeof priority === 'string' ? parseInt(priority) : priority;
-  };
-  
-  // Simple HTML sanitizer
-  const sanitizeHTML = (html) => {
-    // In production, use a dedicated library like DOMPurify
-    return html
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      .replace(/on\w+="[^"]*"/g, '')
-      .replace(/on\w+='[^']*'/g, '');
   };
   
   const createMarkup = (content) => {
@@ -33,34 +28,38 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
   
   const handleDelete = async (e) => {
     e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this vision?')) {
-      try {
-        const isGoal = item.id.toString().startsWith('goal-');
-        
-        if (isGoal) {
-          const goalId = item.id.replace('goal-', '');
-          const result = await useStore.getState().deleteGoal(goalId);
+    const ok = await confirm({
+      title: t('visionboard.confirmDeleteTitle', { defaultValue: 'Delete this vision?' }),
+      message: t('visionboard.confirmDeleteMessage', { defaultValue: 'This action cannot be undone.' }),
+      confirmLabel: t('common.delete', { defaultValue: 'Delete' }),
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      const isGoal = item.id.toString().startsWith('goal-');
+      
+      if (isGoal) {
+        const goalId = item.id.replace('goal-', '');
+        const result = await useStore.getState().deleteGoal(goalId);
 
-          if (result.success) {
-            showSuccess?.('Vision item deleted successfully!', 3000);
-          } else {
-            showError?.(result.error || 'Failed to delete vision item');
-          }
+        if (result.success) {
+          showSuccess?.(t('visionboard.visionDeleted', { defaultValue: 'Vision item deleted successfully!' }), 3000);
         } else {
-          const idToDelete = item.id;
-
-          const result = await deleteVisionBoardItem(idToDelete);
-
-          if (result.success) {
-            showSuccess?.('Vision item deleted successfully!', 3000);
-          } else {
-            showError?.(result.error || 'Failed to delete vision item');
-          }
+          showError?.(result.error || t('visionboard.failedDelete', { defaultValue: 'Failed to delete vision item' }));
         }
-      } catch (error) {
-        console.error('Error deleting vision item:', error);
-        showError?.('Delete failed. Please try again.');
+      } else {
+        const idToDelete = item.id;
+        const result = await deleteVisionBoardItem(idToDelete);
+
+        if (result.success) {
+          showSuccess?.(t('visionboard.visionDeleted', { defaultValue: 'Vision item deleted successfully!' }), 3000);
+        } else {
+          showError?.(result.error || t('visionboard.failedDelete', { defaultValue: 'Failed to delete vision item' }));
+        }
       }
+    } catch (error) {
+      console.error('Error deleting vision item:', error);
+      showError?.(t('visionboard.deleteError', { defaultValue: 'Delete failed. Please try again.' }));
     }
   };
 
@@ -86,12 +85,12 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
 
         if (result.success) {
           if (completed) {
-            showSuccess?.('🎉 Congratulations! Goal completed!', 4000);
+            showSuccess?.(t('visionboard.goalCompleted', { defaultValue: '🎉 Congratulations! Goal completed!' }), 4000);
           } else {
-            showSuccess?.(`Progress updated to ${newProgress}%`, 2000);
+            showSuccess?.(t('visionboard.progressUpdated', { defaultValue: 'Progress updated to {{pct}}%', pct: newProgress }), 2000);
           }
         } else {
-          showError?.(result.error || 'Failed to update progress');
+          showError?.(result.error || t('visionboard.failedUpdateProgress', { defaultValue: 'Failed to update progress' }));
         }
       } else {
         const result = await updateVisionBoardItem(item.id, {
@@ -101,17 +100,17 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
 
         if (result.success) {
           if (completed) {
-            showSuccess?.('🎉 Congratulations! Vision achieved!', 4000);
+            showSuccess?.(t('visionboard.visionAchieved', { defaultValue: '🎉 Congratulations! Vision achieved!' }), 4000);
           } else {
-            showSuccess?.(`Progress updated to ${newProgress}%`, 2000);
+            showSuccess?.(t('visionboard.progressUpdated', { defaultValue: 'Progress updated to {{pct}}%', pct: newProgress }), 2000);
           }
         } else {
-          showError?.(result.error || 'Failed to update progress');
+          showError?.(result.error || t('visionboard.failedUpdateProgress', { defaultValue: 'Failed to update progress' }));
         }
       }
     } catch (error) {
       console.error('Error updating progress:', error);
-      showError?.('Failed to update progress. Please try again.');
+      showError?.(t('visionboard.failedUpdateProgressMsg', { defaultValue: 'Failed to update progress. Please try again.' }));
     }
   };
 
@@ -170,15 +169,9 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
   };
   
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-      className={`relative group h-full`}
-    >
+    <div className={`relative group h-full`}>
       <div
-        className={`${getCardBackground()} rounded-lg shadow-md overflow-hidden transition-all duration-300 h-[320px]`}
+        className={`${getCardBackground()} rounded-lg shadow-md overflow-hidden transition-[transform,box-shadow] duration-300 h-[320px]`}
         onClick={handleCardClick}
       >
         {/* Title with custom icon */}
@@ -217,6 +210,13 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
                 {item.category}
               </span>
             </div>
+          )}
+          
+          {/* Identity link — consistent with grid cards */}
+          {item.identityLink && (
+            <p className="text-[11px] italic text-indigo-500 dark:text-indigo-400 line-clamp-1 mt-1.5">
+              ↳ {item.identityLink}
+            </p>
           )}
         </div>
         
@@ -259,34 +259,32 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
             
             {/* Goal info - always visible */}
             <div className="flex-shrink-0 space-y-2 mt-auto pt-2 border-t border-gray-100 dark:border-gray-800">
-              {/* Goal progress */}
-              {item.dueDate && (
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">Progress</span>
-                    <span className="text-sm font-medium">{item.progress || 0}%</span>
-                  </div>
-                  <div className="relative">
-                    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
-                      <div 
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          item.completed ? 'bg-green-500' : 'bg-primary'
-                        }`}
-                        style={{ width: `${item.progress || 0}%` }}
-                      ></div>
-                    </div>
-                    <input 
-                      type="range"
-                      min="0"
-                      max="100"
-                      step="5"
-                      value={item.progress || 0}
-                      onChange={(e) => handleProgressUpdate(parseInt(e.target.value))}
-                      className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer"
-                    />
-                  </div>
+              {/* Goal progress — always shown, driven by slider */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Progress</span>
+                  <span className="text-sm font-medium">{item.progress || 0}%</span>
                 </div>
-              )}
+                <div className="relative">
+                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                    <div 
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        item.completed ? 'bg-green-500' : 'bg-primary'
+                      }`}
+                      style={{ width: `${item.progress || 0}%` }}
+                    ></div>
+                  </div>
+                  <input 
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    value={item.progress || 0}
+                    onChange={(e) => handleProgressUpdate(parseInt(e.target.value))}
+                    className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer"
+                  />
+                </div>
+              </div>
               
               {/* Due date */}
               {item.dueDate && item.priority && (
@@ -313,7 +311,8 @@ const EnhancedVisionBoardItem = ({ item, onEdit, itemId, showSuccess, showError,
           </div>
         </div>
       </div>
-    </motion.div>
+      {confirmEl}
+    </div>
   );
 };
 

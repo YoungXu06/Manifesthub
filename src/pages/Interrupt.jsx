@@ -1,12 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FiClock, FiCheck, FiArrowRight, FiZap } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { FiCheck, FiArrowRight, FiZap } from 'react-icons/fi';
 import useStore from '../store';
 import useToast from '../hooks/useToast';
-import { ToastContainer } from '../components/Toast';
 import { INTERRUPT_PROMPTS } from '../utils/manifestProtocol';
 import { toDateStr } from '../utils/dateUtils';
+import { loadInterruptDraft, saveInterruptDraft, clearInterruptDraft } from '../utils/interrupts';
+
+const RING_RADIUS = 24;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS; // ≈ 150.8
 
 /**
  * 60-second answer page for a single interrupt.
@@ -14,10 +18,9 @@ import { toDateStr } from '../utils/dateUtils';
  */
 const Interrupt = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const location = useLocation();
   const { saveInterruptResponse, fetchInterruptResponses } = useStore();
-  const { toasts, removeToast, showSuccess, showError } = useToast();
+  const { showSuccess, showError, showInfo } = useToast();
 
   const slot = new URLSearchParams(location.search).get('slot');
   const prompt = INTERRUPT_PROMPTS.find(p => p.key === slot);
@@ -27,13 +30,21 @@ const Interrupt = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Load any prior answer for today
+  const draftMetaRef = useRef(null); // { dateStr, slot }
+  const draftTimerRef = useRef(null);
+
+  // Restore a local draft (takes precedence) or any prior saved answer for today
   useEffect(() => {
     if (!prompt) return;
+    const dateStr = toDateStr(new Date());
+    draftMetaRef.current = { dateStr, slot: prompt.key };
     (async () => {
-      const dateStr = toDateStr(new Date());
       const { responses } = await fetchInterruptResponses(dateStr);
-      if (responses[prompt.key]) {
+      const draft = loadInterruptDraft(dateStr, prompt.key);
+      if (draft) {
+        setAnswer(draft);
+        showInfo(t('interrupts.draftRestored', { defaultValue: 'Draft restored' }));
+      } else if (responses[prompt.key]) {
         setAnswer(responses[prompt.key]);
         setSaved(true);
       }
@@ -49,6 +60,23 @@ const Interrupt = () => {
     }, 1000);
     return () => clearInterval(handle);
   }, [saved]);
+
+  // Clear any pending draft debounce on unmount
+  useEffect(() => () => {
+    if (draftTimerRef.current) clearTimeout(draftTimerRef.current);
+  }, []);
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setAnswer(value);
+    const meta = draftMetaRef.current;
+    if (!meta) return;
+    if (draftTimerRef.current) clearTimeout(draftTimerRef.current);
+    // 500ms debounced local draft write
+    draftTimerRef.current = setTimeout(() => {
+      saveInterruptDraft(meta.dateStr, meta.slot, value);
+    }, 500);
+  };
 
   if (!prompt) {
     return (
@@ -69,16 +97,20 @@ const Interrupt = () => {
     setSaving(false);
     if (result.success) {
       setSaved(true);
+      if (draftTimerRef.current) clearTimeout(draftTimerRef.current);
+      const meta = draftMetaRef.current;
+      if (meta) clearInterruptDraft(meta.dateStr, meta.slot);
       showSuccess(t('interrupts.saved'), 1800);
     } else {
       showError(result.error || t('interrupts.saveFailed'));
     }
   };
 
+  // Ring progress: 0 offset at 60s → full circumference consumed at 0s
+  const ringOffset = (RING_CIRCUMFERENCE / 60) * (60 - secondsLeft);
+
   return (
     <div className="max-w-xl mx-auto py-6 animate-fade-in">
-      <ToastContainer toasts={toasts} removeToast={removeToast} />
-
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
@@ -89,10 +121,38 @@ const Interrupt = () => {
           </span>
         </div>
         {!saved && (
-          <span className="text-xs text-gray-400 flex items-center gap-1.5">
-            <FiClock className="w-3 h-3" />
-            {secondsLeft}s
-          </span>
+          <div aria-live="polite" className="flex items-center">
+            {secondsLeft > 0 ? (
+              <div className="relative w-14 h-14">
+                <svg viewBox="0 0 60 60" className="w-14 h-14">
+                  <circle
+                    cx="30" cy="30" r={RING_RADIUS}
+                    fill="none" strokeWidth="3.5"
+                    className="stroke-gray-200 dark:stroke-gray-700"
+                  />
+                  <motion.circle
+                    cx="30" cy="30" r={RING_RADIUS}
+                    fill="none" strokeWidth="3.5" strokeLinecap="round"
+                    strokeDasharray={RING_CIRCUMFERENCE}
+                    initial={false}
+                    animate={{ strokeDashoffset: ringOffset }}
+                    transition={{ duration: 1, ease: 'linear' }}
+                    className={secondsLeft <= 10 ? 'stroke-amber-500' : 'stroke-indigo-500'}
+                    transform="rotate(-90 30 30)"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-sm font-bold tabular-nums text-gray-700 dark:text-gray-300">
+                    {secondsLeft}s
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <span className="text-xs font-medium text-amber-600 dark:text-amber-400 max-w-[190px] text-right leading-snug">
+                {t('interrupts.timeUp', { defaultValue: 'Time is up — keep going if you want' })}
+              </span>
+            )}
+          </div>
         )}
       </div>
 
@@ -103,7 +163,7 @@ const Interrupt = () => {
         <textarea
           autoFocus
           value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
+          onChange={handleChange}
           placeholder={t('interrupts.placeholder')}
           rows={5}
           className="input w-full text-base leading-relaxed resize-none"

@@ -1,25 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FiMail, FiLock, FiAlertCircle, FiX, FiArrowRight } from 'react-icons/fi';
+import { FiMail, FiLock, FiAlertCircle, FiX, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import useStore from '../store';
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login = () => {
   const { t } = useTranslation();
   const { login, loginWithGoogle, resetPassword, authError, clearAuthError, authLoading } = useStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [fieldErrors, setFieldErrors] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState('');
   const [isResetMode, setIsResetMode] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+
+  // Login redirect: prefer the protected route the user originally wanted.
+  const from = location.state?.from || '/dashboard';
 
   useEffect(() => { return () => clearAuthError(); }, [clearAuthError]);
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFieldErrors(prev => ({ ...prev, [e.target.name]: '' }));
     if (localError) setLocalError('');
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    let error = '';
+    if (name === 'email' && value && !EMAIL_RE.test(value)) {
+      error = t('auth.emailInvalid', { defaultValue: 'Please enter a valid email address' });
+    } else if (name === 'password' && !isResetMode && !value) {
+      error = t('auth.passwordRequired', { defaultValue: 'Please enter your password' });
+    }
+    setFieldErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const handleSubmit = async (e) => {
@@ -27,13 +47,34 @@ const Login = () => {
     if (isResetMode) { handlePasswordReset(); return; }
     setLocalError('');
     const { email, password } = formData;
-    if (!email || !password) { setLocalError(t('auth.fillAllFields') || 'Please fill all fields'); return; }
+    if (!email || !password) {
+      setLocalError(t('auth.fillAllFields') || 'Please fill all fields');
+      if (!email) setFieldErrors(prev => ({ ...prev, email: t('auth.emailRequired', { defaultValue: 'Please enter your email' }) }));
+      if (!password) setFieldErrors(prev => ({ ...prev, password: t('auth.passwordRequired', { defaultValue: 'Please enter your password' }) }));
+      return;
+    }
+    if (!EMAIL_RE.test(email)) {
+      const err = t('auth.emailInvalid', { defaultValue: 'Please enter a valid email address' });
+      setFieldErrors(prev => ({ ...prev, email: err }));
+      setLocalError(err);
+      return;
+    }
     const result = await login(email, password);
-    if (result.success) navigate('/dashboard');
+    if (result.success) navigate(from);
   };
 
   const handlePasswordReset = async () => {
-    if (!formData.email) { setLocalError(t('auth.fillAllFields')); return; }
+    if (!formData.email) {
+      setLocalError(t('auth.fillAllFields'));
+      setFieldErrors(prev => ({ ...prev, email: t('auth.emailRequired', { defaultValue: 'Please enter your email' }) }));
+      return;
+    }
+    if (!EMAIL_RE.test(formData.email)) {
+      const err = t('auth.emailInvalid', { defaultValue: 'Please enter a valid email address' });
+      setFieldErrors(prev => ({ ...prev, email: err }));
+      setLocalError(err);
+      return;
+    }
     const result = await resetPassword(formData.email);
     if (result.success) setResetSent(true);
   };
@@ -41,7 +82,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     setLocalError('');
     const result = await loginWithGoogle();
-    if (result.success) navigate('/dashboard');
+    if (result.success) navigate(from);
   };
 
   const toggleResetMode = () => { setIsResetMode(!isResetMode); setLocalError(''); setResetSent(false); };
@@ -70,7 +111,7 @@ const Login = () => {
 
       {/* Error */}
       {currentError && (
-        <div className="mb-5 p-3.5 bg-red-50 dark:bg-red-900/15 border border-red-100 dark:border-red-900/30 rounded-xl flex items-start justify-between gap-2">
+        <div role="alert" className="mb-5 p-3.5 bg-red-50 dark:bg-red-900/15 border border-red-100 dark:border-red-900/30 rounded-xl flex items-start justify-between gap-2">
           <div className="flex items-center gap-2">
             <FiAlertCircle className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-red-600 dark:text-red-400">{currentError}</p>
@@ -83,7 +124,7 @@ const Login = () => {
 
       {/* Reset success */}
       {resetSent && (
-        <div className="mb-5 p-3.5 bg-emerald-50 dark:bg-emerald-900/15 border border-emerald-100 dark:border-emerald-900/30 rounded-xl">
+        <div role="status" className="mb-5 p-3.5 bg-emerald-50 dark:bg-emerald-900/15 border border-emerald-100 dark:border-emerald-900/30 rounded-xl">
           <p className="text-sm text-emerald-600 dark:text-emerald-400">
             {t('auth.resetLinkSent')}
           </p>
@@ -103,13 +144,17 @@ const Login = () => {
               name="email"
               type="email"
               autoComplete="email"
+              enterKeyHint={isResetMode ? 'go' : 'next'}
               required
-              className="input pl-9 w-full text-sm"
+              onBlur={handleBlur}
+              aria-invalid={!!fieldErrors.email}
+              className={`input pl-9 w-full text-sm sm:text-base ${fieldErrors.email ? 'border-red-400' : ''}`}
               placeholder={t('auth.emailPlaceholder')}
               value={formData.email}
               onChange={handleChange}
             />
           </div>
+          {fieldErrors.email && <p className="text-xs text-red-500 mt-1">{fieldErrors.email}</p>}
         </div>
 
         {!isResetMode && (
@@ -118,28 +163,46 @@ const Login = () => {
               <label htmlFor="password" className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                 {t('auth.password')}
               </label>
-              <button
-                type="button"
-                onClick={toggleResetMode}
-                className="text-xs text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors"
-              >
-                {t('auth.forgotPassword')}
-              </button>
+              {/* Expanded hit area for the forgot-password action */}
+              <div className="p-2 -m-2">
+                <button
+                  type="button"
+                  onClick={toggleResetMode}
+                  className="text-xs text-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium transition-colors"
+                >
+                  {t('auth.forgotPassword')}
+                </button>
+              </div>
             </div>
             <div className="relative">
               <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
+                enterKeyHint="go"
                 required
-                className="input pl-9 w-full text-sm"
+                onBlur={handleBlur}
+                aria-invalid={!!fieldErrors.password}
+                className={`input pl-9 pr-10 w-full text-sm sm:text-base ${fieldErrors.password ? 'border-red-400' : ''}`}
                 placeholder={t('auth.passwordPlaceholder')}
                 value={formData.password}
                 onChange={handleChange}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(v => !v)}
+                aria-pressed={showPassword}
+                aria-label={showPassword
+                  ? t('auth.togglePasswordHide', { defaultValue: 'Hide password' })
+                  : t('auth.togglePassword', { defaultValue: 'Show password' })}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                {showPassword ? <FiEyeOff className="h-4 w-4" /> : <FiEye className="h-4 w-4" />}
+              </button>
             </div>
+            {fieldErrors.password && <p className="text-xs text-red-500 mt-1">{fieldErrors.password}</p>}
           </div>
         )}
 

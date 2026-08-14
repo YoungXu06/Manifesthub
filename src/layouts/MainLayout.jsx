@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../components/navigation/Navbar';
 import Sidebar from '../components/navigation/Sidebar';
 import Footer from '../components/navigation/Footer';
@@ -10,10 +10,21 @@ const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { darkMode } = useStore();
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
+
+  // Open the interrupt flow from anywhere via CustomEvent
+  useEffect(() => {
+    const handleOpenInterrupt = (event) => {
+      const slot = event.detail?.slot;
+      navigate(slot ? `/interrupt?slot=${slot}` : '/interrupt');
+    };
+    window.addEventListener('mh:open-interrupt', handleOpenInterrupt);
+    return () => window.removeEventListener('mh:open-interrupt', handleOpenInterrupt);
+  }, [navigate]);
 
   // Handle responsive sidebar behavior
   useEffect(() => {

@@ -25,6 +25,13 @@ const CATEGORY_META = {
 
 const CATEGORIES = Object.keys(CATEGORY_META);
 
+/* Group section heading — text-xs uppercase + border-t */
+const SectionTitle = ({ children }) => (
+  <h4 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-gray-700/50 pt-3 mb-4">
+    {children}
+  </h4>
+);
+
 /* ─────────────────────────────────────────────
    Component
 ───────────────────────────────────────────── */
@@ -62,6 +69,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
   const [showGoalFields, setShowGoalFields] = useState(true);
   const fileInputRef = useRef(null);
 
@@ -84,6 +92,7 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
     });
     setShowGoalFields(true);
     setImagePreview(itemToEdit?.imageData || itemToEdit?.imageUrl || '');
+    setFieldErrors({});
   }, [itemToEdit]);
 
   const set = (key, val) => setFormData(prev => ({ ...prev, [key]: val }));
@@ -98,6 +107,22 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
     } else {
       set(name, value);
     }
+  };
+
+  // Inline validation on blur — empty required field gets red border + inline error
+  const validateField = (name) => {
+    setFieldErrors(prev => {
+      const next = { ...prev };
+      const val = formData[name];
+      if (!String(val || '').trim()) {
+        next[name] = name === 'title'
+          ? t('visionboard.form.titleRequired', { defaultValue: 'Title is required' })
+          : t('visionboard.form.contentRequired', { defaultValue: 'Description is required' });
+      } else {
+        delete next[name];
+      }
+      return next;
+    });
   };
 
   const handleImageUpload = async (e) => {
@@ -137,18 +162,18 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
     set('steps', formData.steps.filter((_, idx) => idx !== i));
   };
 
+  // Steps are decoupled from progress — progress is controlled only by the slider
   const toggleStepComplete = (i) => {
     const updated = formData.steps.map((s, idx) =>
       idx === i ? { ...s, completed: !s.completed } : s
     );
-    const allDone = updated.every(s => s.completed);
-    setFormData(prev => ({ ...prev, steps: updated, ...(allDone ? { progress: 100, completed: true } : {}) }));
+    set('steps', updated);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title.trim()) { setError(t('visionboard.form.titleRequired', { defaultValue: 'Title is required' })); return; }
-    if (!formData.content.trim()) { setError(t('visionboard.form.contentRequired', { defaultValue: 'Description is required' })); return; }
+    if (!formData.title.trim()) { setError(t('visionboard.form.titleRequired', { defaultValue: 'Title is required' })); setFieldErrors(p => ({ ...p, title: t('visionboard.form.titleRequired', { defaultValue: 'Title is required' }) })); return; }
+    if (!formData.content.trim()) { setError(t('visionboard.form.contentRequired', { defaultValue: 'Description is required' })); setFieldErrors(p => ({ ...p, content: t('visionboard.form.contentRequired', { defaultValue: 'Description is required' }) })); return; }
 
     setIsSubmitting(true);
     setError('');
@@ -173,6 +198,10 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
 
       if (onSubmit) {
         await onSubmit(dataToSave);
+        // Parent owns closing (and its own success flow) — returning here
+        // avoids a redundant onClose() that could trigger the discard-confirm
+        // right after a successful save in edit mode.
+        return;
       } else if (itemToEdit?.id) {
         const result = await updateVisionBoardItem(itemToEdit.id, dataToSave);
         if (!result.success) throw new Error(result.error || t('visionboard.failedUpdate'));
@@ -193,6 +222,8 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
     { value: 3, label: t('visionboard.form.high'),   color: 'text-red-500' },
   ];
 
+  const inputBase = 'w-full px-3.5 py-2.5 rounded-xl border bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 transition';
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
 
@@ -208,349 +239,384 @@ const EnhancedVisionBoardItemForm = ({ itemToEdit = null, onClose, onSubmit, def
           </div>
         )}
 
-        {/* ── Title ── */}
+        {/* ══ Section: Basic Info ══ */}
         <div>
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-            {t('visionboard.form.title')} <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder={t('visionboard.form.titlePlaceholder')}
-            required
-            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
-          />
-        </div>
+          <SectionTitle>{t('visionboard.form.sectionBasic', { defaultValue: 'Basic Info' })}</SectionTitle>
 
-        {/* ── Lens level (year/month/week/day) ── */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-            {t('lens.formLabel')}
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {LENS_LEVELS.map(({ id, emoji, gradient }) => {
-              const active = formData.level === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => set('level', id)}
-                  className={`flex flex-col items-center gap-1 p-2.5 rounded-xl border transition-all text-xs ${
-                    active
-                      ? `bg-gradient-to-br ${gradient} text-white border-transparent shadow`
-                      : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
-                  }`}
-                >
-                  <span className="text-lg">{emoji}</span>
-                  <span className="font-semibold">{t(`lens.${id}.label`)}</span>
-                </button>
-              );
-            })}
-          </div>
-          <p className="text-[11px] text-gray-400 mt-1.5">{t(`lens.${formData.level}.help`)}</p>
-        </div>
-
-        {/* ── Identity link — connects this card to user's foundation ── */}
-        {user?.foundation?.identityStatement && (
-          <div>
+          {/* ── Title ── */}
+          <div className="mb-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-              {t('lens.identityLinkLabel')}
+              {t('visionboard.form.title')} <span className="text-red-400">*</span>
             </label>
-            <p className="text-[11px] text-gray-400 mb-1.5 italic">
-              "{user.foundation.identityStatement}"
-            </p>
             <input
               type="text"
-              value={formData.identityLink}
-              onChange={(e) => set('identityLink', e.target.value)}
-              placeholder={t('lens.identityLinkPlaceholder')}
-              maxLength={140}
-              className="w-full px-3.5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
-            />
-          </div>
-        )}
-
-        {/* ── Category pills ── */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-            {t('visionboard.form.category')}
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map(cat => {
-              const meta = CATEGORY_META[cat];
-              const isActive = formData.category === cat;
-              return (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => set('category', cat)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                    isActive
-                      ? `${meta.color} ring-2`
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  }`}
-                >
-                  <span>{meta.emoji}</span>
-                  {t(`visionboard.categories.${cat}`, { defaultValue: cat })}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── Description ── */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-            {t('visionboard.form.visionDescription')} <span className="text-red-400">*</span>
-          </label>
-          <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            rows={4}
-            placeholder={t('visionboard.form.descriptionPlaceholder', { defaultValue: 'Describe your vision in vivid detail…' })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
-          />
-        </div>
-
-        {/* ── Image upload ── */}
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-            {t('visionboard.form.imageUpload')}
-          </label>
-
-          {imagePreview ? (
-            <div className="relative rounded-xl overflow-hidden group">
-              <img src={imagePreview} alt="preview" className="w-full h-36 object-cover" />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <button
-                  type="button"
-                  onClick={handleImageRemove}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600 transition"
-                >
-                  <FiTrash2 className="w-3.5 h-3.5" />
-                  {t('visionboard.form.removeImage', { defaultValue: 'Remove' })}
-                </button>
-              </div>
-            </div>
-          ) : (
-            <label
-              htmlFor="imageUpload"
-              className={`flex flex-col items-center justify-center gap-2 h-24 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
-                isUploadingImage
-                  ? 'border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/10'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/10'
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              onBlur={() => validateField('title')}
+              placeholder={t('visionboard.form.titlePlaceholder')}
+              required
+              aria-invalid={!!fieldErrors.title}
+              aria-describedby={fieldErrors.title ? 'title-error' : undefined}
+              className={`${inputBase} ${
+                fieldErrors.title
+                  ? 'border-red-400 dark:border-red-500 focus:ring-red-500/40 focus:border-red-400'
+                  : 'border-gray-200 dark:border-gray-700 focus:ring-indigo-500/50 focus:border-indigo-400'
               }`}
-            >
-              {isUploadingImage ? (
-                <FiLoader className="w-5 h-5 text-indigo-500 animate-spin" />
-              ) : (
-                <>
-                  <FiUpload className="w-5 h-5 text-gray-400" />
-                  <span className="text-xs text-gray-400">
-                    {t('visionboard.form.uploadHint', { defaultValue: 'Click to upload · PNG, JPG, WebP (max 10MB)' })}
-                  </span>
-                </>
-              )}
+            />
+            {fieldErrors.title && (
+              <p id="title-error" className="mt-1 text-xs text-red-500">{fieldErrors.title}</p>
+            )}
+          </div>
+
+          {/* ── Lens level (year/month/week/day) ── */}
+          <div className="mb-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+              {t('lens.formLabel')}
+            </label>
+            <div className="grid grid-cols-4 gap-2">
+              {LENS_LEVELS.map(({ id, emoji, gradient }) => {
+                const active = formData.level === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => set('level', id)}
+                    className={`flex flex-col items-center gap-1 p-2.5 rounded-xl border transition-all text-xs ${
+                      active
+                        ? `bg-gradient-to-br ${gradient} text-white border-transparent shadow`
+                        : 'border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                    }`}
+                  >
+                    <span className="text-lg">{emoji}</span>
+                    <span className="font-semibold">{t(`lens.${id}.label`)}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-gray-400 mt-1.5">{t(`lens.${formData.level}.help`)}</p>
+          </div>
+
+          {/* ── Identity link — connects this card to user's foundation ── */}
+          {user?.foundation?.identityStatement && (
+            <div className="mb-5">
+              <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                {t('lens.identityLinkLabel')}
+              </label>
+              <p className="text-[11px] text-gray-400 mb-1.5 italic">
+                "{user.foundation.identityStatement}"
+              </p>
               <input
-                ref={fileInputRef}
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageUpload}
-                disabled={isUploadingImage}
+                type="text"
+                value={formData.identityLink}
+                onChange={(e) => set('identityLink', e.target.value)}
+                placeholder={t('lens.identityLinkPlaceholder')}
+                maxLength={140}
+                className="w-full px-3.5 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
               />
-            </label>
+            </div>
           )}
-        </div>
 
-        {/* ── Two-column: feelings + visualization ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* ── Category pills ── */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-              {t('visionboard.form.feelings')}
+              {t('visionboard.form.category')}
             </label>
-            <textarea
-              name="feelings"
-              value={formData.feelings}
-              onChange={handleChange}
-              rows={3}
-              placeholder={t('visionboard.form.feelingsPlaceholder')}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-              {t('visionboard.form.visualizationPrompt', { defaultValue: 'Visualization Prompt' })}
-            </label>
-            <textarea
-              name="visualization"
-              value={formData.visualization}
-              onChange={handleChange}
-              rows={3}
-              placeholder={t('visionboard.form.visualizationPlaceholder')}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
-            />
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map(cat => {
+                const meta = CATEGORY_META[cat];
+                const isActive = formData.category === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => set('category', cat)}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      isActive
+                        ? `${meta.color} ring-2`
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <span>{meta.emoji}</span>
+                    {t(`visionboard.categories.${cat}`, { defaultValue: cat })}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* ── Goal details accordion ── */}
-        <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-          <button
-            type="button"
-            onClick={() => setShowGoalFields(v => !v)}
-            className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
-            <span className="flex items-center gap-2">
-              <FiTarget className="w-4 h-4 text-indigo-500" />
-              {t('visionboard.form.addGoalDetails', { defaultValue: 'Goal Details' })}
-            </span>
-            {showGoalFields ? <FiChevronUp className="w-4 h-4 text-gray-400" /> : <FiChevronDown className="w-4 h-4 text-gray-400" />}
-          </button>
+        {/* ══ Section: Content & Image ══ */}
+        <div>
+          <SectionTitle>{t('visionboard.form.sectionContent', { defaultValue: 'Content & Image' })}</SectionTitle>
 
-          {showGoalFields && (
-            <div className="px-4 py-4 space-y-4 border-t border-gray-200 dark:border-gray-700">
+          {/* ── Description ── */}
+          <div className="mb-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+              {t('visionboard.form.visionDescription')} <span className="text-red-400">*</span>
+            </label>
+            <textarea
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              onBlur={() => validateField('content')}
+              rows={4}
+              placeholder={t('visionboard.form.descriptionPlaceholder', { defaultValue: 'Describe your vision in vivid detail…' })}
+              aria-invalid={!!fieldErrors.content}
+              aria-describedby={fieldErrors.content ? 'content-error' : undefined}
+              className={`${inputBase} resize-none ${
+                fieldErrors.content
+                  ? 'border-red-400 dark:border-red-500 focus:ring-red-500/40 focus:border-red-400'
+                  : 'border-gray-200 dark:border-gray-700 focus:ring-indigo-500/50 focus:border-indigo-400'
+              }`}
+            />
+            {fieldErrors.content && (
+              <p id="content-error" className="mt-1 text-xs text-red-500">{fieldErrors.content}</p>
+            )}
+          </div>
 
-              {/* Due date + Priority — stacked on mobile, side-by-side on sm+ */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-                    {t('visionboard.form.dueDate', { defaultValue: 'Due Date' })}
-                  </label>
-                  <div className="relative">
-                    <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
-                    <input
-                      type="date"
-                      name="dueDate"
-                      value={formData.dueDate}
-                      onChange={handleChange}
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
-                    />
-                  </div>
-                </div>
+          {/* ── Image upload ── */}
+          <div className="mb-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+              {t('visionboard.form.imageUpload')}
+            </label>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
-                    {t('visionboard.form.priority', { defaultValue: 'Priority' })}
-                  </label>
-                  <div className="flex gap-1.5">
-                    {priorityOpts.map(opt => (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => set('priority', opt.value)}
-                        className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all border ${
-                          formData.priority === opt.value
-                            ? opt.value === 3
-                              ? 'bg-red-50 dark:bg-red-900/20 border-red-400 text-red-500'
-                              : opt.value === 2
-                              ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-400 text-amber-500'
-                              : 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-400 text-emerald-600'
-                            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 hover:border-gray-300'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Progress slider */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                    {t('visionboard.form.progress')}
-                  </label>
-                  <span className={`text-sm font-bold tabular-nums ${formData.completed ? 'text-emerald-500' : 'text-indigo-500'}`}>
-                    {formData.progress}%
-                  </span>
-                </div>
-                {/* Track + thumb wrapper — range sits on top of the visual bar */}
-                <div className="relative h-5 flex items-center">
-                  {/* Visual track */}
-                  <div className="absolute inset-x-0 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden pointer-events-none">
-                    <div
-                      className={`h-full rounded-full transition-all duration-200 ${
-                        formData.completed
-                          ? 'bg-gradient-to-r from-emerald-400 to-emerald-500'
-                          : 'bg-gradient-to-r from-indigo-400 to-purple-500'
-                      }`}
-                      style={{ width: `${formData.progress}%` }}
-                    />
-                  </div>
-                  {/* Native range input — styled thumb, transparent track */}
-                  <input
-                    type="range"
-                    name="progress"
-                    min="0" max="100" step="5"
-                    value={formData.progress}
-                    onChange={handleChange}
-                    className="vision-progress-slider absolute inset-0 w-full h-full cursor-pointer z-10"
-                  />
-                </div>
-                {/* Step ticks */}
-                <div className="flex justify-between mt-1 px-0.5">
-                  {[0, 25, 50, 75, 100].map(v => (
-                    <span key={v} className="text-[10px] text-gray-400 dark:text-gray-500">{v}%</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action steps */}
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-                  {t('visionboard.form.actionSteps', { defaultValue: 'Action Steps' })}
-                </label>
-                <div className="space-y-2 mb-2">
-                  {formData.steps.map((step, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={step.completed}
-                        onChange={() => toggleStepComplete(i)}
-                        className="h-4 w-4 rounded text-indigo-500 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
-                      />
-                      <input
-                        type="text"
-                        value={step.text}
-                        onChange={e => {
-                          const updated = [...formData.steps];
-                          updated[i] = { ...updated[i], text: e.target.value };
-                          set('steps', updated);
-                        }}
-                        className={`flex-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 transition ${step.completed ? 'line-through text-gray-400' : ''}`}
-                      />
-                      <button type="button" onClick={() => handleRemoveStep(i)} className="text-gray-400 hover:text-red-500 transition-colors">
-                        <FiX className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newStep}
-                    onChange={e => setNewStep(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddStep())}
-                    placeholder={t('visionboard.form.addStep')}
-                    className="flex-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 transition"
-                  />
+            {imagePreview ? (
+              <div className="relative rounded-xl overflow-hidden group">
+                <img src={imagePreview} alt="preview" className="w-full h-36 object-cover" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button
                     type="button"
-                    onClick={handleAddStep}
-                    disabled={!newStep.trim()}
-                    className="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-40 text-white rounded-lg transition-colors"
+                    onClick={handleImageRemove}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 text-white rounded-lg text-xs font-medium hover:bg-red-600 transition"
                   >
-                    <FiPlus className="w-4 h-4" />
+                    <FiTrash2 className="w-3.5 h-3.5" />
+                    {t('visionboard.form.removeImage', { defaultValue: 'Remove' })}
                   </button>
                 </div>
               </div>
+            ) : (
+              <label
+                htmlFor="imageUpload"
+                className={`flex flex-col items-center justify-center gap-2 h-24 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                  isUploadingImage
+                    ? 'border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-900/10'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/10'
+                }`}
+              >
+                {isUploadingImage ? (
+                  <FiLoader className="w-5 h-5 text-indigo-500 animate-spin" />
+                ) : (
+                  <>
+                    <FiUpload className="w-5 h-5 text-gray-400" />
+                    <span className="text-xs text-gray-400">
+                      {t('visionboard.form.imageHint', { defaultValue: 'JPEG/PNG/WebP, up to 2MB' })}
+                    </span>
+                  </>
+                )}
+                <input
+                  ref={fileInputRef}
+                  id="imageUpload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                  disabled={isUploadingImage}
+                />
+              </label>
+            )}
+          </div>
+
+          {/* ── Two-column: feelings + visualization ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                {t('visionboard.form.feelings')}
+              </label>
+              <textarea
+                name="feelings"
+                value={formData.feelings}
+                onChange={handleChange}
+                rows={3}
+                placeholder={t('visionboard.form.feelingsPlaceholder')}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
+              />
             </div>
-          )}
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                {t('visionboard.form.visualizationPrompt', { defaultValue: 'Visualization Prompt' })}
+              </label>
+              <textarea
+                name="visualization"
+                value={formData.visualization}
+                onChange={handleChange}
+                rows={3}
+                placeholder={t('visionboard.form.visualizationPlaceholder')}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ══ Section: Goal Details ══ */}
+        <div>
+          <SectionTitle>{t('visionboard.form.sectionGoal', { defaultValue: 'Goal Details' })}</SectionTitle>
+
+          {/* ── Goal details accordion ── */}
+          <div className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowGoalFields(v => !v)}
+              className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              <span className="flex items-center gap-2">
+                <FiTarget className="w-4 h-4 text-indigo-500" />
+                {t('visionboard.form.addGoalDetails', { defaultValue: 'Goal Details' })}
+              </span>
+              {showGoalFields ? <FiChevronUp className="w-4 h-4 text-gray-400" /> : <FiChevronDown className="w-4 h-4 text-gray-400" />}
+            </button>
+
+            {showGoalFields && (
+              <div className="px-4 py-4 space-y-4 border-t border-gray-200 dark:border-gray-700">
+
+                {/* Due date + Priority — stacked on mobile, side-by-side on sm+ */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                      {t('visionboard.form.dueDate', { defaultValue: 'Due Date' })}
+                    </label>
+                    <div className="relative">
+                      <FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
+                      <input
+                        type="date"
+                        name="dueDate"
+                        value={formData.dueDate}
+                        onChange={handleChange}
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-400 transition"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
+                      {t('visionboard.form.priority', { defaultValue: 'Priority' })}
+                    </label>
+                    <div className="flex gap-1.5">
+                      {priorityOpts.map(opt => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => set('priority', opt.value)}
+                          className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all border ${
+                            formData.priority === opt.value
+                              ? opt.value === 3
+                                ? 'bg-red-50 dark:bg-red-900/20 border-red-400 text-red-500'
+                                : opt.value === 2
+                                ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-400 text-amber-500'
+                                : 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-400 text-emerald-600'
+                              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 hover:border-gray-300'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Progress slider — sole controller of progress */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                      {t('visionboard.form.progress')}
+                    </label>
+                    <span className={`text-sm font-bold tabular-nums ${formData.completed ? 'text-emerald-500' : 'text-indigo-500'}`}>
+                      {formData.progress}%
+                    </span>
+                  </div>
+                  {/* Track + thumb wrapper — range sits on top of the visual bar */}
+                  <div className="relative h-5 flex items-center">
+                    {/* Visual track */}
+                    <div className="absolute inset-x-0 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden pointer-events-none">
+                      <div
+                        className={`h-full rounded-full transition-all duration-200 ${
+                          formData.completed
+                            ? 'bg-gradient-to-r from-emerald-400 to-emerald-500'
+                            : 'bg-gradient-to-r from-indigo-400 to-purple-500'
+                        }`}
+                        style={{ width: `${formData.progress}%` }}
+                      />
+                    </div>
+                    {/* Native range input — styled thumb, transparent track */}
+                    <input
+                      type="range"
+                      name="progress"
+                      min="0" max="100" step="5"
+                      value={formData.progress}
+                      onChange={handleChange}
+                      className="vision-progress-slider absolute inset-0 w-full h-full cursor-pointer z-10"
+                    />
+                  </div>
+                  {/* Step ticks */}
+                  <div className="flex justify-between mt-1 px-0.5">
+                    {[0, 25, 50, 75, 100].map(v => (
+                      <span key={v} className="text-[10px] text-gray-400 dark:text-gray-500">{v}%</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action steps */}
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                    {t('visionboard.form.actionSteps', { defaultValue: 'Action Steps' })}
+                  </label>
+                  <div className="space-y-2 mb-2">
+                    {formData.steps.map((step, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          checked={step.completed}
+                          onChange={() => toggleStepComplete(i)}
+                          className="h-4 w-4 rounded text-indigo-500 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
+                        />
+                        <input
+                          type="text"
+                          value={step.text}
+                          onChange={e => {
+                            const updated = [...formData.steps];
+                            updated[i] = { ...updated[i], text: e.target.value };
+                            set('steps', updated);
+                          }}
+                          className={`flex-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 transition ${step.completed ? 'line-through text-gray-400' : ''}`}
+                        />
+                        <button type="button" onClick={() => handleRemoveStep(i)} className="text-gray-400 hover:text-red-500 transition-colors">
+                          <FiX className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newStep}
+                      onChange={e => setNewStep(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddStep())}
+                      placeholder={t('visionboard.form.addStep')}
+                      className="flex-1 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddStep}
+                      disabled={!newStep.trim()}
+                      className="px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-40 text-white rounded-lg transition-colors"
+                    >
+                      <FiPlus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

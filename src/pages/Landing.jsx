@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiArrowRight, FiStar, FiHeart, FiTarget, FiCheckCircle, FiZap, FiEye, FiTrendingUp } from 'react-icons/fi';
-import ThemeToggle from '../components/common/ThemeToggle';
 import LanguageSelector from '../components/common/LanguageSelector';
 import SeoHead from '../components/common/SeoHead';
 import useStore from '../store';
@@ -10,11 +9,13 @@ import useStore from '../store';
 /* ─────────────────────────────────────────────
    Stars (static DOM, twinkling via CSS)
 ───────────────────────────────────────────── */
-const STAR_COUNT = 160;
+const STAR_COUNT = 60;
 
-function useStars() {
+function useStars(disabled) {
   const [stars] = useState(() =>
-    Array.from({ length: STAR_COUNT }, (_, i) => ({
+    disabled
+      ? []
+      : Array.from({ length: STAR_COUNT }, (_, i) => ({
       id: i,
       size: Math.random() * 2 + 0.5,
       left: Math.random() * 100,
@@ -28,22 +29,49 @@ function useStars() {
 }
 
 /* ─────────────────────────────────────────────
+   prefers-reduced-motion (matchMedia)
+───────────────────────────────────────────── */
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = (e) => setReduced(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  return reduced;
+}
+
+/* ─────────────────────────────────────────────
    Canvas Meteor System  (rAF, no React state)
 ───────────────────────────────────────────── */
-function useMeteorCanvas(canvasRef) {
+function useMeteorCanvas(canvasRef, reducedMotion) {
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || reducedMotion) return;
 
     const ctx = canvas.getContext('2d');
     let rafId;
     let meteors = [];
     let lastSpawn = 0;
+    let paused = false;
+
+    /* CSS-pixel viewport (backing store scales by devicePixelRatio) */
+    const W = () => window.innerWidth;
+    const H = () => window.innerHeight;
 
     /* ── resize ── */
     const resize = () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width  = W() * dpr;
+      canvas.height = H() * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -55,12 +83,12 @@ function useMeteorCanvas(canvasRef) {
       let sx, sy;
       if (spawnEdge < 0.65) {
         // top edge, right 55%
-        sx = canvas.width * (0.45 + Math.random() * 0.55);
+        sx = W() * (0.45 + Math.random() * 0.55);
         sy = -10;
       } else {
         // right edge, top 45%
-        sx = canvas.width + 10;
-        sy = canvas.height * Math.random() * 0.45;
+        sx = W() + 10;
+        sy = H() * Math.random() * 0.45;
       }
 
       // 135° in canvas coords: cos(135°)≈-0.707 (left), sin(135°)≈+0.707 (down)
@@ -108,8 +136,6 @@ function useMeteorCanvas(canvasRef) {
       ctx.strokeStyle = grad;
       ctx.lineWidth   = m.thickness;
       ctx.lineCap     = 'round';
-      ctx.shadowColor = `rgba(180,160,255,${alpha * 0.6})`;
-      ctx.shadowBlur  = 6;
       ctx.beginPath();
       ctx.moveTo(tailX, tailY);
       ctx.lineTo(m.x, m.y);
@@ -122,7 +148,6 @@ function useMeteorCanvas(canvasRef) {
       coreGrad.addColorStop(1, `rgba(255,255,255,${alpha})`);
       ctx.strokeStyle = coreGrad;
       ctx.lineWidth   = m.thickness * 0.35;
-      ctx.shadowBlur  = 3;
       ctx.beginPath();
       ctx.moveTo(tailX, tailY);
       ctx.lineTo(m.x, m.y);
@@ -133,7 +158,7 @@ function useMeteorCanvas(canvasRef) {
 
     /* ── Animation loop ── */
     const tick = (timestamp) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, W(), H());
 
       // Spawn: staggered, 1.8–4s gap between meteors
       if (timestamp - lastSpawn > 1800 + Math.random() * 2200) {
@@ -145,7 +170,7 @@ function useMeteorCanvas(canvasRef) {
         m.x    += m.vx;
         m.y    += m.vy;
         m.life += 1;
-        const offScreen = m.x < -200 || m.y > canvas.height + 200;
+        const offScreen = m.x < -200 || m.y > H() + 200;
         const expired   = m.life >= m.maxLife;
         if (!offScreen && !expired) {
           drawMeteor(m);
@@ -159,23 +184,39 @@ function useMeteorCanvas(canvasRef) {
 
     rafId = requestAnimationFrame(tick);
 
+    /* ── pause/resume when the tab is hidden ── */
+    const onVisibility = () => {
+      if (document.hidden) {
+        paused = true;
+        cancelAnimationFrame(rafId);
+      } else if (paused) {
+        paused = false;
+        lastSpawn = performance.now(); // avoid spawn burst on resume
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', onVisibility);
     };
-  }, [canvasRef]);
+  }, [canvasRef, reducedMotion]);
 }
 
 /* ─────────────────────────────────────────────
    Section components
 ───────────────────────────────────────────── */
-const FeatureCard = ({ icon: Icon, title, desc, gradient }) => (
-  <div className="group relative flex flex-col items-start p-7 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-400 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-900/20">
-    <div className={`mb-5 p-3 rounded-xl bg-gradient-to-br ${gradient} shadow-lg`}>
-      <Icon className="w-6 h-6 text-white" />
+const FeatureCard = ({ icon: Icon, title, desc, wide = false }) => (
+  <div className={`group relative flex flex-col items-start p-7 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-900/20 ${wide ? 'lg:col-span-2 lg:flex-row lg:items-center lg:gap-8' : ''}`}>
+    <div className={`${wide ? 'mb-5 lg:mb-0' : 'mb-5'} p-3 rounded-xl bg-indigo-500/15 text-indigo-400`}>
+      <Icon className="w-6 h-6" />
     </div>
-    <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-    <p className="text-sm text-gray-400 leading-relaxed">{desc}</p>
+    <div>
+      <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+      <p className="text-sm text-gray-400 leading-relaxed">{desc}</p>
+    </div>
   </div>
 );
 
@@ -191,25 +232,42 @@ const StepCard = ({ number, title, desc }) => (
   </div>
 );
 
-const TestimonialCard = ({ quote, name, role, avatar }) => (
-  <div className="p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-    <div className="flex mb-3">
-      {[...Array(5)].map((_, i) => (
-        <FiStar key={i} className="w-4 h-4 text-yellow-400 fill-current" style={{ fill: 'currentColor' }} />
-      ))}
-    </div>
-    <p className="text-sm text-gray-300 italic mb-5 leading-relaxed">"{quote}"</p>
-    <div className="flex items-center gap-3">
-      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-bold text-sm">
-        {avatar}
+const TestimonialCard = ({ quote, name, role, avatar, avatarGradient = 'from-purple-400 to-pink-400', duration = '3 months in', rating = 5 }) => {
+  const fullStars = Math.floor(rating);
+  const hasHalf = rating % 1 !== 0;
+
+  return (
+    <div className="p-6 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+      <div className="flex mb-3">
+        {[...Array(5)].map((_, i) => {
+          if (i < fullStars) {
+            return <FiStar key={i} className="w-4 h-4 text-yellow-400 fill-current" />;
+          }
+          if (hasHalf && i === fullStars) {
+            return (
+              <span key={i} className="relative inline-flex">
+                <FiStar className="w-4 h-4 text-gray-600" />
+                <FiStar className="absolute inset-0 w-4 h-4 text-yellow-400 fill-current opacity-50" />
+              </span>
+            );
+          }
+          return <FiStar key={i} className="w-4 h-4 text-gray-600" />;
+        })}
       </div>
-      <div>
-        <p className="text-sm font-medium text-white">{name}</p>
-        <p className="text-xs text-gray-400">{role}</p>
+      <p className="text-sm text-gray-300 leading-relaxed mb-5">"{quote}"</p>
+      <div className="flex items-center gap-3">
+        <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarGradient} flex items-center justify-center text-white font-bold text-sm`}>
+          {avatar}
+        </div>
+        <div>
+          <p className="text-sm font-medium text-white">{name}</p>
+          <p className="text-xs text-gray-400">{role}</p>
+        </div>
       </div>
+      <p className="text-xs text-gray-500 mt-3">{duration}</p>
     </div>
-  </div>
-);
+  );
+};
 
 /* ─────────────────────────────────────────────
    Main Landing component
@@ -217,55 +275,42 @@ const TestimonialCard = ({ quote, name, role, avatar }) => (
 const Landing = () => {
   const { t } = useTranslation();
   const { user } = useStore();
-  const stars = useStars();
-  const [scrollY, setScrollY] = useState(0);
-  const heroRef = useRef(null);
+  const reducedMotion = usePrefersReducedMotion();
+  const stars = useStars(reducedMotion);
   const meteorCanvasRef = useRef(null);
 
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useMeteorCanvas(meteorCanvasRef);
+  useMeteorCanvas(meteorCanvasRef, reducedMotion);
 
   const features = [
     {
       icon: FiEye,
       title: t('landing.features.visualDreamBoard'),
       desc: t('landing.features.visualDreamBoardDesc'),
-      gradient: 'from-purple-500 to-indigo-600',
     },
     {
       icon: FiTarget,
       title: t('landing.features.identityFoundation', { defaultValue: 'Identity Foundation' }),
       desc: t('landing.features.identityFoundationDesc', { defaultValue: 'Anchor a 6-element identity blueprint — anti-vision, vision, monthly project, daily levers, constraints — that reframes who you become, not just what you do.' }),
-      gradient: 'from-emerald-500 to-teal-600',
     },
     {
       icon: FiZap,
       title: t('landing.features.resetProtocol', { defaultValue: '1-Day Reset Protocol' }),
       desc: t('landing.features.resetProtocolDesc', { defaultValue: 'A guided ritual to excavate what you actually want, surface what is silently stopping you, and lock in a year-long lens.' }),
-      gradient: 'from-amber-500 to-rose-600',
     },
     {
       icon: FiHeart,
       title: t('landing.features.dailyHabits'),
       desc: t('landing.features.dailyHabitsDesc'),
-      gradient: 'from-pink-500 to-rose-600',
     },
     {
       icon: FiTrendingUp,
       title: t('landing.features.trackProgress'),
       desc: t('landing.features.trackProgressDesc'),
-      gradient: 'from-emerald-500 to-teal-600',
     },
     {
       icon: FiStar,
       title: t('landing.features.weeklyReflection', { defaultValue: 'Weekly Reflection' }),
       desc: t('landing.features.weeklyReflectionDesc', { defaultValue: 'Five Sunday questions that close the loop between who you say you are and what your actions reveal.' }),
-      gradient: 'from-blue-500 to-cyan-600',
     },
   ];
 
@@ -281,18 +326,27 @@ const Landing = () => {
       name: t('landing.testimonialData.sarah.name'),
       role: t('landing.testimonialData.sarah.role'),
       avatar: "S",
+      rating: 5,
+      duration: t('landing.testimonialData.sarah.duration', { defaultValue: '6 months in' }),
+      avatarGradient: 'from-purple-400 to-pink-400',
     },
     {
       quote: t('landing.testimonialData.marcus.quote'),
       name: t('landing.testimonialData.marcus.name'),
       role: t('landing.testimonialData.marcus.role'),
       avatar: "M",
+      rating: 4.5,
+      duration: t('landing.testimonialData.marcus.duration', { defaultValue: '3 months in' }),
+      avatarGradient: 'from-emerald-400 to-cyan-400',
     },
     {
       quote: t('landing.testimonialData.aiko.quote'),
       name: t('landing.testimonialData.aiko.name'),
       role: t('landing.testimonialData.aiko.role'),
       avatar: "A",
+      rating: 5,
+      duration: t('landing.testimonialData.aiko.duration', { defaultValue: '1 year in' }),
+      avatarGradient: 'from-amber-400 to-rose-400',
     },
   ];
 
@@ -354,8 +408,8 @@ const Landing = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#030008] via-[#0e0520] to-[#050012]" />
         {/* nebula glow */}
         <div className="absolute inset-0 nebula-bg" />
-        {/* stars */}
-        {stars.map(s => (
+        {/* stars (skipped under prefers-reduced-motion) */}
+        {!reducedMotion && stars.map(s => (
           <div
             key={s.id}
             className="absolute rounded-full bg-white"
@@ -369,29 +423,25 @@ const Landing = () => {
             }}
           />
         ))}
-        {/* Canvas meteor system — rAF driven, no React re-renders */}
-        <canvas
-          ref={meteorCanvasRef}
-          className="absolute inset-0 w-full h-full"
-          style={{ mixBlendMode: 'screen' }}
-        />
+        {/* Canvas meteor system — rAF driven, no React re-renders (skipped under prefers-reduced-motion) */}
+        {!reducedMotion && (
+          <canvas
+            ref={meteorCanvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ mixBlendMode: 'screen' }}
+          />
+        )}
         {/* parallax nebula disc */}
         <div
           className="absolute top-1/3 left-1/2 w-[900px] h-[900px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
           style={{
-            transform: `translate(-50%, calc(-50% + ${scrollY * 0.08}px))`,
             background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 65%)',
             filter: 'blur(40px)',
           }}
         />
 
         {/* Silhouette person + glow */}
-        <div
-          className="absolute bottom-0 left-1/2 w-full max-w-xl h-[38vh] pointer-events-none"
-          style={{
-            transform: `translate(-50%, ${scrollY * 0.08}px)`,
-          }}
-        >
+        <div className="absolute bottom-0 left-1/2 w-full max-w-xl h-[38vh] -translate-x-1/2 pointer-events-none">
           {/* person svg */}
           <div
             className="w-full h-full"
@@ -418,7 +468,8 @@ const Landing = () => {
 
         {/* ── Navbar ── */}
         <header className="sticky top-0 z-50 border-b border-white/5 bg-black/40 backdrop-blur-md">
-          <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+          <nav aria-label={t('landing.navAriaLabel', { defaultValue: 'Primary navigation' })}>
+            <div className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 group">
               <img
@@ -432,7 +483,6 @@ const Landing = () => {
             {/* Nav actions */}
             <div className="flex items-center gap-2">
               <LanguageSelector variant="icon" />
-              <ThemeToggle />
               {user ? (
                 <Link to="/dashboard" className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors">
                   {t('landing.dashboardArrow')}
@@ -444,7 +494,7 @@ const Landing = () => {
                   </Link>
                   <Link
                     to="/register"
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+                    className="px-4 py-2 min-h-[44px] flex items-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-sm font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
                   >
                     {t('landing.getStartedFree')}
                   </Link>
@@ -452,14 +502,15 @@ const Landing = () => {
               )}
             </div>
           </div>
+          </nav>
         </header>
 
         {/* ── Hero ── */}
-        <section ref={heroRef} className="flex-1 flex items-center justify-center min-h-[88vh] px-5">
+        <section className="flex-1 flex items-center justify-center min-h-[88vh] px-5">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="animate-slide-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs font-medium mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
               {t('landing.badge')}
             </div>
 
@@ -470,12 +521,12 @@ const Landing = () => {
             </h1>
 
             {/* Sub */}
-            <p className="animate-slide-up-d1 text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
               {t('landing.subheadline')}
             </p>
 
             {/* CTAs */}
-            <div className="animate-slide-up-d2 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 to="/register"
                 className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-600 text-white font-semibold text-base hover:from-purple-600 hover:via-violet-600 hover:to-indigo-700 transition-all cta-glow hover:scale-105 active:scale-100"
@@ -522,8 +573,8 @@ const Landing = () => {
               </p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {features.map((f) => (
-                <FeatureCard key={f.title} {...f} />
+              {features.map((f, i) => (
+                <FeatureCard key={f.title} {...f} wide={i === 0} />
               ))}
             </div>
           </div>
@@ -542,7 +593,7 @@ const Landing = () => {
               </div>
               {/* Illustration / preview mockup */}
               <div className="hidden md:flex items-center justify-center">
-                <div className="relative w-72 h-80 animate-float">
+                <div className="relative w-full max-w-xs aspect-[3/4] animate-float">
                   {/* mock dashboard card */}
                   <div className="absolute inset-0 rounded-3xl glass-card overflow-hidden p-5 flex flex-col gap-4">
                     <div className="flex items-center gap-3">
@@ -616,14 +667,18 @@ const Landing = () => {
 
               {/* Annual */}
               <div className="relative rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-900/30 to-indigo-900/30 backdrop-blur-sm p-7 flex flex-col cta-glow">
-                <span className="absolute -top-3 right-5 text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-400 to-rose-400 text-gray-900">
+                <span className="absolute -top-3 right-5 text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300">
                   {t('landing.priceBest', { defaultValue: 'Best for serious work' })}
                 </span>
                 <p className="text-xs uppercase tracking-widest font-semibold text-purple-300 mb-2">
                   {t('landing.priceAnnual', { defaultValue: 'ManifestHub Annual' })}
                 </p>
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-bold text-white">$99.99</span>
+                <div className="flex items-baseline gap-2 mb-1 flex-wrap">
+                  <span className="flex items-baseline gap-1.5 text-sm text-gray-500">
+                    <s>$149</s>
+                    <span className="text-purple-300">{t('landing.launchPrice', { defaultValue: 'launch price' })}</span>
+                  </span>
+                  <span className="text-3xl font-bold text-white tnum">$99.99</span>
                   <span className="text-sm text-gray-400">/ {t('landing.priceYear', { defaultValue: 'year' })}</span>
                 </div>
                 <p className="text-sm text-purple-300 mb-6">{t('landing.priceAnnualNote', { defaultValue: '≈ $8.33 / month, billed yearly' })}</p>
@@ -638,8 +693,11 @@ const Landing = () => {
                   to="/register"
                   className="text-center block px-5 py-3 rounded-full bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-600 text-white font-semibold text-sm hover:from-purple-600 hover:via-violet-600 hover:to-indigo-700 transition-all"
                 >
-                  {t('landing.priceAnnualCta', { defaultValue: 'Start free → upgrade anytime' })}
+                  {t('landing.priceAnnualCta', { defaultValue: 'Get ManifestHub Annual' })}
                 </Link>
+                <p className="text-xs text-gray-400 mt-3 text-center">
+                  {t('landing.guarantee', { defaultValue: '14-day money-back guarantee · Cancel anytime' })}
+                </p>
               </div>
             </div>
           </div>
@@ -669,10 +727,10 @@ const Landing = () => {
             </div>
             <h2 className="text-4xl sm:text-5xl font-extrabold text-white mb-5 leading-tight">
               {t('landing.bestLife')}<br />
-              <span className="shimmer-text">{t('landing.oneDecisionAway')}</span>
+              <span>{t('landing.oneDecisionAway')}</span>
             </h2>
             <p className="text-gray-400 mb-10 text-lg leading-relaxed">
-              {t('landing.joinThousands')}
+              {t('landing.joinThousands', { defaultValue: 'Join people turning identity into action' })}
             </p>
             <Link
               to="/register"
@@ -699,6 +757,9 @@ const Landing = () => {
             <div className="flex items-center gap-4">
               <Link to="/login" className="hover:text-gray-300 transition-colors">{t('auth.signIn')}</Link>
               <Link to="/register" className="hover:text-gray-300 transition-colors">{t('landing.getStartedFree')}</Link>
+              <Link to="/privacy" className="hover:text-gray-300 transition-colors">{t('landing.footerPrivacy', { defaultValue: 'Privacy' })}</Link>
+              <Link to="/terms" className="hover:text-gray-300 transition-colors">{t('landing.footerTerms', { defaultValue: 'Terms' })}</Link>
+              <Link to="/contact" className="hover:text-gray-300 transition-colors">{t('landing.footerContact', { defaultValue: 'Contact' })}</Link>
             </div>
           </div>
         </footer>

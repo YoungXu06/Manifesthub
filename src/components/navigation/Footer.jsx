@@ -11,7 +11,7 @@ const Footer = () => {
       className="bg-white dark:bg-dark-light border-t border-gray-100 dark:border-gray-800/70 px-6 flex items-center"
       style={{ height: '48px', flexShrink: 0 }}
     >
-      <div className="w-full flex flex-row justify-between items-center">
+      <div className="w-full flex flex-row flex-wrap justify-between items-center gap-x-4 gap-y-1">
         <p className="text-xs text-gray-400 dark:text-gray-500">
           &copy; {year} {t('app.name')}
         </p>

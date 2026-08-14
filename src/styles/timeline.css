@@ -17,16 +17,8 @@
   );
   transform: translateX(-50%);
   z-index: 1;
-  animation: pulse 2s infinite alternate;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 5px rgba(79, 70, 229, 0.2);
-  }
-  100% {
-    box-shadow: 0 0 15px rgba(79, 70, 229, 0.6);
-  }
+  /* 静态光晕(去掉 pulse 动画) */
+  box-shadow: 0 0 8px rgba(79, 70, 229, 0.35);
 }
 
 .dark .timeline-center-line {
@@ -35,6 +27,7 @@
     rgba(129, 140, 248, 0.8),
     rgba(129, 140, 248, 0.2)
   );
+  box-shadow: 0 0 8px rgba(129, 140, 248, 0.35);
 }
 
 .timeline-item {
@@ -55,15 +48,11 @@
   }
 }
 
-/* 让每个项目依次延迟出现 */
+/* 依次延迟出现(仅保留前 4 项) */
 .timeline-item:nth-child(1) { animation-delay: 0.1s; }
 .timeline-item:nth-child(2) { animation-delay: 0.2s; }
 .timeline-item:nth-child(3) { animation-delay: 0.3s; }
 .timeline-item:nth-child(4) { animation-delay: 0.4s; }
-.timeline-item:nth-child(5) { animation-delay: 0.5s; }
-.timeline-item:nth-child(6) { animation-delay: 0.6s; }
-.timeline-item:nth-child(7) { animation-delay: 0.7s; }
-.timeline-item:nth-child(8) { animation-delay: 0.8s; }
 
 .timeline-connector {
   position: absolute;
@@ -158,7 +147,7 @@
   position: relative;
 }
 
-/* 悬浮效果 */
+/* 悬浮效果 — 只保留阴影/高亮，不再整体 scale */
 .timeline-item:hover .timeline-connector {
   background: linear-gradient(to right, transparent, rgba(79, 70, 229, 1));
   width: 70px;
@@ -180,7 +169,7 @@
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.4),
     0 0 0 8px rgba(79, 70, 229, 0.2),
     0 0 20px rgba(79, 70, 229, 0.6);
-  transform: translateY(-50%) scale(1.2);
+  transform: translateY(-50%);
 }
 
 .dark .timeline-item:hover .timeline-dot {
@@ -193,11 +182,7 @@
   opacity: 1;
   font-weight: 500;
   z-index: 5;
-  transform: translateX(-50%) scale(1.05);
-}
-
-.timeline-item:hover .timeline-content {
-  transform: scale(1.03);
+  transform: translateX(-50%);
 }
 
 @media (max-width: 768px) {
@@ -234,7 +219,7 @@
   }
   
   .timeline-item:hover .timeline-date {
-    transform: translateX(-50%) scale(1.05);
+    transform: translateX(-50%);
   }
   
   .timeline-item.left .timeline-content,
@@ -242,4 +227,17 @@
     margin-left: 0;
     margin-right: 0;
   }
-} 
+}
+
+/* 用户偏好减弱动效时关闭动画 */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-item,
+  .timeline-center-line,
+  .timeline-dot,
+  .timeline-connector,
+  .timeline-date,
+  .timeline-content {
+    animation: none !important;
+    transition: none !important;
+  }
+}
