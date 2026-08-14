@@ -29,7 +29,7 @@ import {
   serverTimestamp
 } from 'firebase/firestore';
 import { notifyIndexRequired } from '../components/IndexNotification';
-import { toIsoWeek, toQuarter, toDateStr } from '../utils/dateUtils';
+import { toQuarter } from '../utils/dateUtils';
 
 const mapAuthErrorCode = (errorCode) => {
   const errorMap = {
@@ -91,7 +91,8 @@ const useStore = create(
         };
         
         set(state => ({
-          notifications: [...state.notifications, notification]
+          // Keep at most 5 visible — prevents the stack overflowing the screen.
+          notifications: [...state.notifications, notification].slice(-5)
         }));
         
         return id;
@@ -101,10 +102,6 @@ const useStore = create(
         set(state => ({
           notifications: state.notifications.filter(n => n.id !== id)
         }));
-      },
-      
-      clearAllNotifications: () => {
-        set({ notifications: [] });
       },
       
       // Convenience notification methods
@@ -371,8 +368,29 @@ const useStore = create(
       logout: async () => {
         set({ authLoading: true });
         try {
+          // Tear down the live user-doc listener before signing out so it
+          // stops consuming Firestore quota (and never leaks across users).
+          const unsub = get()._userUnsub;
+          if (unsub) { try { unsub(); } catch {} }
           await signOut(auth);
-          set({ user: null, authLoading: false, authError: null });
+          // Clear ALL per-user state so a subsequent login on the same
+          // browser can never surface the previous user's data — combined
+          // with the "skip if non-empty" fetch guards this was a
+          // cross-user data bleed.
+          set({
+            user: null,
+            authLoading: false,
+            authError: null,
+            goals: [],
+            currentGoal: null,
+            visionBoard: [],
+            checkIns: [],
+            gratitudeEntries: [],
+            streakCount: 0,
+            lastCheckIn: null,
+            foundation: null,
+            _userUnsub: null,
+          });
           return { success: true };
         } catch (error) {
           const errorMessage = mapAuthErrorCode(error.code) || error.message;
@@ -558,22 +576,6 @@ const useStore = create(
         } catch (error) {
           console.error('Error processing image:', error);
           get().showError(`Image upload failed: ${error.message}`);
-          return { 
-            success: false, 
-            error: error.message 
-          };
-        }
-      },
-      
-      deleteImage: async (imageId) => {
-        try {
-          // Since images are now stored as base64 in documents,
-          // deletion is handled when the document is updated/deleted
-          // This method is kept for backward compatibility
-          return { success: true };
-        } catch (error) {
-          console.error('Error in deleteImage:', error);
-          get().showWarning('Image cleanup encountered an issue, but operation continued.');
           return { 
             success: false, 
             error: error.message 
@@ -1417,14 +1419,6 @@ const useStore = create(
       // foundationHistory/{userId}_{ts} (immutable snapshots).
       foundation: null,
 
-      fetchFoundation: async () => {
-        const { user } = get();
-        if (!user) return { foundation: null };
-        const cur = user.foundation || null;
-        set({ foundation: cur });
-        return { foundation: cur };
-      },
-
       saveFoundation: async (next) => {
         const { user } = get();
         if (!user) return { success: false, error: 'Not authenticated' };
@@ -1494,18 +1488,21 @@ const useStore = create(
           // sessionData: { id?, kind: 'mini'|'full', stage, answers, completedAt? }
           const id = sessionData.id || `${user.uid}_${Date.now()}`;
           const ref = doc(db, 'resetSessions', id);
+          const snap = await getDoc(ref);
+          const existing = snap.exists() ? snap.data() : null;
           const payload = {
             userId: user.uid,
             kind: sessionData.kind || 'full',
             stage: sessionData.stage || 'morning',
             answers: sessionData.answers || {},
-            completedAt: sessionData.completedAt || null,
+            // completedAt is sticky: once a session is finished it must
+            // never be reset to null by a later autosave/update.
+            completedAt: sessionData.completedAt || existing?.completedAt || null,
             updatedAt: serverTimestamp(),
             year: new Date().getFullYear(),
             quarter: toQuarter(new Date()),
           };
-          const exists = await getDoc(ref);
-          if (exists.exists()) {
+          if (existing) {
             await updateDoc(ref, payload);
           } else {
             await setDoc(ref, { ...payload, createdAt: serverTimestamp() });

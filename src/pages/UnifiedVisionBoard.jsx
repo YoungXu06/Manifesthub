@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   FiPlus, FiFilter, FiSearch, FiX, FiCalendar,
   FiGrid, FiList, FiChevronUp, FiChevronDown, FiLayout,
@@ -10,9 +11,10 @@ import useStore from '../store';
 import EnhancedVisionBoardItem from '../components/visionboard/EnhancedVisionBoardItem';
 import VisionBoardListItem from '../components/visionboard/VisionBoardListItem';
 import EnhancedVisionBoardItemForm from '../components/visionboard/EnhancedVisionBoardItemForm';
-import { ToastContainer } from '../components/Toast';
 import useToast from '../hooks/useToast';
 import useSubscription from '../hooks/useSubscription';
+import { useConfirm } from '../hooks/useConfirm.jsx';
+import Skeleton from '../components/common/Skeleton';
 import { LENS_LEVELS, FREE_TIER_LIMITS } from '../utils/manifestProtocol';
 import { isLensCapped } from '../utils/subscription';
 import '../styles/timeline.css';
@@ -38,7 +40,9 @@ const CATEGORY_META = {
 ───────────────────────────────────────────── */
 const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { deleteVisionBoardItem, updateVisionBoardItem } = useStore();
+  const [confirm, confirmEl] = useConfirm();
 
   const meta = CATEGORY_META[item.category] || CATEGORY_META.general;
   const lensLevel = LENS_LEVELS.find(l => l.id === (item.level || 'month'));
@@ -48,16 +52,22 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
 
   const handleDelete = async (e) => {
     e.stopPropagation();
-    if (!window.confirm('Delete this vision?')) return;
+    const ok = await confirm({
+      title: t('visionboard.confirmDeleteTitle', { defaultValue: 'Delete this vision?' }),
+      message: t('visionboard.confirmDeleteMessage', { defaultValue: 'This vision card will be permanently removed.' }),
+      confirmLabel: t('common.delete', { defaultValue: 'Delete' }),
+      danger: true,
+    });
+    if (!ok) return;
     try {
       if (item.id.toString().startsWith('goal-')) {
         const result = await useStore.getState().deleteGoal(item.id.replace('goal-', ''));
         if (result.success) showSuccess?.(t('visionboard.visionDeleted'));
-        else showError?.(result.error || 'Delete failed');
+        else showError?.(result.error || t('visionboard.failedDelete', { defaultValue: 'Delete failed' }));
       } else {
         const result = await deleteVisionBoardItem(item.id);
         if (result.success) showSuccess?.(t('visionboard.visionDeleted'));
-        else showError?.(result.error || 'Delete failed');
+        else showError?.(result.error || t('visionboard.failedDelete', { defaultValue: 'Delete failed' }));
       }
     } catch { showError?.(t('visionboard.deleteError')); }
   };
@@ -79,14 +89,15 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
   const handleCardClick = () => {
     const { user } = useStore.getState();
     if (!user) return;
-    window.location.href = `/visionboard/${user.uid}/${item.id}`;
+    navigate(`/visionboard/${user.uid}/${item.id}`);
   };
 
   return (
     <div
-      className="group relative bg-white dark:bg-gray-800/80 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-xl hover:shadow-black/8 dark:hover:shadow-black/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+      className="group relative bg-white dark:bg-gray-800/80 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700/50 hover:shadow-xl hover:shadow-black/8 dark:hover:shadow-black/30 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
       onClick={handleCardClick}
     >
+      {confirmEl}
       {/* Image or gradient header */}
       <div className={`relative h-36 overflow-hidden ${!item.imageData && !item.imageUrl ? `bg-gradient-to-br ${meta.color}` : ''}`}>
         {(item.imageData || item.imageUrl) ? (
@@ -104,6 +115,10 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
         {/* Overlay on image */}
         {(item.imageData || item.imageUrl) && (
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        )}
+        {/* Completed tint overlay */}
+        {isCompleted && (
+          <div className="absolute inset-0 bg-emerald-500/5 pointer-events-none" />
         )}
         {/* Status badge */}
         {isCompleted && (
@@ -141,6 +156,7 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
         {/* Lens level + Title */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-semibold text-gray-900 dark:text-white text-sm leading-snug line-clamp-2 flex-1">
+            {isCompleted && <span className="text-emerald-500 mr-1">✓</span>}
             {item.title}
           </h3>
           {lensLevel && (
@@ -173,17 +189,16 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
               className={`h-full rounded-full transition-all duration-500 ${isCompleted ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' : 'bg-gradient-to-r from-indigo-400 to-purple-500'}`}
               style={{ width: `${progress}%` }}
             />
+            <input
+              type="range"
+              min="0" max="100" step="5"
+              value={progress}
+              onChange={handleProgressUpdate}
+              onClick={e => e.stopPropagation()}
+              aria-label="Progress"
+              className="absolute inset-0 opacity-0 cursor-pointer"
+            />
           </div>
-          {/* Invisible range for drag */}
-          <input
-            type="range"
-            min="0" max="100" step="5"
-            value={progress}
-            onChange={handleProgressUpdate}
-            onClick={e => e.stopPropagation()}
-            className="absolute opacity-0 w-full h-2 cursor-pointer -mt-2"
-            style={{ marginTop: '-8px' }}
-          />
         </div>
 
         {/* Footer meta */}
@@ -201,26 +216,35 @@ const MoodBoardCard = ({ item, onEdit, showSuccess, showError, showWarning }) =>
 /* ─────────────────────────────────────────────
    Empty state
 ───────────────────────────────────────────── */
-const EmptyState = ({ hasFilters, onAdd }) => (
-  <div className="flex flex-col items-center justify-center py-20 text-center">
-    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 flex items-center justify-center text-4xl mb-5 shadow-inner">
-      {hasFilters ? '🔍' : '🎯'}
+const EmptyState = ({ hasFilters, onAdd, onClear }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col items-center justify-center py-20 text-center">
+      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 flex items-center justify-center text-4xl mb-5 shadow-inner">
+        {hasFilters ? '🔍' : '🎯'}
+      </div>
+      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
+        {hasFilters
+          ? t('visionboard.noMatchTitle', { defaultValue: 'No matching visions' })
+          : t('visionboard.emptyTitle', { defaultValue: 'Your vision board awaits' })}
+      </h3>
+      <p className="text-gray-400 dark:text-gray-500 max-w-xs text-sm leading-relaxed mb-6">
+        {hasFilters
+          ? t('visionboard.noMatchHint', { defaultValue: "Try adjusting your search or filters to find what you're looking for." })
+          : t('visionboard.emptyHint', { defaultValue: 'Add your first vision card to start manifesting your dreams into reality.' })}
+      </p>
+      {hasFilters ? (
+        <button onClick={onClear} className="btn btn-secondary flex items-center gap-2">
+          <FiX className="w-4 h-4" /> {t('visionboard.clearAllFilters', { defaultValue: 'Clear all filters' })}
+        </button>
+      ) : (
+        <button onClick={onAdd} className="btn btn-primary flex items-center gap-2">
+          <FiPlus className="w-4 h-4" /> {t('visionboard.createFirst', { defaultValue: 'Create Your First Vision' })}
+        </button>
+      )}
     </div>
-    <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
-      {hasFilters ? 'No matching visions' : 'Your vision board awaits'}
-    </h3>
-    <p className="text-gray-400 dark:text-gray-500 max-w-xs text-sm leading-relaxed mb-6">
-      {hasFilters
-        ? 'Try adjusting your search or filters to find what you\'re looking for.'
-        : 'Add your first vision card to start manifesting your dreams into reality.'}
-    </p>
-    {!hasFilters && (
-      <button onClick={onAdd} className="btn btn-primary flex items-center gap-2">
-        <FiPlus className="w-4 h-4" /> Create Your First Vision
-      </button>
-    )}
-  </div>
-);
+  );
+};
 
 /* ─────────────────────────────────────────────
    Main UnifiedVisionBoard
@@ -228,8 +252,9 @@ const EmptyState = ({ hasFilters, onAdd }) => (
 const UnifiedVisionBoard = () => {
   const { t } = useTranslation();
   const { visionBoard, goals, fetchVisionBoard, fetchGoals, deleteVisionBoardItem, addVisionBoardItem } = useStore();
-  const { isPaid, openCheckout } = useSubscription();
-  const { toasts, removeToast, showSuccess, showError, showWarning } = useToast();
+  const { isPaid } = useSubscription();
+  const { showSuccess, showError, showWarning } = useToast();
+  const [confirm, confirmEl] = useConfirm();
 
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -255,8 +280,45 @@ const UnifiedVisionBoard = () => {
   const PAGE_SIZE = 12;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  // Reset visible count whenever filters/sort change
-  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [filterCategory, filterStatus, filterLevel, searchTerm, sortBy, sortOrder]);
+  // Reset visible count whenever filters/sort change (skip the initial mount)
+  const isFirstFilterRun = useRef(true);
+  useEffect(() => {
+    if (isFirstFilterRun.current) { isFirstFilterRun.current = false; return; }
+    setVisibleCount(PAGE_SIZE);
+    try { sessionStorage.removeItem('visionboard-scroll'); } catch {}
+  }, [filterCategory, filterStatus, filterLevel, searchTerm, sortBy, sortOrder]);
+
+  // ── Scroll restoration — save visibleCount + scrollY on unmount, restore on mount ──
+  const visibleCountRef = useRef(visibleCount);
+  useEffect(() => { visibleCountRef.current = visibleCount; }, [visibleCount]);
+  const restoredScroll = useRef(null);
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('visionboard-scroll');
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (Number.isFinite(data?.visibleCount) && data.visibleCount >= PAGE_SIZE) {
+          setVisibleCount(data.visibleCount);
+        }
+        if (Number.isFinite(data?.scrollY)) restoredScroll.current = data.scrollY;
+      }
+    } catch {}
+    return () => {
+      try {
+        sessionStorage.setItem('visionboard-scroll', JSON.stringify({
+          visibleCount: visibleCountRef.current,
+          scrollY: window.scrollY,
+        }));
+      } catch {}
+    };
+  }, []);
+  // Apply the saved scroll position once content has loaded
+  useEffect(() => {
+    if (!isLoading && restoredScroll.current != null) {
+      window.scrollTo(0, restoredScroll.current);
+      restoredScroll.current = null;
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const load = async () => {
@@ -299,8 +361,6 @@ const UnifiedVisionBoard = () => {
   }, [visionBoard, goals, isLoading]);
 
   // ── IntersectionObserver: load more when sentinel scrolls into view ─
-  // Use a callback ref so the observer re-attaches whenever the sentinel
-  // mounts/unmounts (switching view modes), without putting .current in deps.
   const sentinelRef = useCallback((el) => {
     if (!el) return;
     const obs = new IntersectionObserver(
@@ -309,24 +369,58 @@ const UnifiedVisionBoard = () => {
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, []); // stable — never needs to re-run
+  }, []);
 
   const handleAddItem = (level = null) => {
-    // Free-tier quota gate per-level
-    if (level && level !== 'day' && !isPaid) {
-      const currentCountForLevel = visionBoard.filter(v => (v.level || 'month') === level).length;
-      if (isLensCapped(level, currentCountForLevel, isPaid)) {
+    // Free-tier quota gate per-level — no level defaults to the active lens tab
+    const effLevel = level || (filterLevel !== 'all' ? filterLevel : 'month');
+    if (effLevel !== 'day' && !isPaid) {
+      const currentCountForLevel = visionBoard.filter(v => (v.level || 'month') === effLevel).length;
+      if (isLensCapped(effLevel, currentCountForLevel, isPaid)) {
         showWarning(t('lens.quotaExceeded'));
-        openCheckout();
-        return;
+        return; // non-blocking: warn only, no auto-checkout
       }
     }
-    setDefaultLevel(level);
+    setDefaultLevel(effLevel);
     setItemToEdit(null);
     setShowForm(true);
   };
   const handleEditItem = (item) => { setItemToEdit(item); setShowForm(true); };
-  const handleFormClose = () => { setShowForm(false); setItemToEdit(null); setDefaultLevel(null); };
+
+  // Close modal — edit mode gets a discard-changes confirmation (unless forced after save)
+  const confirmBusyRef = useRef(false);
+  const handleFormClose = async (opts = {}) => {
+    const { force = false } = opts;
+    if (!force && itemToEdit) {
+      if (confirmBusyRef.current) return;
+      confirmBusyRef.current = true;
+      const ok = await confirm({
+        title: t('visionboard.discardChangesTitle', { defaultValue: 'Discard changes?' }),
+        message: t('visionboard.discardChangesMessage', { defaultValue: 'You have unsaved changes. Discard them?' }),
+        confirmLabel: t('common.discard', { defaultValue: 'Discard' }),
+        danger: true,
+      });
+      confirmBusyRef.current = false;
+      if (!ok) return;
+    }
+    setShowForm(false);
+    setItemToEdit(null);
+    setDefaultLevel(null);
+  };
+
+  // Modal: Escape closes, body scroll locked while open
+  const handleFormCloseRef = useRef(handleFormClose);
+  useEffect(() => { handleFormCloseRef.current = handleFormClose; });
+  useEffect(() => {
+    if (!showForm) return;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e) => { if (e.key === 'Escape') handleFormCloseRef.current(); };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [showForm]);
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -336,16 +430,35 @@ const UnifiedVisionBoard = () => {
         level: formData.level || defaultLevel || itemToEdit?.level || 'month',
       };
       if (itemToEdit?.id) {
-        const { updateVisionBoardItem } = useStore.getState();
-        const result = await updateVisionBoardItem(itemToEdit.id, dataWithLevel);
-        if (result.success) { showSuccess(t('visionboard.visionUpdated'), 3000); handleFormClose(); }
-        else showError(result.error || t('visionboard.failedUpdate'));
+        const { updateVisionBoardItem, updateGoal } = useStore.getState();
+        if (String(itemToEdit.id).startsWith('goal-')) {
+          const goalId = itemToEdit.id.replace('goal-', '');
+          const goalUpdates = {
+            title: dataWithLevel.title,
+            description: dataWithLevel.content,
+            category: dataWithLevel.category,
+            progress: dataWithLevel.progress,
+            completed: dataWithLevel.completed,
+            steps: dataWithLevel.steps || [],
+          };
+          if (dataWithLevel.dueDate) goalUpdates.dueDate = dataWithLevel.dueDate;
+          if (dataWithLevel.priority !== undefined && dataWithLevel.priority !== null) {
+            goalUpdates.priority = dataWithLevel.priority;
+          }
+          const result = await updateGoal(goalId, goalUpdates);
+          if (result.success) { showSuccess(t('visionboard.visionUpdated'), 3000); handleFormClose({ force: true }); }
+          else showError(result.error || t('visionboard.failedUpdate'));
+        } else {
+          const result = await updateVisionBoardItem(itemToEdit.id, dataWithLevel);
+          if (result.success) { showSuccess(t('visionboard.visionUpdated'), 3000); handleFormClose({ force: true }); }
+          else showError(result.error || t('visionboard.failedUpdate'));
+        }
       } else {
         const result = await addVisionBoardItem(dataWithLevel);
-        if (result.success) { showSuccess(t('visionboard.visionCreated'), 3000); handleFormClose(); }
+        if (result.success) { showSuccess(t('visionboard.visionCreated'), 3000); handleFormClose({ force: true }); }
         else showError(result.error || t('visionboard.failedCreate'));
       }
-    } catch { showError(t('common.noDataYet')); }
+    } catch { showError(t('visionboard.saveError', { defaultValue: 'Something went wrong while saving. Please try again.' })); }
   };
 
   const getAllCategories = () => {
@@ -382,9 +495,19 @@ const UnifiedVisionBoard = () => {
 
   /* summary stats */
   const completedCount = filteredItems.filter(i => i.completed).length;
-  const avgProgress = filteredItems.length
-    ? Math.round(filteredItems.reduce((acc, i) => acc + (i.progress || 0), 0) / filteredItems.length)
-    : 0;
+  // Global-caliber due stats from unifiedItems (uncompleted only)
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const tomorrowStart = new Date(todayStart.getTime() + 86400000);
+  const dueTodayCount = unifiedItems.filter(i => {
+    if (i.completed || !i.dueDate) return false;
+    const ts = new Date(i.dueDate).getTime();
+    return ts >= todayStart.getTime() && ts < tomorrowStart.getTime();
+  }).length;
+  const overdueCount = unifiedItems.filter(i => {
+    if (i.completed || !i.dueDate) return false;
+    return new Date(i.dueDate).getTime() < todayStart.getTime();
+  }).length;
 
   // Sliced list for rendering — only show visibleCount items
   const visibleItems = filteredItems.slice(0, visibleCount);
@@ -402,9 +525,14 @@ const UnifiedVisionBoard = () => {
     ? <FiChevronUp className="w-3 h-3" />
     : <FiChevronDown className="w-3 h-3" />;
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setFilterCategory('all');
+    setFilterStatus('all');
+  };
+
   return (
     <div className="animate-fade-in max-w-7xl mx-auto">
-      <ToastContainer toasts={toasts} removeToast={removeToast} />
 
       {/* ── Page Header ── */}
       <div className="mb-7">
@@ -416,7 +544,7 @@ const UnifiedVisionBoard = () => {
             <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
               {t('visionboard.subtitle')}
             </p>
-            {/* quick summary */}
+            {/* quick summary — global caliber */}
             {unifiedItems.length > 0 && (
               <div className="flex items-center gap-4 mt-3 text-xs text-gray-400">
                 <span className="flex items-center gap-1">
@@ -427,9 +555,19 @@ const UnifiedVisionBoard = () => {
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   {t('visionboard.manifested', {count: unifiedItems.filter(i => i.completed).length})}
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-purple-400" />
-                  {t('visionboard.avgProgress', {pct: Math.round(unifiedItems.reduce((a, i) => a + (i.progress || 0), 0) / unifiedItems.length)})}
+                <span
+                  className="flex items-center gap-1"
+                  title={t('visionboard.dueTodayHint', { defaultValue: 'Due today, not yet completed' })}
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  {t('visionboard.dueToday', { count: dueTodayCount, defaultValue: 'Due today: {{count}}' })}
+                </span>
+                <span
+                  className="flex items-center gap-1"
+                  title={t('visionboard.overdueHint', { defaultValue: 'Overdue and not completed' })}
+                >
+                  <span className="w-2 h-2 rounded-full bg-red-400" />
+                  {t('visionboard.overdueCount', { count: overdueCount, defaultValue: 'Overdue: {{count}}' })}
                 </span>
               </div>
             )}
@@ -542,10 +680,11 @@ const UnifiedVisionBoard = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          {/* Selects — horizontal scroll on mobile, inline on sm+ */}
+          <div className="flex items-center gap-2 overflow-x-auto sm:overflow-visible flex-nowrap">
             {/* Category */}
             <select
-              className="input text-sm h-9 bg-transparent w-full sm:w-auto sm:min-w-[130px]"
+              className="input text-sm h-9 bg-transparent shrink-0 w-auto min-w-[130px]"
               value={filterCategory}
               onChange={e => setFilterCategory(e.target.value)}
             >
@@ -558,7 +697,7 @@ const UnifiedVisionBoard = () => {
 
             {/* Status */}
             <select
-              className="input text-sm h-9 bg-transparent w-full sm:w-auto sm:min-w-[130px]"
+              className="input text-sm h-9 bg-transparent shrink-0 w-auto min-w-[130px]"
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
             >
@@ -571,7 +710,7 @@ const UnifiedVisionBoard = () => {
             {/* Sort (list only) */}
             {viewMode === 'list' && (
               <select
-                className="input text-sm h-9 bg-transparent w-full sm:w-auto sm:min-w-[140px]"
+                className="input text-sm h-9 bg-transparent shrink-0 w-auto min-w-[140px]"
                 value={`${sortBy}-${sortOrder}`}
                 onChange={e => {
                   const [sb, so] = e.target.value.split('-');
@@ -583,7 +722,7 @@ const UnifiedVisionBoard = () => {
                 <option value="title-asc">{t('visionboard.titleAZ')}</option>
                 <option value="title-desc">{t('visionboard.titleZA')}</option>
                 <option value="progress-desc">{t('visionboard.highestProgress')}</option>
-                <option value="progress-asc">{t('visionboard.lowPriority')}</option>
+                <option value="progress-asc">{t('visionboard.progressLow', { defaultValue: 'Progress: low first' })}</option>
                 <option value="dueDate-asc">{t('visionboard.dueSoon')}</option>
                 <option value="priority-desc">{t('visionboard.highPriority')}</option>
               </select>
@@ -614,7 +753,7 @@ const UnifiedVisionBoard = () => {
               </span>
             )}
             <button
-              onClick={() => { setSearchTerm(''); setFilterCategory('all'); setFilterStatus('all'); }}
+              onClick={clearFilters}
               className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 ml-auto"
             >
               Clear all
@@ -627,25 +766,22 @@ const UnifiedVisionBoard = () => {
       {!isLoading && filteredItems.length > 0 && (
         <div className="flex items-center justify-between mb-4 px-0.5">
           <p className="text-xs text-gray-400">
-            {t('visionboard.showingVisionsPlural', {count: filteredItems.length})}
-            {hasFilters && ` (${t('visionboard.filtered')})`}
+            {t('visionboard.visibleCount', { count: filteredItems.length, defaultValue: 'Visible {{count}} items' })}
+            <span className="mx-1">·</span>
+            {t('visionboard.completedCount', { count: completedCount, defaultValue: '{{count}} completed' })}
           </p>
-          {completedCount > 0 && (
-            <span className="text-xs text-emerald-500 font-medium">
-              {t('visionboard.manifested', {count: completedCount})}
-            </span>
-          )}
         </div>
       )}
 
       {/* ── Content ── */}
       {isLoading ? (
-        <div className="flex justify-center items-center h-64 gap-3 flex-col">
-          <div className="w-10 h-10 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
-          <p className="text-sm text-gray-400">Loading your visions…</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-48 w-full rounded-2xl" />
+          ))}
         </div>
       ) : filteredItems.length === 0 ? (
-        <EmptyState hasFilters={hasFilters} onAdd={() => handleAddItem()} />
+        <EmptyState hasFilters={hasFilters} onAdd={() => handleAddItem()} onClear={clearFilters} />
       ) : viewMode === 'grid' ? (
         /* ── GRID / MOOD BOARD VIEW ── */
         <>
@@ -816,6 +952,7 @@ const UnifiedVisionBoard = () => {
         </div>,
         document.body
       )}
+      {confirmEl}
     </div>
   );
 };

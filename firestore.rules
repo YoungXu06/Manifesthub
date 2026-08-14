@@ -13,6 +13,8 @@ service cloud.firestore {
 
     // Disallow client-side writes to subscription / billing fields —
     // only the Cloud Function (Admin SDK, bypasses rules) may set them.
+    // NOTE: keep this list in sync with the fields the webhook writes
+    // (api/lemonsqueezy-webhook.js).
     function noProtectedKeys() {
       return !request.resource.data.diff(resource.data).affectedKeys()
         .hasAny([
@@ -20,14 +22,32 @@ service cloud.firestore {
           'subscriptionExpiresAt',
           'lemonsqueezyCustomerId',
           'lemonsqueezySubscriptionId',
-          'lemonsqueezyCustomerPortalUrl'
+          'lemonsqueezyCustomerPortalUrl',
+          'lemonsqueezyVariantId',
+          'subscriptionUpdatedAt'
         ]);
+    }
+
+    // For CREATE there is no existing resource to diff against, so inspect
+    // the incoming document keys directly. This closes the hole where a
+    // client seeds a fresh users/{uid} doc with subscriptionStatus: 'active'
+    // and unlocks every paid feature for free.
+    function noProtectedKeysInIncoming() {
+      return !request.resource.data.keys().hasAny([
+        'subscriptionStatus',
+        'subscriptionExpiresAt',
+        'lemonsqueezyCustomerId',
+        'lemonsqueezySubscriptionId',
+        'lemonsqueezyCustomerPortalUrl',
+        'lemonsqueezyVariantId',
+        'subscriptionUpdatedAt'
+      ]);
     }
 
     // ── users ─────────────────────────────────────────────
     match /users/{userId} {
       allow read:   if isSignedIn() && isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && noProtectedKeysInIncoming();
       allow update: if isSignedIn() && isOwner(userId) && noProtectedKeys();
       allow delete: if false;
     }

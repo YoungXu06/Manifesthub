@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   FiArrowLeft, FiCalendar, FiTarget, FiClock, FiCheck, FiEdit2, FiTrash2,
   FiStar, FiDollarSign, FiHome, FiUsers, FiBook, FiAward, FiGlobe, 
@@ -8,10 +9,17 @@ import {
 import useStore from '../store';
 import { motion } from 'framer-motion';
 import EnhancedVisionBoardItemForm from '../components/visionboard/EnhancedVisionBoardItemForm';
+import useToast from '../hooks/useToast';
+import { useConfirm } from '../hooks/useConfirm.jsx';
+import { sanitizeHTML } from '../utils/sanitize';
+import Skeleton from '../components/common/Skeleton';
 
 const VisionDetail = ({ editMode = false }) => {
   const { id, userId } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { showSuccess, showError } = useToast();
+  const [confirm, confirmEl] = useConfirm();
   const [item, setItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -135,7 +143,6 @@ const VisionDetail = ({ editMode = false }) => {
     } else {
       // Ensure update uses Firebase document ID
       const idToUpdate = item.id;
-      // console.log(`Updating progress of vision card with document ID: ${idToUpdate}`);
       updateVisionBoardItem(idToUpdate, { progress: newProgress, completed: isCompleted })
         .then(result => {
           if (!result.success) {
@@ -209,7 +216,6 @@ const VisionDetail = ({ editMode = false }) => {
         completed: isCompleted
       };
       
-      // console.log(`Updating steps of vision card with document ID: ${idToUpdate}`);
       updateVisionBoardItem(idToUpdate, updates)
         .then(result => {
           if (!result.success) {
@@ -229,29 +235,35 @@ const VisionDetail = ({ editMode = false }) => {
   const handleDelete = async () => {
     if (!item) return;
     
-    if (window.confirm('Are you sure you want to delete this vision card?')) {
-      try {
-        const isGoalType = item.id.toString().startsWith('goal-');
-        
-        // Navigate away first so user does not stay on deleted page
-        navigate('/visionboard');
-        
-        if (isGoalType) {
-          const goalId = item.id.replace('goal-', '');
-          await deleteGoal(goalId);
-        } else {
-          // Prefer item.id (Firebase doc ID) for deletion
-          const idToDelete = item.id; // use Firebase document ID, not uuid
-          // console.log(`Deleting vision card with document ID: ${idToDelete}`);
-          await deleteVisionBoardItem(idToDelete);
-        }
-        
-        // Refresh data in background
-        Promise.all([fetchVisionBoard(true), fetchGoals(true)]);
-      } catch (error) {
-        console.error('Error deleting card:', error);
-        alert('Delete failed, please try again later');
+    const ok = await confirm({
+      title: t('visionboard.confirmDeleteTitle', { defaultValue: 'Delete this vision?' }),
+      message: t('visionboard.confirmDeleteMessage', { defaultValue: 'This vision card will be permanently removed.' }),
+      confirmLabel: t('common.delete', { defaultValue: 'Delete' }),
+      danger: true,
+    });
+    if (!ok) return;
+    
+    try {
+      const isGoalType = item.id.toString().startsWith('goal-');
+      
+      // Delete first, then navigate away — only leave on success
+      if (isGoalType) {
+        const goalId = item.id.replace('goal-', '');
+        await deleteGoal(goalId);
+      } else {
+        // Prefer item.id (Firebase doc ID) for deletion
+        const idToDelete = item.id;
+        await deleteVisionBoardItem(idToDelete);
       }
+      
+      showSuccess(t('visionboard.visionDeleted'));
+      navigate('/visionboard');
+      
+      // Refresh data in background
+      Promise.all([fetchVisionBoard(true), fetchGoals(true)]);
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      showError(t('visionboard.deleteError', { defaultValue: 'Delete failed, please try again later' }));
     }
   };
   
@@ -261,15 +273,6 @@ const VisionDetail = ({ editMode = false }) => {
     const itemId = item.id;
     const currentUserId = userId || user?.uid || '';
     navigate(`/visionboard/edit/${currentUserId}/${itemId}`);
-  };
-  
-  // Simple HTML sanitizer
-  const sanitizeHTML = (html) => {
-    if (!html) return '';
-    return html
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      .replace(/on\w+="[^"]*"/g, '')
-      .replace(/on\w+='[^']*'/g, '');
   };
   
   const createMarkup = (content) => {
@@ -319,9 +322,6 @@ const VisionDetail = ({ editMode = false }) => {
   // Handle form submission
   const handleSubmit = async (formData) => {
     try {
-      // console.log('Original form data:', formData);
-      // console.log('Current item ID:', item.id);
-      
       // Set completion state based on progress
       const progress = parseInt(formData.progress || 0);
       formData.completed = progress === 100;
@@ -358,8 +358,6 @@ const VisionDetail = ({ editMode = false }) => {
           }
         }
         
-        // console.log('Updating goal with ID:', goalId);
-        // console.log('Updated goal data:', goalData);
         const result = await updateGoal(goalId, goalData);
         
         if (result.success) {
@@ -382,7 +380,6 @@ const VisionDetail = ({ editMode = false }) => {
       } else {
         // This is a vision item — use Firebase document ID
         const docId = item.id; // use Firebase document ID
-        // console.log('Updating vision card with Firebase document ID:', docId);
         
         // Prepare update data, remove id and uuid to avoid conflicts
         const visionData = { ...formData };
@@ -410,13 +407,9 @@ const VisionDetail = ({ editMode = false }) => {
           }
         }
         
-        // console.log('Updated vision card data:', visionData);
-        
         const result = await updateVisionBoardItem(docId, visionData);
         
         if (result.success) {
-          // console.log('Vision card successfully updated!');
-          
           // Update local state immediately for instant feedback
           setItem({
             ...item,
@@ -436,7 +429,7 @@ const VisionDetail = ({ editMode = false }) => {
       }
     } catch (error) {
       console.error('Error updating item:', error);
-      alert('Update failed: ' + error.message);
+      showError(t('visionboard.failedUpdate', { defaultValue: 'Update failed' }) + ': ' + error.message);
     }
   };
   
@@ -455,8 +448,22 @@ const VisionDetail = ({ editMode = false }) => {
   
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="animate-fade-in space-y-6">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-10 w-10 rounded-full" />
+          <Skeleton className="h-6 w-56" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <Skeleton className="h-44 w-full rounded-lg" />
+            <Skeleton className="h-28 w-full rounded-lg" />
+            <Skeleton className="h-36 w-full rounded-lg" />
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-64 w-full rounded-lg" />
+            <Skeleton className="h-32 w-full rounded-lg" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -469,6 +476,7 @@ const VisionDetail = ({ editMode = false }) => {
       transition={{ duration: 0.3 }}
       className="animate-fade-in"
     >
+      {confirmEl}
       {/* Back button and header */}
       <div className="mb-6 flex justify-between items-center">
         <div className="flex items-center">
@@ -633,8 +641,10 @@ const VisionDetail = ({ editMode = false }) => {
                   </div>
                 )}
                 
-                {/* Goal details section */}
-                {item.dueDate && (
+                {/* Goal details section — show whenever there is any
+                    goal-like data, not only when a due date exists. */}
+                {(item.dueDate || item.progress > 0 || item.completed ||
+                    (item.steps && item.steps.length > 0)) && (
                   <>
                     <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-5">
                       <div className="flex justify-between items-center mb-3">
@@ -676,6 +686,7 @@ const VisionDetail = ({ editMode = false }) => {
                       </div>
                       
                       <div className="grid grid-cols-1 gap-3 mb-4">
+                        {item.dueDate && (
                         <div className="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                           <FiCalendar className="h-4 w-4 mr-3 text-gray-500" />
                           <div>
@@ -683,6 +694,7 @@ const VisionDetail = ({ editMode = false }) => {
                             <p className="font-medium text-sm">{new Date(item.dueDate).toLocaleDateString()}</p>
                           </div>
                         </div>
+                        )}
                         
                         <div className="flex items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                           <FiTarget className="h-4 w-4 mr-3 text-gray-500" />

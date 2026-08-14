@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FiSun, FiSunset, FiClock, FiZap, FiArrowRight, FiCheck, FiList } from 'react-icons/fi';
 import useStore from '../store';
 import useSubscription from '../hooks/useSubscription';
-import Paywall from '../components/common/Paywall';
-import { FREE_TIER_LIMITS } from '../utils/manifestProtocol';
+import { RESET_MORNING_KEYS, RESET_EVENING_KEYS } from '../utils/manifestProtocol';
 import { formatHuman } from '../utils/dateUtils';
 
 /**
@@ -34,7 +33,6 @@ const ResetIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const miniLeft = Math.max(0, FREE_TIER_LIMITS.miniResetPerYear - miniThisQuarter);
   const canMini = isPaid || miniThisQuarter < 1; // free: 1 per quarter
 
   return (
@@ -70,7 +68,7 @@ const ResetIndex = () => {
 
           {!isPaid && (
             <p className="text-xs text-gray-400 mb-3">
-              {t('reset.miniQuotaThisQuarter', { used: miniThisQuarter, total: 1 })}
+              {t('reset.miniQuotaLeft', { defaultValue: 'Free tier: 1 mini reset per quarter — {{left}} left this quarter', left: Math.max(0, 1 - miniThisQuarter) })}
             </p>
           )}
 
@@ -124,6 +122,21 @@ const ResetIndex = () => {
               {t('reset.unlockFull')}
             </button>
           )}
+
+          <details className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+            <summary className="cursor-pointer font-medium inline-flex items-center gap-1 hover:text-indigo-600 dark:hover:text-indigo-400">
+              <FiList className="w-3 h-3" />
+              {t('reset.fullOverview', { defaultValue: 'View the 22-question overview' })}
+            </summary>
+            <div className="mt-2 space-y-1">
+              <p>
+                {t('reset.fullOverviewMorning', { defaultValue: '{{count}} morning excavation prompts', count: RESET_MORNING_KEYS.length })}
+              </p>
+              <p>
+                {t('reset.fullOverviewEvening', { defaultValue: '{{count}} evening synthesis prompts', count: RESET_EVENING_KEYS.length })}
+              </p>
+            </div>
+          </details>
         </div>
       </div>
 
