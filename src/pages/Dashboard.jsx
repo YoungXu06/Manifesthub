@@ -514,12 +514,15 @@ const Dashboard = () => {
                 </Link>
               )}
             </div>
-            <div className="flex-1 relative z-10 overflow-hidden min-h-0">
+            {/* Slides share one grid cell (grid-area:1/1) so they overlap for the
+                crossfade AND the grid sizes to the tallest slide — long text grows
+                the card instead of being clipped. */}
+            <div className="relative z-10 grid grid-cols-1 place-content-center flex-1">
               {affirmDeck.map((card, i) => (
-                <div key={i} className="absolute inset-0 flex flex-col justify-center overflow-hidden transition-opacity duration-700"
+                <div key={i} className="[grid-area:1/1] flex flex-col justify-center transition-opacity duration-700"
                   style={{ opacity: i === affirmIdx ? 1 : 0, pointerEvents: i === affirmIdx ? 'auto' : 'none' }}>
-                  <p className="text-white font-semibold text-base leading-snug italic line-clamp-3">{card.text}</p>
-                  <p className="text-white/85 text-xs leading-relaxed mt-2 line-clamp-2">{card.caption}</p>
+                  <p className="text-white font-semibold text-base leading-snug italic">{card.text}</p>
+                  <p className="text-white/85 text-xs leading-relaxed mt-2">{card.caption}</p>
                 </div>
               ))}
             </div>
