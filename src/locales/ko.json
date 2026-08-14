@@ -1,192 +1,506 @@
 {
-  "app": { "name": "Manifest Hub", "tagline": "꿈을 시각화하고, 현실로 만들어요" },
-  "nav": { "dashboard": "대시보드", "goals": "목표", "visionboard": "비전보드", "profile": "프로필", "logout": "로그아웃", "navigate": "탐색", "foundation": "기반", "reset": "리셋", "reflect": "회고" },
-  "auth": {
-    "login": "로그인", "register": "회원가입", "email": "이메일 주소", "password": "비밀번호", "confirmPassword": "비밀번호 확인",
-    "forgotPassword": "비밀번호를 잊으셨나요?", "noAccount": "계정이 없으신가요?", "hasAccount": "이미 계정이 있으신가요?",
-    "signUp": "회원가입", "signIn": "로그인", "signInWithGoogle": "Google로 계속하기", "signUpWithGoogle": "Google로 회원가입",
-    "orContinueWith": "또는", "yourName": "이름", "namePlaceholder": "홍길동", "emailPlaceholder": "your@email.com",
-    "passwordPlaceholder": "비밀번호를 입력하세요", "passwordMinHint": "최소 6자리", "repeatPassword": "비밀번호를 다시 입력하세요",
-    "createFreeAccount": "무료 계정 만들기", "bySigningUp": "가입하면 서비스 약관 및 개인정보 처리방침에 동의하게 됩니다.",
-    "fillAllFields": "모든 필드를 입력해주세요", "passwordMismatch": "비밀번호가 일치하지 않습니다", "passwordTooShort": "비밀번호는 최소 6자리여야 합니다",
-    "sendResetLink": "재설정 링크 보내기", "backToSignIn": "← 로그인으로 돌아가기", "resetPasswordSubtitle": "이메일을 입력하면 재설정 링크를 보내드립니다",
-    "resetLinkSent": "✅ 재설정 링크를 보냈습니다! 이메일을 확인해주세요.",
-    "welcomeBack": "돌아오셨군요 ✨", "signInSubtitle": "로그인하여 실현 여정을 계속하세요", "beginJourney": "여정을 시작해요 🌟",
-    "signUpSubtitle": "무료 계정을 만들고 오늘부터 실현을 시작하세요",
-    "weak": "약함", "good": "보통", "strong": "강함", "passwordStrength": "비밀번호 강도",
-    "verifyingSession": "세션 확인 중...", "signinArrow": "로그인 →"
+  "app": {
+    "name": "Manifest Hub",
+    "tagline": "꿈을 시각화하고, 현실로 만들어요"
   },
-  "sidebar": { "dayStreak": "일 연속", "annualMember": "연간 회원", "upgrade": "연간으로 업그레이드" },
+  "nav": {
+    "dashboard": "대시보드",
+    "goals": "목표",
+    "visionboard": "비전보드",
+    "profile": "프로필",
+    "logout": "로그아웃",
+    "navigate": "탐색",
+    "foundation": "기반",
+    "reset": "리셋",
+    "reflect": "회고"
+  },
+  "auth": {
+    "login": "로그인",
+    "register": "회원가입",
+    "email": "이메일 주소",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "signUp": "회원가입",
+    "signIn": "로그인",
+    "signInWithGoogle": "Google로 계속하기",
+    "signUpWithGoogle": "Google로 회원가입",
+    "orContinueWith": "또는",
+    "yourName": "이름",
+    "namePlaceholder": "홍길동",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "비밀번호를 입력하세요",
+    "passwordMinHint": "최소 8자리",
+    "repeatPassword": "비밀번호를 다시 입력하세요",
+    "createFreeAccount": "무료 계정 만들기",
+    "bySigningUp": "가입하면 서비스 약관 및 개인정보 처리방침에 동의하게 됩니다.",
+    "fillAllFields": "모든 필드를 입력해주세요",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다",
+    "passwordTooShort": "비밀번호는 최소 8자리여야 합니다",
+    "sendResetLink": "재설정 링크 보내기",
+    "backToSignIn": "← 로그인으로 돌아가기",
+    "resetPasswordSubtitle": "이메일을 입력하면 재설정 링크를 보내드립니다",
+    "resetLinkSent": "✅ 재설정 링크를 보냈습니다! 이메일을 확인해주세요.",
+    "welcomeBack": "돌아오셨군요 ✨",
+    "signInSubtitle": "로그인하여 실현 여정을 계속하세요",
+    "beginJourney": "여정을 시작해요 🌟",
+    "signUpSubtitle": "무료 계정을 만들고 오늘부터 실현을 시작하세요",
+    "weak": "약함",
+    "good": "보통",
+    "strong": "강함",
+    "passwordStrength": "비밀번호 강도",
+    "verifyingSession": "세션 확인 중...",
+    "signinArrow": "로그인 →"
+  },
+  "sidebar": {
+    "dayStreak": "일 연속",
+    "annualMember": "연간 회원",
+    "upgrade": "연간으로 업그레이드"
+  },
   "paywall": {
-    "lockedFeature": "연간 플랜", "default": "ManifestHub 연간 회원 전용 기능입니다",
+    "lockedFeature": "연간 플랜",
+    "default": "ManifestHub 연간 회원 전용 기능입니다",
     "defaultBlurb": "완전한 정체성 전환 도구 키트를 $99.99/년에 잠금 해제하세요.",
-    "cta": "업그레이드 — $99.99/년", "priceHint": "≈ $8.33/월, 연간 청구. 언제든지 취소 가능.",
-    "included": "포함", "annual": "연간",
-    "b1": "완전한 1일 리셋 프로토콜", "b2": "무제한 렌즈 카드 + 기록",
-    "b3": "기반 진화 타임라인", "b4": "패턴 중단 (하루 6회 프롬프트)"
+    "cta": "업그레이드 — $99.99/년",
+    "priceHint": "≈ $8.33/월, 연간 청구. 언제든지 취소 가능.",
+    "included": "포함",
+    "annual": "연간",
+    "b1": "완전한 1일 리셋 프로토콜",
+    "b2": "무제한 렌즈 카드 + 기록",
+    "b3": "기반 진화 타임라인",
+    "b4": "패턴 중단 (하루 6회 프롬프트)"
   },
   "subscription": {
-    "heading": "구독", "freePlan": "무료 플랜",
-    "activePlan": "ManifestHub 연간 — 활성", "upgrade": "연간으로 업그레이드",
+    "heading": "구독",
+    "freePlan": "무료 플랜",
+    "activePlan": "ManifestHub 연간 — 활성",
+    "upgrade": "연간으로 업그레이드",
     "upgradeBlurb": "완전한 리셋 프로토콜, 무제한 기록, 연간 비교 잠금 해제 — $99.99/년.",
-    "manage": "구독 관리", "renewsAt": "{{date}}에 갱신", "cancellingAt": "{{date}}까지 이용 가능"
+    "manage": "구독 관리",
+    "renewsAt": "{{date}}에 갱신",
+    "cancellingAt": "{{date}}까지 이용 가능"
   },
   "lens": {
-    "all": "모든 렌즈", "formLabel": "이 카드는 어떤 렌즈를 위한 것인가요?",
-    "addAt": "{{level}}에 추가", "quotaExceeded": "무료 플랜 한도 도달. 업그레이드하여 더 추가하세요.",
+    "all": "모든 렌즈",
+    "formLabel": "이 카드는 어떤 렌즈를 위한 것인가요?",
+    "addAt": "{{level}}에 추가",
+    "quotaExceeded": "무료 플랜 한도 도달. 업그레이드하여 더 추가하세요.",
     "identityLinkLabel": "이것이 당신의 정체성에 어떻게 기여하나요?",
     "identityLinkPlaceholder": "이 카드를 당신이 되어가는 사람과 연결하세요…",
-    "year":  { "label": "년",  "help": "지난 12개월을 현실로 느끼게 하는 단 하나의 진실." },
-    "month": { "label": "월", "help": "보스전: 연간 렌즈를 전진시키는 프로젝트나 기술." },
-    "week":  { "label": "주",  "help": "퀘스트: 다음 일요일까지 달성할 집중된 결과물." },
-    "day":   { "label": "일",   "help": "레버: 오늘 자동조종으로 하는 바늘을 움직이는 행동." }
+    "year": {
+      "label": "년",
+      "help": "지난 12개월을 현실로 느끼게 하는 단 하나의 진실."
+    },
+    "month": {
+      "label": "월",
+      "help": "보스전: 연간 렌즈를 전진시키는 프로젝트나 기술."
+    },
+    "week": {
+      "label": "주",
+      "help": "퀘스트: 다음 일요일까지 달성할 집중된 결과물."
+    },
+    "day": {
+      "label": "일",
+      "help": "레버: 오늘 자동조종으로 하는 바늘을 움직이는 행동."
+    }
   },
   "foundation": {
-    "title": "기반", "heading": "당신의 정체성 기반",
+    "title": "기반",
+    "heading": "당신의 정체성 기반",
     "subheading": "당신의 1년을 바라보는 렌즈를 구성하는 여섯 가지 요소. 간결하고, 정직하게, 손으로 직접 쓰세요. 언제든지 수정 가능.",
     "emptyTitle": "1년을 바라볼 렌즈를 설정하세요",
     "emptyDesc": "5분 — 여섯 가지 질문, 각각 한 문장. 이것이 모든 리셋, 렌즈 카드, 주간 회고의 척추가 됩니다.",
-    "start": "기반 시작하기", "edit": "편집", "save": "기반 저장", "saving": "저장 중…",
-    "saved": "기반이 저장되었습니다.", "saveFailed": "저장할 수 없습니다. 다시 시도하세요.",
-    "updatedAt": "{{date}}에 업데이트", "historyTitle": "기반 기록",
+    "start": "기반 시작하기",
+    "edit": "편집",
+    "save": "기반 저장",
+    "saving": "저장 중…",
+    "saved": "기반이 저장되었습니다.",
+    "saveFailed": "저장할 수 없습니다. 다시 시도하세요.",
+    "updatedAt": "{{date}}에 업데이트",
+    "historyTitle": "기반 기록",
     "historyEmpty": "아직 이전 버전이 없습니다. 기반을 편집하면 이전 버전이 여기에 저장됩니다.",
-    "historyEntry": "{{date}}에 교체됨", "historyLocked": "연간 회원은 기반의 모든 이전 버전을 보관하며 나란히 비교할 수 있습니다.",
-    "onboard": { "step": "{{current}} / {{total}} 단계", "skip": "지금은 건너뛰기", "fiveMin": "총 5분", "lockIn": "확정하기" },
-    "antiVision":        { "label": "반비전", "help": "앞으로 5년 동안 아무것도 변하지 않는다면 — 그 삶의 평범한 화요일을 묘사하세요. 잔인할 정도로 구체적으로.", "placeholder": "내 인생이 …이 되는 것을 거부한다" },
-    "vision":            { "label": "비전", "help": "현실성은 잊으세요. 손가락을 튕겨 3년 후 다른 삶을 살 수 있다면 — 평범한 화요일은 어떤 모습인가요?", "placeholder": "내가 만들어가고 있는 것은…" },
-    "identityStatement": { "label": "정체성 선언", "help": "그 삶이 강요가 아닌 자연스럽게 느껴지려면, 자신에 대해 무엇을 믿어야 할까요?", "placeholder": "나는 …하는 유형의 사람이다" },
-    "oneYearLens":       { "label": "연간 렌즈", "help": "12개월 후 무엇이 사실이어야 옛 패턴이 깨졌다고 알 수 있을까요?", "placeholder": "[날짜]까지, 한 가지 구체적인 것이 사실이 된다: …" },
-    "oneMonthProject":   { "label": "월간 프로젝트", "help": "이달의 보스전은 무엇인가요 — 연간 렌즈가 가능하도록 존재해야 하는 기술/결과물/시스템?", "placeholder": "이번 달 나는 …을(를) 만들고/배우고/전달하고 있다" },
-    "constraints":       { "label": "제약 (레드라인)", "help": "비전을 좇기 위해 기꺼이 희생하지 않을 것은? 3-5줄. 이것이 당신 게임의 규칙입니다.", "placeholder": "나는 …을(를) 희생하지 않겠다" }
+    "historyEntry": "{{date}}에 교체됨",
+    "historyLocked": "연간 회원은 기반의 모든 이전 버전을 보관하며 나란히 비교할 수 있습니다.",
+    "onboard": {
+      "step": "{{current}} / {{total}} 단계",
+      "skip": "지금은 건너뛰기",
+      "fiveMin": "총 5분",
+      "lockIn": "확정하기"
+    },
+    "antiVision": {
+      "label": "반비전",
+      "help": "앞으로 5년 동안 아무것도 변하지 않는다면 — 그 삶의 평범한 화요일을 묘사하세요. 잔인할 정도로 구체적으로.",
+      "placeholder": "내 인생이 …이 되는 것을 거부한다"
+    },
+    "vision": {
+      "label": "비전",
+      "help": "현실성은 잊으세요. 손가락을 튕겨 3년 후 다른 삶을 살 수 있다면 — 평범한 화요일은 어떤 모습인가요?",
+      "placeholder": "내가 만들어가고 있는 것은…"
+    },
+    "identityStatement": {
+      "label": "정체성 선언",
+      "help": "그 삶이 강요가 아닌 자연스럽게 느껴지려면, 자신에 대해 무엇을 믿어야 할까요?",
+      "placeholder": "나는 …하는 유형의 사람이다"
+    },
+    "oneYearLens": {
+      "label": "연간 렌즈",
+      "help": "12개월 후 무엇이 사실이어야 옛 패턴이 깨졌다고 알 수 있을까요?",
+      "placeholder": "[날짜]까지, 한 가지 구체적인 것이 사실이 된다: …"
+    },
+    "oneMonthProject": {
+      "label": "월간 프로젝트",
+      "help": "이달의 보스전은 무엇인가요 — 연간 렌즈가 가능하도록 존재해야 하는 기술/결과물/시스템?",
+      "placeholder": "이번 달 나는 …을(를) 만들고/배우고/전달하고 있다"
+    },
+    "constraints": {
+      "label": "제약 (레드라인)",
+      "help": "비전을 좇기 위해 기꺼이 희생하지 않을 것은? 3-5줄. 이것이 당신 게임의 규칙입니다.",
+      "placeholder": "나는 …을(를) 희생하지 않겠다"
+    }
   },
   "reset": {
-    "indexTag": "리셋 프로토콜", "indexTitle": "새로운 장으로 나아가는 의식.",
+    "indexTag": "리셋 프로토콜",
+    "indexTitle": "새로운 장으로 나아가는 의식.",
     "indexSubtitle": "\"How to fix your entire life in 1 day\"에서 각색 — 프로토콜은 세 단계: 아침 발굴, 낮 패턴 끊기, 저녁 통합. 아래에서 강도를 선택하세요.",
-    "miniName": "미니 리셋", "miniDuration": "약 30분 · 무료",
+    "miniName": "미니 리셋",
+    "miniDuration": "약 30분 · 무료",
     "miniDesc": "불만을 표면화하고, 버려야 할 정체성을 명명하며, 비전 MVP의 씨앗을 뿌리는 7개의 정제된 질문.",
-    "miniQuotaThisQuarter": "이번 분기 {{used}}/{{total}} 사용", "miniNextQuarter": "다음 분기에 다시 사용 가능.",
-    "fullName": "완전 1일 리셋", "fullDuration": "약 1일 · 연간",
+    "miniQuotaThisQuarter": "이번 분기 {{used}}/{{total}} 사용",
+    "miniNextQuarter": "다음 분기에 다시 사용 가능.",
+    "fullName": "완전 1일 리셋",
+    "fullDuration": "약 1일 · 연간",
     "fullDesc": "14개의 아침 발굴 질문, 6개의 낮 중단, 8개의 저녁 통합 질문. 결과는 직접 기반에 기록됩니다.",
-    "startMini": "미니 리셋 시작", "startFull": "1일 리셋 시작", "unlockFull": "완전 리셋 잠금 해제",
-    "fullTitle": "1일 리셋 프로토콜", "fullSubtitle": "연간 플랜에서 이용 가능한 플래그십 의식.",
+    "startMini": "미니 리셋 시작",
+    "startFull": "1일 리셋 시작",
+    "unlockFull": "완전 리셋 잠금 해제",
+    "fullTitle": "1일 리셋 프로토콜",
+    "fullSubtitle": "연간 플랜에서 이용 가능한 플래그십 의식.",
     "lockedTitle": "완전 리셋은 연간 회원 전용입니다",
     "lockedBlurb": "14개의 아침 질문, 6개의 낮 패턴 중단, 8개의 저녁 통합 질문이 직접 기반에 기록됩니다.",
     "fallbackHint": "대신 30분 버전을 사용해보시겠어요? 무료입니다.",
-    "historyTitle": "지난 세션", "historyEmpty": "아직 리셋 세션이 없습니다 — 첫 번째 세션이 여기에 표시됩니다.",
-    "completed": "{{date}}에 완료", "draft": "초안 · {{date}}", "continue": "계속하기",
-    "stage": { "morning": "아침", "evening": "저녁" },
-    "saving": "저장 중…", "autosaved": "자동 저장됨", "completing": "완료 중…",
-    "finish": "완료하고 기반에 동기화", "noAi": "이 숙고를 AI에 맡기지 마세요. 당신에게 진실된 것을 쓰세요.",
+    "historyTitle": "지난 세션",
+    "historyEmpty": "아직 리셋 세션이 없습니다 — 첫 번째 세션이 여기에 표시됩니다.",
+    "completed": "{{date}}에 완료",
+    "draft": "초안 · {{date}}",
+    "continue": "계속하기",
+    "stage": {
+      "morning": "아침",
+      "evening": "저녁"
+    },
+    "saving": "저장 중…",
+    "autosaved": "자동 저장됨",
+    "completing": "완료 중…",
+    "finish": "완료하고 기반에 동기화",
+    "noAi": "이 숙고를 AI에 맡기지 마세요. 당신에게 진실된 것을 쓰세요.",
     "placeholder": "시간을 들이세요. 틀린 답은 없습니다.",
-    "done": { "title": "리셋 완료.", "miniDesc": "쓴 내용과 함께 조용히 앉아 있으세요. 내일 다시 읽어보세요. 작업은 숙고에 있고 문서에 있지 않습니다.", "fullDesc": "통합 결과로 기반이 업데이트되었습니다. 다음 30일을 새로운 장으로 대하세요.", "viewFoundation": "내 기반 보기", "dashboard": "대시보드로 돌아가기" },
+    "done": {
+      "title": "리셋 완료.",
+      "miniDesc": "쓴 내용과 함께 조용히 앉아 있으세요. 내일 다시 읽어보세요. 작업은 숙고에 있고 문서에 있지 않습니다.",
+      "fullDesc": "통합 결과로 기반이 업데이트되었습니다. 다음 30일을 새로운 장으로 대하세요.",
+      "viewFoundation": "내 기반 보기",
+      "dashboard": "대시보드로 돌아가기"
+    },
     "q": {
-      "q1_dullDissatisfaction": { "prompt": "당신이 함께 사는 법을 배운, 둔하고 지속적인 불만은 무엇인가요?", "help": "깊은 고통이 아니라 — 조용히 참아온 것. 싫어하지 않으면 계속 참을 것입니다." },
-      "q2_repeatedComplaints": { "prompt": "반복적으로 불평하지만 결코 바꾸지 않는 것은 무엇인가요?", "help": "지난 1년 동안 가장 자주 했던 세 가지 불평을 적으세요." },
-      "q3_behaviorVsWords": { "prompt": "각 불평에 대해 — 당신의 행동을 관찰하는 사람은 당신이 실제로 무엇을 원한다고 결론 내릴까요?", "help": "행동은 말보다 더 정직하게 목표를 드러냅니다." },
-      "q4_unbearableTruth": { "prompt": "깊이 존경하는 사람에게 인정하기 견디기 어려운, 현재 삶에 대한 진실은?", "help": "그래도 쓰세요. 이름 붙이는 것이 풀어내는 것입니다." },
-      "q5_fiveYearTuesday": { "prompt": "5년 동안 아무것도 변하지 않는다면 — 평범한 화요일을 묘사하세요.", "help": "어디에서 일어나나요? 몸은 어떤 느낌인가요? 9시에서 18시 사이에 무엇을 하나요? 밤 10시에 기분이 어떤가요?" },
-      "q6_tenYearMissed": { "prompt": "10년 후는요? 무엇을 놓쳤나요? 어떤 기회가 닫혔나요? 누가 당신을 포기했나요?", "help": "당신이 없을 때 사람들은 당신에 대해 뭐라고 말할까요?" },
-      "q7_endOfLife": { "prompt": "인생 종말 관점 — 안전한 버전을 살았습니다. 그 대가는?", "help": "느끼거나, 시도하거나, 되는 것을 자신에게 허락하지 않은 것은?" },
-      "q8_alreadyLivingFuture": { "prompt": "당신 주변에서 방금 묘사한 미래를 이미 살고 있는 사람은?", "help": "같은 궤도에서 5, 10, 20년 앞선 사람. 그 사람이 되는 것을 상상하면 어떤 느낌인가요?" },
-      "q9_identityToGiveUp": { "prompt": "진정으로 변하기 위해 어떤 정체성을 포기해야 하나요?", "help": "완성하세요: '나는 …하는 유형의 사람이다' — 그리고 더 이상 그렇지 않은 것이 사회적으로 어떤 대가를 치르게 할지 주목하세요." },
-      "q10_embarrassingReason": { "prompt": "당신이 변하지 않은 가장 창피한 이유는?", "help": "약하고, 두렵고, 게으르게 들리는 것 — 합리적이지 않은 것." },
-      "q11_protectionCost": { "prompt": "현재 행동이 자기 보호라면 — 정확히 무엇을 보호하고 있나요? 그 대가는?", "help": "두 질문 모두 정직한 답변이 필요합니다." },
-      "q12_idealTuesday": { "prompt": "손가락을 튕기면 — 3년 후 이상적인 삶을 살고 있습니다. 평범한 화요일을 묘사하세요.", "help": "Q5와 같은 수준의 세부사항으로. 현실성은 잊으세요." },
-      "q13_identityToHave": { "prompt": "그 삶이 자연스럽게 느껴지려면 자신에 대해 무엇을 믿어야 하나요?", "help": "정체성 선언을 쓰세요: '나는 …하는 유형의 사람이다'" },
-      "q14_oneActionThisWeek": { "prompt": "이미 그 사람이라면 이번 주에 할 한 가지는?", "help": "구체적으로. 일정에 넣을 수 있게." },
-      "e1_whyStuck": { "prompt": "오늘을 거쳐 — 왜 막혀 있었는지 가장 진실되게 느껴지는 것은?", "help": "오늘 아침 떠오른 것을 종합하세요." },
-      "e2_actualEnemy": { "prompt": "진짜 적을 명명하라. 환경도, 사람도 아닌 — 쇼를 지휘해온 내면의 패턴이나 신념.", "help": "무자비하게 구체적으로." },
-      "e3_antiVisionSentence": { "prompt": "한 문장으로 쓰기: 당신의 삶이 무엇이 되는 것을 거부하는가.", "help": "이것이 압축된 반비전입니다. 읽을 때 무언가 느껴져야 합니다." },
-      "e4_visionSentence": { "prompt": "한 문장으로 쓰기: 무엇을 향해 나아가고 있는가 — 진화할 것을 알면서.", "help": "이것이 비전 MVP입니다. 간결함은 괜찮습니다. 깊이는 앞으로 몇 달의 행동에서 옵니다." },
-      "e5_oneYearLens": { "prompt": "연간 렌즈: 옛 패턴이 깨졌음을 알기 위해 12개월 후 사실이어야 하는 단 한 가지는?", "help": "구체적, 관찰 가능, 이분법적. '기분이 나아진다'가 아니라 'X를 출시했다/Y를 줄였다/Z를 납품했다'." },
-      "e6_oneMonthLens": { "prompt": "월간 프로젝트: 이번 달 보스전은 어떤 모습인가요?", "help": "연간 렌즈가 가능하도록 유지하기 위해 무엇을 배우고/만들고/획득해야 하나요?" },
-      "e7_dailyLevers": { "prompt": "두세 개의 일일 레버: 미래의 당신이 협상 없이 그냥 할 행동.", "help": "내일 캘린더에 차단하세요." },
-      "e8_constraints": { "prompt": "제약: 거기에 도달하기 위해 희생하지 않을 것은?", "help": "이것이 게임의 규칙입니다. 규칙 없이는 게임도 없습니다." }
+      "q1_dullDissatisfaction": {
+        "prompt": "당신이 함께 사는 법을 배운, 둔하고 지속적인 불만은 무엇인가요?",
+        "help": "깊은 고통이 아니라 — 조용히 참아온 것. 싫어하지 않으면 계속 참을 것입니다."
+      },
+      "q2_repeatedComplaints": {
+        "prompt": "반복적으로 불평하지만 결코 바꾸지 않는 것은 무엇인가요?",
+        "help": "지난 1년 동안 가장 자주 했던 세 가지 불평을 적으세요."
+      },
+      "q3_behaviorVsWords": {
+        "prompt": "각 불평에 대해 — 당신의 행동을 관찰하는 사람은 당신이 실제로 무엇을 원한다고 결론 내릴까요?",
+        "help": "행동은 말보다 더 정직하게 목표를 드러냅니다."
+      },
+      "q4_unbearableTruth": {
+        "prompt": "깊이 존경하는 사람에게 인정하기 견디기 어려운, 현재 삶에 대한 진실은?",
+        "help": "그래도 쓰세요. 이름 붙이는 것이 풀어내는 것입니다."
+      },
+      "q5_fiveYearTuesday": {
+        "prompt": "5년 동안 아무것도 변하지 않는다면 — 평범한 화요일을 묘사하세요.",
+        "help": "어디에서 일어나나요? 몸은 어떤 느낌인가요? 9시에서 18시 사이에 무엇을 하나요? 밤 10시에 기분이 어떤가요?"
+      },
+      "q6_tenYearMissed": {
+        "prompt": "10년 후는요? 무엇을 놓쳤나요? 어떤 기회가 닫혔나요? 누가 당신을 포기했나요?",
+        "help": "당신이 없을 때 사람들은 당신에 대해 뭐라고 말할까요?"
+      },
+      "q7_endOfLife": {
+        "prompt": "인생 종말 관점 — 안전한 버전을 살았습니다. 그 대가는?",
+        "help": "느끼거나, 시도하거나, 되는 것을 자신에게 허락하지 않은 것은?"
+      },
+      "q8_alreadyLivingFuture": {
+        "prompt": "당신 주변에서 방금 묘사한 미래를 이미 살고 있는 사람은?",
+        "help": "같은 궤도에서 5, 10, 20년 앞선 사람. 그 사람이 되는 것을 상상하면 어떤 느낌인가요?"
+      },
+      "q9_identityToGiveUp": {
+        "prompt": "진정으로 변하기 위해 어떤 정체성을 포기해야 하나요?",
+        "help": "완성하세요: '나는 …하는 유형의 사람이다' — 그리고 더 이상 그렇지 않은 것이 사회적으로 어떤 대가를 치르게 할지 주목하세요."
+      },
+      "q10_embarrassingReason": {
+        "prompt": "당신이 변하지 않은 가장 창피한 이유는?",
+        "help": "약하고, 두렵고, 게으르게 들리는 것 — 합리적이지 않은 것."
+      },
+      "q11_protectionCost": {
+        "prompt": "현재 행동이 자기 보호라면 — 정확히 무엇을 보호하고 있나요? 그 대가는?",
+        "help": "두 질문 모두 정직한 답변이 필요합니다."
+      },
+      "q12_idealTuesday": {
+        "prompt": "손가락을 튕기면 — 3년 후 이상적인 삶을 살고 있습니다. 평범한 화요일을 묘사하세요.",
+        "help": "Q5와 같은 수준의 세부사항으로. 현실성은 잊으세요."
+      },
+      "q13_identityToHave": {
+        "prompt": "그 삶이 자연스럽게 느껴지려면 자신에 대해 무엇을 믿어야 하나요?",
+        "help": "정체성 선언을 쓰세요: '나는 …하는 유형의 사람이다'"
+      },
+      "q14_oneActionThisWeek": {
+        "prompt": "이미 그 사람이라면 이번 주에 할 한 가지는?",
+        "help": "구체적으로. 일정에 넣을 수 있게."
+      },
+      "e1_whyStuck": {
+        "prompt": "오늘을 거쳐 — 왜 막혀 있었는지 가장 진실되게 느껴지는 것은?",
+        "help": "오늘 아침 떠오른 것을 종합하세요."
+      },
+      "e2_actualEnemy": {
+        "prompt": "진짜 적을 명명하라. 환경도, 사람도 아닌 — 쇼를 지휘해온 내면의 패턴이나 신념.",
+        "help": "무자비하게 구체적으로."
+      },
+      "e3_antiVisionSentence": {
+        "prompt": "한 문장으로 쓰기: 당신의 삶이 무엇이 되는 것을 거부하는가.",
+        "help": "이것이 압축된 반비전입니다. 읽을 때 무언가 느껴져야 합니다."
+      },
+      "e4_visionSentence": {
+        "prompt": "한 문장으로 쓰기: 무엇을 향해 나아가고 있는가 — 진화할 것을 알면서.",
+        "help": "이것이 비전 MVP입니다. 간결함은 괜찮습니다. 깊이는 앞으로 몇 달의 행동에서 옵니다."
+      },
+      "e5_oneYearLens": {
+        "prompt": "연간 렌즈: 옛 패턴이 깨졌음을 알기 위해 12개월 후 사실이어야 하는 단 한 가지는?",
+        "help": "구체적, 관찰 가능, 이분법적. '기분이 나아진다'가 아니라 'X를 출시했다/Y를 줄였다/Z를 납품했다'."
+      },
+      "e6_oneMonthLens": {
+        "prompt": "월간 프로젝트: 이번 달 보스전은 어떤 모습인가요?",
+        "help": "연간 렌즈가 가능하도록 유지하기 위해 무엇을 배우고/만들고/획득해야 하나요?"
+      },
+      "e7_dailyLevers": {
+        "prompt": "두세 개의 일일 레버: 미래의 당신이 협상 없이 그냥 할 행동.",
+        "help": "내일 캘린더에 차단하세요."
+      },
+      "e8_constraints": {
+        "prompt": "제약: 거기에 도달하기 위해 희생하지 않을 것은?",
+        "help": "이것이 게임의 규칙입니다. 규칙 없이는 게임도 없습니다."
+      }
     }
   },
   "interrupts": {
-    "tag": "패턴 중단", "section": "패턴 중단",
+    "tag": "패턴 중단",
+    "section": "패턴 중단",
     "sectionDesc": "하루 6개의 마이크로 질문을 예약하여 자동조종을 끊으세요. 앱이 열려 있는 동안 알림이 발송되며, 놓친 질문은 수신함에 대기합니다.",
-    "toggleTitle": "일일 패턴 중단", "toggleEnabled": "활성화 · 하루 6개 질문", "toggleDisabled": "꺼짐 · 자동조종을 끊으려면 활성화",
+    "toggleTitle": "일일 패턴 중단",
+    "toggleEnabled": "활성화 · 하루 6개 질문",
+    "toggleDisabled": "꺼짐 · 자동조종을 끊으려면 활성화",
     "enabledWithNotif": "알림 활성화됨. 낮 동안 ManifestHub를 열어 두세요.",
     "enabledNoNotif": "활성화됨 (앱 내 전용 — 브라우저 알림이 허용되지 않음).",
-    "disabled": "패턴 중단이 비활성화되었습니다.", "permissionFailed": "활성화할 수 없습니다. 브라우저 설정에서 알림을 허용하세요.",
-    "notFound": "중단을 찾을 수 없습니다.", "saved": "기록됨.", "saveFailed": "저장 실패. 다시 시도하세요.",
-    "save": "답변 기록", "update": "답변 업데이트",
+    "disabled": "패턴 중단이 비활성화되었습니다.",
+    "permissionFailed": "활성화할 수 없습니다. 브라우저 설정에서 알림을 허용하세요.",
+    "notFound": "중단을 찾을 수 없습니다.",
+    "saved": "기록됨.",
+    "saveFailed": "저장 실패. 다시 시도하세요.",
+    "save": "답변 기록",
+    "update": "답변 업데이트",
     "placeholder": "첫 생각 — 필터링하지 마세요. 60초면 충분합니다.",
     "softTimer": "부드러운 60초 타이머. 필요하면 더 시간을 들이세요.",
-    "banner": { "title": "{{count}}개의 중단이 대기 중", "answer": "답변" },
+    "banner": {
+      "title": "{{count}}개의 중단이 대기 중",
+      "answer": "답변"
+    },
     "q": {
-      "i1_avoiding": { "short": "지금 무엇을 회피하고 있는가?", "prompt": "지금 하고 있는 일을 하면서 무엇을 회피하고 있는가?" },
-      "i2_filmedBehavior": { "short": "촬영된 행동이 무엇이라고 말할까?", "prompt": "누군가 지난 2시간을 촬영했다면, 내가 인생에서 무엇을 원한다고 결론 내릴까?" },
-      "i3_lifeIHate": { "short": "원하는 삶인가 싫어하는 삶인가?", "prompt": "나는 싫어하는 삶을 향해 가고 있는가, 원하는 삶을 향해 가고 있는가?" },
-      "i4_pretendingNotImportant": { "short": "중요하지 않은 척하는 것?", "prompt": "중요하지 않은 척하는 가장 중요한 것은 무엇인가?" },
-      "i5_identityProtection": { "short": "정체성 보호인가 진짜 욕구인가?", "prompt": "오늘 진정한 욕구보다 정체성 보호 때문에 한 일은?" },
-      "i6_aliveVsDead": { "short": "가장 생생했던 때 vs 가장 죽어있던 때?", "prompt": "오늘 언제 가장 생생하게 느꼈나? 언제 가장 죽은 듯이 느꼈나?" },
-      "i7_stoppedNeeding": { "short": "인정받을 필요가 없어진다면?", "prompt": "사람들이 나를 특정 방식으로 볼 필요가 없어진다면 무엇이 달라질까?" },
-      "i8_aliveVsSafety": { "short": "생동감 vs 안전?", "prompt": "내 삶의 어디에서 생동감을 안전과 교환하고 있는가?" },
-      "i9_smallestVersion": { "short": "내일의 가장 작은 버전은?", "prompt": "내가 되고 싶은 사람의 가장 작은 버전으로 내일 될 수 있는 것은?" }
+      "i1_avoiding": {
+        "short": "지금 무엇을 회피하고 있는가?",
+        "prompt": "지금 하고 있는 일을 하면서 무엇을 회피하고 있는가?"
+      },
+      "i2_filmedBehavior": {
+        "short": "촬영된 행동이 무엇이라고 말할까?",
+        "prompt": "누군가 지난 2시간을 촬영했다면, 내가 인생에서 무엇을 원한다고 결론 내릴까?"
+      },
+      "i3_lifeIHate": {
+        "short": "원하는 삶인가 싫어하는 삶인가?",
+        "prompt": "나는 싫어하는 삶을 향해 가고 있는가, 원하는 삶을 향해 가고 있는가?"
+      },
+      "i4_pretendingNotImportant": {
+        "short": "중요하지 않은 척하는 것?",
+        "prompt": "중요하지 않은 척하는 가장 중요한 것은 무엇인가?"
+      },
+      "i5_identityProtection": {
+        "short": "정체성 보호인가 진짜 욕구인가?",
+        "prompt": "오늘 진정한 욕구보다 정체성 보호 때문에 한 일은?"
+      },
+      "i6_aliveVsDead": {
+        "short": "가장 생생했던 때 vs 가장 죽어있던 때?",
+        "prompt": "오늘 언제 가장 생생하게 느꼈나? 언제 가장 죽은 듯이 느꼈나?"
+      },
+      "i7_stoppedNeeding": {
+        "short": "인정받을 필요가 없어진다면?",
+        "prompt": "사람들이 나를 특정 방식으로 볼 필요가 없어진다면 무엇이 달라질까?"
+      },
+      "i8_aliveVsSafety": {
+        "short": "생동감 vs 안전?",
+        "prompt": "내 삶의 어디에서 생동감을 안전과 교환하고 있는가?"
+      },
+      "i9_smallestVersion": {
+        "short": "내일의 가장 작은 버전은?",
+        "prompt": "내가 되고 싶은 사람의 가장 작은 버전으로 내일 될 수 있는 것은?"
+      }
     }
   },
   "reflection": {
-    "tag": "주간 회고", "title": "이번 주는 당신을 어디로 움직였나요?", "subtitle": "다섯 가지 질문. 루프 종료.",
-    "save": "회고 저장", "saved": "회고가 저장되었습니다.", "saveFailed": "저장 실패. 다시 시도하세요.",
-    "placeholder": "정직하게, 간결하게.", "summary": "점수 {{score}}/5 · 프로젝트: {{status}}",
-    "historyTitle": "지난 주", "historyEmpty": "아직 회고가 없습니다 — 첫 번째 회고가 여기에 표시됩니다.",
-    "hiddenCount": "아카이브에 {{count}}주 더 있음", "unlockHint": "연간은 무제한 기록 + 월/분기 트렌드를 잠금 해제합니다.",
-    "statusOpts": { "ahead": "앞섬", "on": "순조", "behind": "뒤처짐", "adjust": "조정 필요" },
+    "tag": "주간 회고",
+    "title": "이번 주는 당신을 어디로 움직였나요?",
+    "subtitle": "다섯 가지 질문. 루프 종료.",
+    "save": "회고 저장",
+    "saved": "회고가 저장되었습니다.",
+    "saveFailed": "저장 실패. 다시 시도하세요.",
+    "placeholder": "정직하게, 간결하게.",
+    "summary": "점수 {{score}}/5 · 프로젝트: {{status}}",
+    "historyTitle": "지난 주",
+    "historyEmpty": "아직 회고가 없습니다 — 첫 번째 회고가 여기에 표시됩니다.",
+    "hiddenCount": "아카이브에 {{count}}주 더 있음",
+    "unlockHint": "연간은 무제한 기록 + 월/분기 트렌드를 잠금 해제합니다.",
+    "statusOpts": {
+      "ahead": "앞섬",
+      "on": "순조",
+      "behind": "뒤처짐",
+      "adjust": "조정 필요"
+    },
     "q": {
-      "w1_identityProgress": { "prompt": "이번 주는 당신을 정체성 선언에 얼마나 가깝게 움직였나요?", "help": "1 = 움직임 없음 · 5 = 분명히 가까워짐." },
-      "w2_antiVisionSlips": { "prompt": "이번 주 어떤 반비전 행동이 재발했나요?", "help": "이름을 붙여서 숨지 못하게 하세요." },
-      "w3_futureMomentum": { "prompt": "미래의 당신과 가장 닮은 행동은 무엇이었나요?", "help": "다음 주에 더 원하는 것입니다." },
-      "w4_projectStatus": { "prompt": "월간 프로젝트 진행 상황은?", "help": "불편하더라도 가장 정직한 라벨을 선택하세요." },
-      "w5_dailyLevers": { "prompt": "다음 주에 약속하는 두 가지 일일 레버.", "help": "구체적. 캘린더에 넣을 수 있는. 협상 불가." }
+      "w1_identityProgress": {
+        "prompt": "이번 주는 당신을 정체성 선언에 얼마나 가깝게 움직였나요?",
+        "help": "1 = 움직임 없음 · 5 = 분명히 가까워짐."
+      },
+      "w2_antiVisionSlips": {
+        "prompt": "이번 주 어떤 반비전 행동이 재발했나요?",
+        "help": "이름을 붙여서 숨지 못하게 하세요."
+      },
+      "w3_futureMomentum": {
+        "prompt": "미래의 당신과 가장 닮은 행동은 무엇이었나요?",
+        "help": "다음 주에 더 원하는 것입니다."
+      },
+      "w4_projectStatus": {
+        "prompt": "월간 프로젝트 진행 상황은?",
+        "help": "불편하더라도 가장 정직한 라벨을 선택하세요."
+      },
+      "w5_dailyLevers": {
+        "prompt": "다음 주에 약속하는 두 가지 일일 레버.",
+        "help": "구체적. 캘린더에 넣을 수 있는. 협상 불가."
+      }
     }
   },
   "dashboard": {
-    "welcome": "돌아오셨군요, {{name}}님!", "manifestationJourney": "당신의 실현 여정이 아름답게 펼쳐지고 있어요.",
-    "todayGoals": "오늘의 목표", "affirmation": "일일 확언", "todayAffirmation": "오늘의 확언",
-    "visualizationPrompt": "시각화 가이드", "visionOverview": "비전 개요",
+    "welcome": "돌아오셨군요, {{name}}님!",
+    "manifestationJourney": "당신의 실현 여정이 아름답게 펼쳐지고 있어요.",
+    "todayGoals": "오늘의 목표",
+    "affirmation": "일일 확언",
+    "todayAffirmation": "오늘의 확언",
+    "visualizationPrompt": "시각화 가이드",
+    "visionOverview": "비전 개요",
     "yourVisionBoardDescription": "개인 비전보드로 꿈을 만들고, 시각화하고, 실현하세요.",
-    "gratitudeJournal": "감사 일기", "todayIAmGratefulFor": "✨ 오늘 감사한 것...", "iAmGratefulFor": "감사합니다...",
+    "gratitudeJournal": "감사 일기",
+    "todayIAmGratefulFor": "✨ 오늘 감사한 것...",
+    "iAmGratefulFor": "감사합니다...",
     "enterGratitude": "오늘 감사한 것을 3가지 써주세요…",
     "enterGratitudeForDate": "그날 무엇에 감사했나요?",
-    "saveGratitude": "감사 저장", "updateGratitude": "감사 업데이트",
-    "saving": "저장 중", "checkingIn": "체크인 중", "recentGratitude": "최근 감사",
-    "calendarAndProgress": "일일 기록", "dailyCheckIn": "일일 체크인",
-    "checkedInToday": "오늘 체크인 완료!", "checkInNow": "지금 체크인",
-    "currentStreak": "현재 연속", "days": "일", "dayStreak": "일 연속",
-    "createVisionCard": "비전 카드 만들기", "viewAll": "전체 보기",
+    "saveGratitude": "감사 저장",
+    "updateGratitude": "감사 업데이트",
+    "saving": "저장 중",
+    "checkingIn": "체크인 중",
+    "recentGratitude": "최근 감사",
+    "calendarAndProgress": "일일 기록",
+    "dailyCheckIn": "일일 체크인",
+    "checkedInToday": "오늘 체크인 완료!",
+    "checkInNow": "지금 체크인",
+    "currentStreak": "현재 연속",
+    "days": "일",
+    "dayStreak": "일 연속",
+    "createVisionCard": "비전 카드 만들기",
+    "viewAll": "전체 보기",
     "noVisionItems": "아직 비전 카드가 없어요. 비전보드를 만들어보세요.",
-    "totalGoals": "전체 목표", "inProgress": "진행 중", "visionItems": "비전 항목", "completed": "완료",
-    "stats": "당신의 통계", "savedAt": "저장 시간", "saved": "저장됨", "unsaved": "저장되지 않은 변경 사항",
-    "nothingSavedYet": "아직 저장된 것 없음", "keepUpGoodWork": "잘하고 있어요! 내일도 파이팅!",
+    "totalGoals": "전체 목표",
+    "inProgress": "진행 중",
+    "visionItems": "비전 항목",
+    "completed": "완료",
+    "stats": "당신의 통계",
+    "savedAt": "저장 시간",
+    "saved": "저장됨",
+    "unsaved": "저장되지 않은 변경 사항",
+    "nothingSavedYet": "아직 저장된 것 없음",
+    "keepUpGoodWork": "잘하고 있어요! 내일도 파이팅!",
     "shareGratitudePrompt": "오늘 감사한 것을 나눠보세요",
     "noEntryForDate": "이 날짜의 기록이 없어요",
-    "checkInStatus": "체크인 상태", "checkedInOnDate": "이 날 체크인 완료", "noCheckInOnDate": "이 날 체크인 없음",
-    "checkInSuccess": "체크인 성공! 계속 파이팅!", "checkInFailed": "체크인 실패. 다시 시도해주세요.",
+    "checkInStatus": "체크인 상태",
+    "checkedInOnDate": "이 날 체크인 완료",
+    "noCheckInOnDate": "이 날 체크인 없음",
+    "checkInSuccess": "체크인 성공! 계속 파이팅!",
+    "checkInFailed": "체크인 실패. 다시 시도해주세요.",
     "checkInError": "체크인 중 네트워크 오류. 다시 시도해주세요.",
-    "gratitudeSaved": "감사 일기가 저장되었어요!", "gratitudeUpdated": "감사 일기가 업데이트되었어요!",
-    "gratitudeSaveFailed": "저장 실패. 다시 시도해주세요.", "gratitudeSaveError": "저장 중 네트워크 오류. 다시 시도해주세요.",
+    "gratitudeSaved": "감사 일기가 저장되었어요!",
+    "gratitudeUpdated": "감사 일기가 업데이트되었어요!",
+    "gratitudeSaveFailed": "저장 실패. 다시 시도해주세요.",
+    "gratitudeSaveError": "저장 중 네트워크 오류. 다시 시도해주세요.",
     "gratitudeRaisesVibration": "감사는 당신의 진동을 높이고 실현 능력을 증폭시킵니다.",
-    "today": "📅 오늘", "howAreYouFeeling": "오늘 기분이 어떠세요?", "moodSubtitle": "감정 상태가 당신의 실현 에너지를 형성해요",
-    "moodSaved": "기분이 기록되었어요 ✨", "feelingNote": "✓ {{mood}} 상태 — 에너지가 기록되었어요", "feelingOnDay": "이 날의 기분: {{mood}}",
-    "todayIntention": "오늘의 의도", "intentionFor": "{{date}}의 의도", "setIntentionPrompt": "오늘의 의도를 설정해요",
-    "noIntentionRecorded": "기록된 의도 없음", "setIntention": "의도 설정", "intentionPlaceholder": "나는 ...하려고 합니다",
+    "today": "📅 오늘",
+    "howAreYouFeeling": "오늘 기분이 어떠세요?",
+    "moodSubtitle": "감정 상태가 당신의 실현 에너지를 형성해요",
+    "moodSaved": "기분이 기록되었어요 ✨",
+    "feelingNote": "✓ {{mood}} 상태 — 에너지가 기록되었어요",
+    "feelingOnDay": "이 날의 기분: {{mood}}",
+    "todayIntention": "오늘의 의도",
+    "intentionFor": "{{date}}의 의도",
+    "setIntentionPrompt": "오늘의 의도를 설정해요",
+    "noIntentionRecorded": "기록된 의도 없음",
+    "setIntention": "의도 설정",
+    "intentionPlaceholder": "나는 ...하려고 합니다",
     "intentionFromIdentity": "정체성 버전의 나는 오늘 무엇을 할까?",
-    "intentionSaved": "오늘의 의도를 설정했어요! 🎯", "failedSaveIntention": "의도 저장 실패",
-    "overallProgress": "전체 진행률", "visionsManiifested": "{{total}}개 비전 중 {{count}}개 실현", "visionBoardEmpty": "비전보드가 비어있어요",
-    "gratefulFor": "{{date}}에 감사한 것", "goodMorning": "좋은 아침이에요", "goodAfternoon": "안녕하세요", "goodEvening": "좋은 저녁이에요",
-    "moods": { "great": "최고", "good": "좋음", "okay": "보통", "low": "낮음" },
+    "intentionSaved": "오늘의 의도를 설정했어요! 🎯",
+    "failedSaveIntention": "의도 저장 실패",
+    "overallProgress": "전체 진행률",
+    "visionsManiifested": "{{total}}개 비전 중 {{count}}개 실현",
+    "visionBoardEmpty": "비전보드가 비어있어요",
+    "gratefulFor": "{{date}}에 감사한 것",
+    "goodMorning": "좋은 아침이에요",
+    "goodAfternoon": "안녕하세요",
+    "goodEvening": "좋은 저녁이에요",
+    "moods": {
+      "great": "최고",
+      "good": "좋음",
+      "okay": "보통",
+      "low": "낮음"
+    },
     "affirmations": {
-      "0": { "text": "나는 내 꿈과 목표를 가질 자격이 있어요.", "visualization": "가장 큰 꿈을 이루는 자신을 상상해보세요. 어떤 느낌인가요?" },
-      "1": { "text": "매일 나는 목표에 가까워지고 있어요.", "visualization": "오늘 작고 의미 있는 행동을 하는 자신을 보세요." },
-      "2": { "text": "나는 내 삶을 변화시킬 힘이 있어요.", "visualization": "만들고 싶은 긍정적인 변화를 시각화해보세요." },
-      "3": { "text": "나는 성공과 풍요를 끌어당겨요.", "visualization": "풍요가 쉽게 내 삶으로 흘러드는 것을 상상해보세요." },
-      "4": { "text": "내 가능성은 무한하고 무엇이든 이룰 수 있어요.", "visualization": "어떤 장애물도 쉽게 극복하는 자신을 보세요." }
+      "0": {
+        "text": "나는 내 꿈과 목표를 가질 자격이 있어요.",
+        "visualization": "가장 큰 꿈을 이루는 자신을 상상해보세요. 어떤 느낌인가요?"
+      },
+      "1": {
+        "text": "매일 나는 목표에 가까워지고 있어요.",
+        "visualization": "오늘 작고 의미 있는 행동을 하는 자신을 보세요."
+      },
+      "2": {
+        "text": "나는 내 삶을 변화시킬 힘이 있어요.",
+        "visualization": "만들고 싶은 긍정적인 변화를 시각화해보세요."
+      },
+      "3": {
+        "text": "나는 성공과 풍요를 끌어당겨요.",
+        "visualization": "풍요가 쉽게 내 삶으로 흘러드는 것을 상상해보세요."
+      },
+      "4": {
+        "text": "내 가능성은 무한하고 무엇이든 이룰 수 있어요.",
+        "visualization": "어떤 장애물도 쉽게 극복하는 자신을 보세요."
+      }
     },
     "aff": {
-      "identityLens": "정체성 렌즈", "setup": "설정하기",
+      "identityLens": "정체성 렌즈",
+      "setup": "설정하기",
       "antiVisionPrefix": "나는 거부한다: ",
       "identityCaption": "작아지고 싶은 유혹이 들 때 이것을 읽으세요.",
       "antiVisionCaption": "당신이 멀어지고 있는 것 — 노력 뒤의 중력.",
@@ -194,109 +508,424 @@
       "monthCaption": "이번 달의 보스전.",
       "yearCaption": "패턴이 깨졌음을 증명하는 단 하나의 연간 진실."
     },
-    "identity": { "tag": "당신의 정체성 렌즈", "thisMonth": "이번 달", "setupTitle": "정체성 기반을 설정하세요", "setupDesc": "5분 — 당신이 1년을 보는 방식을 재구성하는 여섯 가지 요소. 1일 리셋 프로토콜에서 각색." },
-    "quick": { "reset": "리셋 프로토콜", "lens": "렌즈 계층", "reflect": "주간 회고", "foundation": "기반" }
-  },
-  "goals": { "myGoals": "내 목표", "addNew": "새 목표 추가", "categories": { "all": "전체 목표", "career": "커리어", "finance": "재정", "health": "건강", "relationships": "관계", "personal": "개인", "other": "기타" }, "form": { "title": "목표 제목", "category": "카테고리", "description": "설명", "targetDate": "목표 날짜", "tags": "태그", "addTag": "태그 추가", "save": "목표 저장", "cancel": "취소" } },
-  "visionboard": {
-    "title": "비전보드", "subtitle": "하나씩 비전을 시각화하며 현실을 만들어가요",
-    "addVision": "비전 추가", "newVision": "✨ 새 비전", "editVision": "✏️ 비전 편집",
-    "addCard": "카드 추가", "editMode": "편집 모드", "viewMode": "보기 모드",
-    "gridView": "그리드", "timelineView": "타임라인", "listView": "목록",
-    "searchPlaceholder": "비전과 목표를 검색해요…", "allCategories": "전체 카테고리", "allStatuses": "전체 상태",
-    "completed": "✅ 완료", "inProgress": "🔄 진행 중", "notStarted": "🌱 미시작",
-    "noMatchingVisions": "일치하는 비전이 없어요", "tryAdjustingFilters": "검색이나 필터를 조정해보세요.",
-    "visionBoardAwaits": "비전보드가 당신을 기다려요", "addFirstVision": "첫 번째 카드를 추가하여 실현을 시작하세요.", "createFirstVision": "첫 번째 비전 만들기",
-    "showingVisions": "{{count}}개 비전 표시", "showingVisionsPlural": "{{count}}개 비전 표시",
-    "filtered": "필터링됨", "manifested": "🏆 {{count}}개 실현",
-    "visionsTotal": "총 {{count}}개 비전", "avgProgress": "평균 {{pct}}% 진행률",
-    "highPriority": "높음", "mediumPriority": "중간", "lowPriority": "낮음",
-    "overdue": "기한 초과", "done": "완료", "progress": "진행률", "dueDate": "마감일", "priority": "우선순위", "actions": "작업", "vision": "비전",
-    "newestFirst": "최신순", "oldestFirst": "오래된순", "titleAZ": "제목 A-Z", "titleZA": "제목 Z-A", "highestProgress": "진행률 높은순", "dueSoon": "마감 임박순",
-    "clearAll": "모두 지우기", "filters": "필터:",
-    "deleteConfirm": "이 비전을 삭제하시겠어요?", "visionDeleted": "비전이 삭제되었어요",
-    "failedDelete": "비전 삭제 실패", "deleteError": "삭제 실패. 다시 시도해주세요.",
-    "goalCompleted": "🎉 축하해요! 목표 달성!", "visionAchieved": "🎉 축하해요! 비전이 실현되었어요!",
-    "progressUpdated": "진행률이 {{pct}}%로 업데이트되었어요", "failedUpdateProgress": "진행률 업데이트 실패", "failedUpdateProgressMsg": "진행률 업데이트 실패. 다시 시도해주세요.",
-    "visionUpdated": "비전이 업데이트되었어요!", "visionCreated": "✨ 새 비전이 만들어졌어요!",
-    "failedUpdate": "비전 업데이트 실패", "failedCreate": "비전 생성 실패",
-    "cardTypes": { "image": "이미지", "text": "텍스트", "quote": "인용", "affirmation": "확언" },
-    "categories": { "general": "일반", "career": "커리어", "health": "건강", "relationships": "관계", "finances": "재정", "personal": "개인", "travel": "여행", "home": "주거", "education": "교육", "spirituality": "영성" },
-    "form": {
-      "title": "비전 제목", "titlePlaceholder": "무엇을 실현하고 싶으세요?", "titleRequired": "제목을 입력해주세요", "contentRequired": "설명을 입력해주세요",
-      "category": "카테고리", "description": "설명", "visionDescription": "비전 설명", "descriptionPlaceholder": "비전을 생생하게 묘사하세요…",
-      "feelings": "감정과 느낌", "feelingsPlaceholder": "이루었을 때 어떤 느낌일까요?",
-      "visualization": "시각화 가이드", "visualizationPrompt": "시각화 가이드", "visualizationPlaceholder": "비전이 실현되는 장면을 묘사해보세요...",
-      "imageUpload": "비전 이미지", "uploadHint": "클릭하여 업로드 · PNG, JPG, WebP (최대 10MB)", "imageUploadError": "이미지 업로드 실패", "removeImage": "삭제",
-      "imageHint": "PNG, JPG (최대 2MB)", "imageSizeError": "이미지 크기는 2MB 미만이어야 해요",
-      "progress": "진행률", "goalSection": "목표 설정", "addGoalDetails": "목표 세부 정보",
-      "dueDate": "마감일", "priority": "우선순위", "low": "낮음", "medium": "중간", "high": "높음",
-      "steps": "실행 단계", "actionSteps": "실행 단계", "addStep": "단계 추가…", "addStepBtn": "단계 추가",
-      "submit": "비전 저장", "update": "비전 업데이트", "saving": "저장 중…", "cancel": "취소"
+    "identity": {
+      "tag": "당신의 정체성 렌즈",
+      "thisMonth": "이번 달",
+      "setupTitle": "정체성 기반을 설정하세요",
+      "setupDesc": "5분 — 당신이 1년을 보는 방식을 재구성하는 여섯 가지 요소. 1일 리셋 프로토콜에서 각색."
     },
-    "editVisionSubtitle": "비전 세부 사항 업데이트", "newVisionSubtitle": "꿈을 현실로 만들어보세요",
+    "quick": {
+      "reset": "리셋 프로토콜",
+      "lens": "렌즈 계층",
+      "reflect": "주간 회고",
+      "foundation": "기반"
+    }
+  },
+  "goals": {
+    "myGoals": "내 목표",
+    "addNew": "새 목표 추가",
+    "categories": {
+      "all": "전체 목표",
+      "career": "커리어",
+      "finance": "재정",
+      "health": "건강",
+      "relationships": "관계",
+      "personal": "개인",
+      "other": "기타"
+    },
+    "form": {
+      "title": "목표 제목",
+      "category": "카테고리",
+      "description": "설명",
+      "targetDate": "목표 날짜",
+      "tags": "태그",
+      "addTag": "태그 추가",
+      "save": "목표 저장",
+      "cancel": "취소"
+    }
+  },
+  "visionboard": {
+    "title": "비전보드",
+    "subtitle": "하나씩 비전을 시각화하며 현실을 만들어가요",
+    "addVision": "비전 추가",
+    "newVision": "✨ 새 비전",
+    "editVision": "✏️ 비전 편집",
+    "addCard": "카드 추가",
+    "editMode": "편집 모드",
+    "viewMode": "보기 모드",
+    "gridView": "그리드",
+    "timelineView": "타임라인",
+    "listView": "목록",
+    "searchPlaceholder": "비전과 목표를 검색해요…",
+    "allCategories": "전체 카테고리",
+    "allStatuses": "전체 상태",
+    "completed": "✅ 완료",
+    "inProgress": "🔄 진행 중",
+    "notStarted": "🌱 미시작",
+    "noMatchingVisions": "일치하는 비전이 없어요",
+    "tryAdjustingFilters": "검색이나 필터를 조정해보세요.",
+    "visionBoardAwaits": "비전보드가 당신을 기다려요",
+    "addFirstVision": "첫 번째 카드를 추가하여 실현을 시작하세요.",
+    "createFirstVision": "첫 번째 비전 만들기",
+    "showingVisions": "{{count}}개 비전 표시",
+    "showingVisionsPlural": "{{count}}개 비전 표시",
+    "filtered": "필터링됨",
+    "manifested": "🏆 {{count}}개 실현",
+    "visionsTotal": "총 {{count}}개 비전",
+    "avgProgress": "평균 {{pct}}% 진행률",
+    "highPriority": "높음",
+    "mediumPriority": "중간",
+    "lowPriority": "낮음",
+    "overdue": "기한 초과",
+    "done": "완료",
+    "progress": "진행률",
+    "dueDate": "마감일",
+    "priority": "우선순위",
+    "actions": "작업",
+    "vision": "비전",
+    "newestFirst": "최신순",
+    "oldestFirst": "오래된순",
+    "titleAZ": "제목 A-Z",
+    "titleZA": "제목 Z-A",
+    "highestProgress": "진행률 높은순",
+    "dueSoon": "마감 임박순",
+    "clearAll": "모두 지우기",
+    "filters": "필터:",
+    "deleteConfirm": "이 비전을 삭제하시겠어요?",
+    "visionDeleted": "비전이 삭제되었어요",
+    "failedDelete": "비전 삭제 실패",
+    "deleteError": "삭제 실패. 다시 시도해주세요.",
+    "goalCompleted": "🎉 축하해요! 목표 달성!",
+    "visionAchieved": "🎉 축하해요! 비전이 실현되었어요!",
+    "progressUpdated": "진행률이 {{pct}}%로 업데이트되었어요",
+    "failedUpdateProgress": "진행률 업데이트 실패",
+    "failedUpdateProgressMsg": "진행률 업데이트 실패. 다시 시도해주세요.",
+    "visionUpdated": "비전이 업데이트되었어요!",
+    "visionCreated": "✨ 새 비전이 만들어졌어요!",
+    "failedUpdate": "비전 업데이트 실패",
+    "failedCreate": "비전 생성 실패",
+    "cardTypes": {
+      "image": "이미지",
+      "text": "텍스트",
+      "quote": "인용",
+      "affirmation": "확언"
+    },
+    "categories": {
+      "general": "일반",
+      "career": "커리어",
+      "health": "건강",
+      "relationships": "관계",
+      "finances": "재정",
+      "personal": "개인",
+      "travel": "여행",
+      "home": "주거",
+      "education": "교육",
+      "spirituality": "영성"
+    },
+    "form": {
+      "title": "비전 제목",
+      "titlePlaceholder": "무엇을 실현하고 싶으세요?",
+      "titleRequired": "제목을 입력해주세요",
+      "contentRequired": "설명을 입력해주세요",
+      "category": "카테고리",
+      "description": "설명",
+      "visionDescription": "비전 설명",
+      "descriptionPlaceholder": "비전을 생생하게 묘사하세요…",
+      "feelings": "감정과 느낌",
+      "feelingsPlaceholder": "이루었을 때 어떤 느낌일까요?",
+      "visualization": "시각화 가이드",
+      "visualizationPrompt": "시각화 가이드",
+      "visualizationPlaceholder": "비전이 실현되는 장면을 묘사해보세요...",
+      "imageUpload": "비전 이미지",
+      "uploadHint": "클릭하여 업로드 · PNG, JPG, WebP (최대 10MB)",
+      "imageUploadError": "이미지 업로드 실패",
+      "removeImage": "삭제",
+      "imageHint": "PNG, JPG (최대 2MB)",
+      "imageSizeError": "이미지 크기는 2MB 미만이어야 해요",
+      "progress": "진행률",
+      "goalSection": "목표 설정",
+      "addGoalDetails": "목표 세부 정보",
+      "dueDate": "마감일",
+      "priority": "우선순위",
+      "low": "낮음",
+      "medium": "중간",
+      "high": "높음",
+      "steps": "실행 단계",
+      "actionSteps": "실행 단계",
+      "addStep": "단계 추가…",
+      "addStepBtn": "단계 추가",
+      "submit": "비전 저장",
+      "update": "비전 업데이트",
+      "saving": "저장 중…",
+      "cancel": "취소"
+    },
+    "editVisionSubtitle": "비전 세부 사항 업데이트",
+    "newVisionSubtitle": "꿈을 현실로 만들어보세요",
     "detail": {
-      "back": "뒤로", "edit": "편집", "delete": "삭제", "deleteConfirm": "이 비전을 삭제하시겠어요?",
-      "created": "생성일", "updated": "수정일", "status": "상태", "overdue": "기한 초과", "completedStatus": "완료", "active": "진행 중",
-      "description": "설명", "feelings": "감정", "visualization": "시각화",
-      "goalDetails": "목표 세부 사항", "progress": "진행률", "dueDate": "마감일", "priority": "우선순위", "actionSteps": "실행 단계",
-      "noContent": "아직 설명이 없어요.", "notFound": "비전을 찾을 수 없어요", "notFoundDesc": "찾으시는 비전이 없거나 삭제되었어요.",
-      "backToBoard": "비전보드로 돌아가기", "failedLoad": "로드에 실패했어요.", "failedDelete": "삭제 실패. 다시 시도해주세요.", "failedUpdate": "업데이트 실패. 다시 시도해주세요."
+      "back": "뒤로",
+      "edit": "편집",
+      "delete": "삭제",
+      "deleteConfirm": "이 비전을 삭제하시겠어요?",
+      "created": "생성일",
+      "updated": "수정일",
+      "status": "상태",
+      "overdue": "기한 초과",
+      "completedStatus": "완료",
+      "active": "진행 중",
+      "description": "설명",
+      "feelings": "감정",
+      "visualization": "시각화",
+      "goalDetails": "목표 세부 사항",
+      "progress": "진행률",
+      "dueDate": "마감일",
+      "priority": "우선순위",
+      "actionSteps": "실행 단계",
+      "noContent": "아직 설명이 없어요.",
+      "notFound": "비전을 찾을 수 없어요",
+      "notFoundDesc": "찾으시는 비전이 없거나 삭제되었어요.",
+      "backToBoard": "비전보드로 돌아가기",
+      "failedLoad": "로드에 실패했어요.",
+      "failedDelete": "삭제 실패. 다시 시도해주세요.",
+      "failedUpdate": "업데이트 실패. 다시 시도해주세요."
     }
   },
   "profile": {
-    "personalInfo": "개인 정보", "name": "이름", "email": "이메일", "changePassword": "비밀번호 변경",
-    "preferences": "환경 설정", "language": "언어", "theme": "테마", "notifications": "알림",
-    "saveChanges": "변경 사항 저장", "notificationsHint": "목표와 진행 상황에 대한 알림 받기",
-    "profileUpdated": "프로필이 업데이트되었어요!", "failedUpdate": "프로필 업데이트 실패. 다시 시도해주세요.",
-    "accountSettings": "계정 설정", "dangerZone": "위험 영역", "deleteAccount": "계정 삭제",
+    "personalInfo": "개인 정보",
+    "name": "이름",
+    "email": "이메일",
+    "changePassword": "비밀번호 변경",
+    "preferences": "환경 설정",
+    "language": "언어",
+    "theme": "테마",
+    "notifications": "알림",
+    "saveChanges": "변경 사항 저장",
+    "notificationsHint": "목표와 진행 상황에 대한 알림 받기",
+    "profileUpdated": "프로필이 업데이트되었어요!",
+    "failedUpdate": "프로필 업데이트 실패. 다시 시도해주세요.",
+    "accountSettings": "계정 설정",
+    "dangerZone": "위험 영역",
+    "deleteAccount": "계정 삭제",
     "deleteAccountHint": "삭제 후에는 계정과 모든 데이터를 복구할 수 없어요.",
-    "themeLight": "라이트", "themeDark": "다크", "themeSystem": "시스템"
+    "themeLight": "라이트",
+    "themeDark": "다크",
+    "themeSystem": "시스템"
   },
   "common": {
-    "loading": "로딩 중...", "save": "저장", "cancel": "취소", "delete": "삭제", "edit": "편집",
-    "search": "검색", "filters": "필터", "sortBy": "정렬", "darkMode": "다크 모드", "lightMode": "라이트 모드",
-    "dismiss": "닫기", "back": "뒤로", "next": "다음", "close": "닫기", "confirm": "확인",
-    "yes": "예", "no": "아니오", "or": "또는", "noDataYet": "아직 데이터가 없어요",
-    "openSidebar": "사이드바 열기", "closeSidebar": "사이드바 닫기"
+    "loading": "로딩 중...",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "search": "검색",
+    "filters": "필터",
+    "sortBy": "정렬",
+    "darkMode": "다크 모드",
+    "lightMode": "라이트 모드",
+    "dismiss": "닫기",
+    "back": "뒤로",
+    "next": "다음",
+    "close": "닫기",
+    "confirm": "확인",
+    "yes": "예",
+    "no": "아니오",
+    "or": "또는",
+    "noDataYet": "아직 데이터가 없어요",
+    "openSidebar": "사이드바 열기",
+    "closeSidebar": "사이드바 닫기"
   },
-  "theme": { "light": "라이트", "dark": "다크", "system": "시스템" },
-  "language": { "en": "English", "zh": "中文", "es": "Español", "ja": "日本語", "de": "Deutsch", "fr": "Français", "ko": "한국어", "pt": "Português", "ru": "Русский", "changeLanguage": "언어 변경", "selectLanguage": "언어 선택" },
-  "indexNotification": { "title": "데이터베이스 인덱스 필요", "needsIndex": "{{collection}} 인덱스 생성이 필요해요", "createNow": "지금 생성" },
+  "theme": {
+    "light": "라이트",
+    "dark": "다크",
+    "system": "시스템"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский",
+    "changeLanguage": "언어 변경",
+    "selectLanguage": "언어 선택"
+  },
+  "indexNotification": {
+    "title": "데이터베이스 인덱스 필요",
+    "needsIndex": "{{collection}} 인덱스 생성이 필요해요",
+    "createNow": "지금 생성"
+  },
   "landing": {
-    "badge": "끌어당김의 법칙 · 목표 실현 플랫폼", "headline1": "꿈을 이루세요,", "headline2": "현실로 만드세요",
+    "badge": "끌어당김의 법칙 · 목표 실현 플랫폼",
+    "headline1": "꿈을 이루세요,",
+    "headline2": "현실로 만드세요",
     "subheadline": "당신의 생각이 현실을 만들어요. 목표를 시각화하고, 강력한 일상 습관을 만들어 꿈이 하나씩 현실이 되는 것을 지켜보세요.",
-    "ctaStart": "무료로 여정 시작하기", "ctaAlreadyHave": "이미 계정이 있어요", "noCreditCard": "신용카드 불필요", "freePlan": "영구 무료 플랜", "setup": "2분 설정",
-    "startJourneyFree": "오늘 여정을 시작해요", "dashboardArrow": "대시보드 →", "getStartedFree": "무료로 시작하기",
-    "whyManifestHub": "왜 ManifestHub인가요?", "everythingYouNeed": "실현에 필요한 모든 것",
+    "ctaStart": "무료로 여정 시작하기",
+    "ctaAlreadyHave": "이미 계정이 있어요",
+    "noCreditCard": "신용카드 불필요",
+    "freePlan": "영구 무료 플랜",
+    "setup": "2분 설정",
+    "startJourneyFree": "오늘 여정을 시작해요",
+    "dashboardArrow": "대시보드 →",
+    "getStartedFree": "무료로 시작하기",
+    "whyManifestHub": "왜 ManifestHub인가요?",
+    "everythingYouNeed": "실현에 필요한 모든 것",
     "everythingSubtitle": "검증된 끌어당김의 법칙 원리에 기반하여 의도를 현실로 바꾸는 완전한 시스템.",
-    "theProcess": "프로세스", "threeSteps": "현실을 만드는 3단계", "testimonials": "후기", "manifestingWithUs": "우리와 함께 실현하는 사람들",
-    "bestLife": "당신의 최고의 삶은", "oneDecisionAway": "한 결정 거리에 있어요",
+    "theProcess": "프로세스",
+    "threeSteps": "현실을 만드는 3단계",
+    "testimonials": "후기",
+    "manifestingWithUs": "우리와 함께 실현하는 사람들",
+    "bestLife": "당신의 최고의 삶은",
+    "oneDecisionAway": "한 결정 거리에 있어요",
     "joinThousands": "이미 ManifestHub로 꿈을 실현하는 수천 명과 함께해요. 무료, 카드 불필요.",
     "allRightsReserved": "모든 권리 보유.",
     "features": {
-      "visualDreamBoard": "비주얼 드림 보드", "visualDreamBoardDesc": "이미지, 인용구, 목표로 멋진 비전보드를 만들어보세요. 비주얼 캔버스에서 꿈을 생생하게.",
-      "dailyHabits": "일일 감사와 습관", "dailyHabitsDesc": "체크인, 감사 일기, 연속 기록으로 강력한 일상을 만들어요.",
-      "trackProgress": "진행 상황 추적", "trackProgressDesc": "진행 표시줄, 이정표, 대화형 캘린더로 모든 목표를 모니터링해요."
+      "visualDreamBoard": "비주얼 드림 보드",
+      "visualDreamBoardDesc": "이미지, 인용구, 목표로 멋진 비전보드를 만들어보세요. 비주얼 캔버스에서 꿈을 생생하게.",
+      "dailyHabits": "일일 감사와 습관",
+      "dailyHabitsDesc": "체크인, 감사 일기, 연속 기록으로 강력한 일상을 만들어요.",
+      "trackProgress": "진행 상황 추적",
+      "trackProgressDesc": "진행 표시줄, 이정표, 대화형 캘린더로 모든 목표를 모니터링해요."
     },
     "steps": {
-      "01": { "title": "비전 만들기", "desc": "이미지, 설명, 감정 앵커로 꿈을 비전 카드로 추가해요." },
-      "02": { "title": "일일 의식 만들기", "desc": "매일 체크인하고, 감사를 쓰고, 개인화된 확언을 읊어요." },
-      "03": { "title": "실현하고 축하하기", "desc": "진행 상황을 추적하고, 목표를 완성하고, 모든 승리를 축하해요." }
+      "01": {
+        "title": "비전 만들기",
+        "desc": "이미지, 설명, 감정 앵커로 꿈을 비전 카드로 추가해요."
+      },
+      "02": {
+        "title": "일일 의식 만들기",
+        "desc": "매일 체크인하고, 감사를 쓰고, 개인화된 확언을 읊어요."
+      },
+      "03": {
+        "title": "실현하고 축하하기",
+        "desc": "진행 상황을 추적하고, 목표를 완성하고, 모든 승리를 축하해요."
+      }
     },
-    "mockProgress": "진행률", "mockAffirmation": "✓ 확언", "mockGratitude": "✓ 감사",
+    "mockProgress": "진행률",
+    "mockAffirmation": "✓ 확언",
+    "mockGratitude": "✓ 감사",
     "testimonialData": {
-      "sarah": { "quote": "ManifestHub은 제가 목표에 접근하는 방식을 바꿨어요. 모든 것이 시각화되고 정리되어 매일 집중력과 의욕을 유지할 수 있어요.", "name": "Sarah L.", "role": "기업가" },
-      "marcus": { "quote": "일일 체크인과 감사 일기는 정말 게임 체인저예요. 연속 60일에 올해 3가지 큰 목표를 실현했어요!", "name": "Marcus T.", "role": "라이프 코치" },
-      "aiko": { "quote": "아름답고, 미니멀하고, 강력해요. 비전보드가 삶에서 정말 중요한 것과 연결되게 해줘서 좋아요.", "name": "Aiko N.", "role": "디자이너" }
+      "sarah": {
+        "quote": "ManifestHub은 제가 목표에 접근하는 방식을 바꿨어요. 모든 것이 시각화되고 정리되어 매일 집중력과 의욕을 유지할 수 있어요.",
+        "name": "Sarah L.",
+        "role": "기업가"
+      },
+      "marcus": {
+        "quote": "일일 체크인과 감사 일기는 정말 게임 체인저예요. 연속 60일에 올해 3가지 큰 목표를 실현했어요!",
+        "name": "Marcus T.",
+        "role": "라이프 코치"
+      },
+      "aiko": {
+        "quote": "아름답고, 미니멀하고, 강력해요. 비전보드가 삶에서 정말 중요한 것과 연결되게 해줘서 좋아요.",
+        "name": "Aiko N.",
+        "role": "디자이너"
+      }
     }
   },
-  "notFound": { "title": "페이지를 찾을 수 없어요", "subtitle": "앗! 찾으시는 페이지가 없어요.", "backHome": "홈으로 돌아가기" },
-  "footer": { "privacyPolicy": "개인정보 처리방침", "termsOfService": "서비스 약관", "contact": "문의하기" },
-  "legal": {
-    "lastUpdated": "마지막 업데이트: 2026년 4월", "back": "뒤로",
-    "privacy": { "title": "개인정보 처리방침", "s1Title": "1. 수집하는 정보", "s1": "계정 생성 시 제공된 정보(이름, 이메일, 비전보드/목표/감사 일기에 추가한 콘텐츠)를 수집합니다. 제품 경험 개선을 위해 사용 데이터도 수집합니다.", "s2Title": "2. 정보 사용 방법", "s2Intro": "정보 사용 목적:", "s2Items": ["ManifestHub 제공, 유지 및 개선", "경험과 확언 개인화", "업데이트 전송 (선택 시)", "지원 요청 응답"], "s2Outro": "개인 데이터를 제3자에게 판매하지 않습니다.", "s3Title": "3. 데이터 저장", "s3": "Google Firebase(Firestore)를 사용하여 안전하게 데이터를 저장합니다. Firebase는 업계 표준 암호화를 사용합니다.", "s4Title": "4. 인증", "s4": "Firebase Authentication을 사용하여 로그인을 관리합니다. 원시 비밀번호를 저장하지 않습니다.", "s5Title": "5. 쿠키 및 로컬 스토리지", "s5": "브라우저 localStorage를 사용하여 테마 기본 설정, 언어 및 세션 상태를 기억합니다. 추적 쿠키나 제3자 광고 네트워크를 사용하지 않습니다.", "s6Title": "6. 귀하의 권리", "s6": "언제든지 계정 및 모든 관련 데이터의 삭제를 요청할 수 있습니다. 30일 이내에 요청을 처리합니다.", "s7Title": "7. 정책 변경", "s7": "본 정책은 수시로 업데이트될 수 있습니다. 중요한 변경 사항은 이메일 또는 앱 내 공지로 알려드립니다.", "s8Title": "8. 문의", "s8": "본 정책에 대한 질문은 여기로:" },
-    "terms": { "title": "서비스 약관", "s1Title": "1. 약관 동의", "s1": "ManifestHub에 접근하거나 사용함으로써 본 서비스 약관에 구속되는 것에 동의합니다.", "s2Title": "2. 서비스 설명", "s2": "ManifestHub는 개인 목표 시각화 및 실현 도구입니다. 본 서비스는 개인, 비상업적 용도로 '있는 그대로' 제공됩니다.", "s3Title": "3. 계정 책임", "s3Intro": "귀하는 다음에 대한 책임이 있습니다:", "s3Items": ["계정 자격 증명의 기밀 유지", "계정에서 발생하는 모든 활동", "계정 정보의 정확성과 최신성 유지"], "s4Title": "4. 허용되는 사용", "s4Intro": "ManifestHub를 다음 목적으로 사용하지 않기로 동의합니다:", "s4Items": ["불법적이거나 유해하거나 타인의 권리를 침해하는 콘텐츠 업로드", "서비스의 어떤 부분에 대한 무단 접근 시도", "자동화된 수단(봇, 스크레이퍼)으로 서비스와 상호작용", "서비스의 성능이나 무결성 간섭"], "s5Title": "5. 귀하의 콘텐츠", "s5a": "ManifestHub에서 생성한 모든 콘텐츠의 완전한 소유권을 보유합니다. 서비스를 사용함으로써 귀하에게 서비스를 제공하기 위한 목적으로만 해당 콘텐츠를 저장하고 표시할 수 있는 제한된 라이선스를 당사에 부여합니다.", "s5b": "귀하의 명시적 동의 없이 귀하의 개인 콘텐츠를 광고, AI 훈련 또는 제3자와의 공유에 사용하지 않습니다.", "s6Title": "6. 가용성", "s6": "높은 가용성을 유지하기 위해 노력하지만 중단 없는 접근을 보장하지는 않습니다.", "s7Title": "7. 책임 제한", "s7": "법률이 허용하는 최대 범위 내에서 ManifestHub는 서비스 사용으로 인해 발생하는 간접적, 부수적 또는 결과적 손해에 대해 책임을 지지 않습니다.", "s8Title": "8. 약관 변경", "s8": "변경 사항 게시 후 서비스의 지속적인 사용은 업데이트된 약관에 대한 동의로 간주됩니다.", "s9Title": "9. 문의", "s9": "본 약관에 대한 질문은 여기로:" }
+  "notFound": {
+    "title": "페이지를 찾을 수 없어요",
+    "subtitle": "앗! 찾으시는 페이지가 없어요.",
+    "backHome": "홈으로 돌아가기"
   },
-  "contact": { "title": "문의하기", "subtitle": "보통 1~2 영업일 이내에 답변드립니다", "getInTouch": "연락 방법", "emailLabel": "이메일", "responseTime": "응답 시간", "responseTimeValue": "1~2 영업일", "privacyAndLegal": "개인정보 및 법적 사항", "privacyLink": "개인정보 처리방침 →", "termsLink": "서비스 약관 →", "name": "이름", "namePlaceholder": "이름을 입력하세요", "email": "이메일", "emailPlaceholder": "your@email.com", "subject": "제목", "subjectPlaceholder": "주제를 선택하세요…", "message": "메시지", "messagePlaceholder": "어떻게 도와드릴까요?", "send": "메시지 보내기", "sending": "보내는 중…", "successTitle": "메시지를 보냈어요!", "successDesc": "문의해주셔서 감사합니다. 곧 답변드리겠습니다.", "sendAnother": "다른 메시지 보내기", "subjects": ["일반 질문", "버그 리포트", "기능 요청", "계정 및 결제", "개인정보 문의", "기타"] }
+  "footer": {
+    "privacyPolicy": "개인정보 처리방침",
+    "termsOfService": "서비스 약관",
+    "contact": "문의하기"
+  },
+  "legal": {
+    "lastUpdated": "마지막 업데이트: 2026년 4월",
+    "back": "뒤로",
+    "privacy": {
+      "title": "개인정보 처리방침",
+      "s1Title": "1. 수집하는 정보",
+      "s1": "계정 생성 시 제공된 정보(이름, 이메일, 비전보드/목표/감사 일기에 추가한 콘텐츠)를 수집합니다. 제품 경험 개선을 위해 사용 데이터도 수집합니다.",
+      "s2Title": "2. 정보 사용 방법",
+      "s2Intro": "정보 사용 목적:",
+      "s2Items": [
+        "ManifestHub 제공, 유지 및 개선",
+        "경험과 확언 개인화",
+        "업데이트 전송 (선택 시)",
+        "지원 요청 응답"
+      ],
+      "s2Outro": "개인 데이터를 제3자에게 판매하지 않습니다.",
+      "s3Title": "3. 데이터 저장",
+      "s3": "Google Firebase(Firestore)를 사용하여 안전하게 데이터를 저장합니다. Firebase는 업계 표준 암호화를 사용합니다.",
+      "s4Title": "4. 인증",
+      "s4": "Firebase Authentication을 사용하여 로그인을 관리합니다. 원시 비밀번호를 저장하지 않습니다.",
+      "s5Title": "5. 쿠키 및 로컬 스토리지",
+      "s5": "브라우저 localStorage를 사용하여 테마 기본 설정, 언어 및 세션 상태를 기억합니다. 추적 쿠키나 제3자 광고 네트워크를 사용하지 않습니다.",
+      "s6Title": "6. 귀하의 권리",
+      "s6": "언제든지 계정 및 모든 관련 데이터의 삭제를 요청할 수 있습니다. 30일 이내에 요청을 처리합니다.",
+      "s7Title": "7. 정책 변경",
+      "s7": "본 정책은 수시로 업데이트될 수 있습니다. 중요한 변경 사항은 이메일 또는 앱 내 공지로 알려드립니다.",
+      "s8Title": "8. 문의",
+      "s8": "본 정책에 대한 질문은 여기로:"
+    },
+    "terms": {
+      "title": "서비스 약관",
+      "s1Title": "1. 약관 동의",
+      "s1": "ManifestHub에 접근하거나 사용함으로써 본 서비스 약관에 구속되는 것에 동의합니다.",
+      "s2Title": "2. 서비스 설명",
+      "s2": "ManifestHub는 개인 목표 시각화 및 실현 도구입니다. 본 서비스는 개인, 비상업적 용도로 '있는 그대로' 제공됩니다.",
+      "s3Title": "3. 계정 책임",
+      "s3Intro": "귀하는 다음에 대한 책임이 있습니다:",
+      "s3Items": [
+        "계정 자격 증명의 기밀 유지",
+        "계정에서 발생하는 모든 활동",
+        "계정 정보의 정확성과 최신성 유지"
+      ],
+      "s4Title": "4. 허용되는 사용",
+      "s4Intro": "ManifestHub를 다음 목적으로 사용하지 않기로 동의합니다:",
+      "s4Items": [
+        "불법적이거나 유해하거나 타인의 권리를 침해하는 콘텐츠 업로드",
+        "서비스의 어떤 부분에 대한 무단 접근 시도",
+        "자동화된 수단(봇, 스크레이퍼)으로 서비스와 상호작용",
+        "서비스의 성능이나 무결성 간섭"
+      ],
+      "s5Title": "5. 귀하의 콘텐츠",
+      "s5a": "ManifestHub에서 생성한 모든 콘텐츠의 완전한 소유권을 보유합니다. 서비스를 사용함으로써 귀하에게 서비스를 제공하기 위한 목적으로만 해당 콘텐츠를 저장하고 표시할 수 있는 제한된 라이선스를 당사에 부여합니다.",
+      "s5b": "귀하의 명시적 동의 없이 귀하의 개인 콘텐츠를 광고, AI 훈련 또는 제3자와의 공유에 사용하지 않습니다.",
+      "s6Title": "6. 가용성",
+      "s6": "높은 가용성을 유지하기 위해 노력하지만 중단 없는 접근을 보장하지는 않습니다.",
+      "s7Title": "7. 책임 제한",
+      "s7": "법률이 허용하는 최대 범위 내에서 ManifestHub는 서비스 사용으로 인해 발생하는 간접적, 부수적 또는 결과적 손해에 대해 책임을 지지 않습니다.",
+      "s8Title": "8. 약관 변경",
+      "s8": "변경 사항 게시 후 서비스의 지속적인 사용은 업데이트된 약관에 대한 동의로 간주됩니다.",
+      "s9Title": "9. 문의",
+      "s9": "본 약관에 대한 질문은 여기로:"
+    }
+  },
+  "contact": {
+    "title": "문의하기",
+    "subtitle": "보통 1~2 영업일 이내에 답변드립니다",
+    "getInTouch": "연락 방법",
+    "emailLabel": "이메일",
+    "responseTime": "응답 시간",
+    "responseTimeValue": "1~2 영업일",
+    "privacyAndLegal": "개인정보 및 법적 사항",
+    "privacyLink": "개인정보 처리방침 →",
+    "termsLink": "서비스 약관 →",
+    "name": "이름",
+    "namePlaceholder": "이름을 입력하세요",
+    "email": "이메일",
+    "emailPlaceholder": "your@email.com",
+    "subject": "제목",
+    "subjectPlaceholder": "주제를 선택하세요…",
+    "message": "메시지",
+    "messagePlaceholder": "어떻게 도와드릴까요?",
+    "send": "메시지 보내기",
+    "sending": "보내는 중…",
+    "successTitle": "메시지를 보냈어요!",
+    "successDesc": "문의해주셔서 감사합니다. 곧 답변드리겠습니다.",
+    "sendAnother": "다른 메시지 보내기",
+    "subjects": [
+      "일반 질문",
+      "버그 리포트",
+      "기능 요청",
+      "계정 및 결제",
+      "개인정보 문의",
+      "기타"
+    ]
+  }
 }

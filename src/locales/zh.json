@@ -32,13 +32,13 @@
     "namePlaceholder": "张三",
     "emailPlaceholder": "your@email.com",
     "passwordPlaceholder": "请输入密码",
-    "passwordMinHint": "至少 6 位字符",
+    "passwordMinHint": "至少 8 个字符",
     "repeatPassword": "再次输入密码",
     "createFreeAccount": "免费创建账号",
     "bySigningUp": "注册即表示您同意我们的服务条款和隐私政策。",
     "fillAllFields": "请填写所有字段",
     "passwordMismatch": "两次密码不一致",
-    "passwordTooShort": "密码至少需要 6 位字符",
+    "passwordTooShort": "密码至少需要 8 个字符",
     "sendResetLink": "发送重置链接",
     "backToSignIn": "← 返回登录",
     "resetPasswordSubtitle": "输入邮箱，我们将发送重置链接",
@@ -121,7 +121,6 @@
     "intentionSaved": "今日意图已设定！🎯",
     "failedSaveIntention": "意图保存失败",
     "overallProgress": "总体进度",
-    "visionsManiifested": "{{total}}个愿景中已实现{{count}}个",
     "visionBoardEmpty": "您的愿景板是空的",
     "gratefulFor": "{{date}}感恩内容",
     "goodMorning": "早上好",
@@ -177,7 +176,8 @@
       "lens": "镜头层级",
       "reflect": "周度复盘",
       "foundation": "身份地基"
-    }
+    },
+    "visionsManifested": "{{total}}个愿景中已实现{{count}}个"
   },
   "goals": {
     "myGoals": "我的目标",
@@ -444,7 +444,13 @@
       "dailyHabits": "每日感恩与习惯",
       "dailyHabitsDesc": "通过每日签到、感恩日记和连续打卡，建立强大的日常实践。",
       "trackProgress": "追踪您的进度",
-      "trackProgressDesc": "用进度条、里程碑和互动日历监控每个目标，保持在轨道上。"
+      "trackProgressDesc": "用进度条、里程碑和互动日历监控每个目标，保持在轨道上。",
+      "identityFoundation": "身份基础",
+      "identityFoundationDesc": "挖掘你的反愿景,定义你正在成为的人",
+      "resetProtocol": "1 天重置协议",
+      "resetProtocolDesc": "22 道引导问题,一天内重建你的身份",
+      "weeklyReflection": "每周反思",
+      "weeklyReflectionDesc": "5 道周度问题,闭环你的自我反馈"
     },
     "steps": {
       "01": {
@@ -467,19 +473,47 @@
       "sarah": {
         "quote": "ManifestHub彻底改变了我对目标的态度。一切都可视化且有条理，让我每天都保持专注和积极。",
         "name": "Sarah L.",
-        "role": "创业者"
+        "role": "创业者",
+        "duration": "6 months in"
       },
       "marcus": {
         "quote": "每日签到和感恩日记真是改变游戏规则。我的连续打卡已达60天，今年实现了3个重大目标！",
         "name": "Marcus T.",
-        "role": "生活教练"
+        "role": "生活教练",
+        "duration": "3 months in"
       },
       "aiko": {
         "quote": "美观、简洁又强大。我爱这个愿景板让我与生命中真正重要的事物保持连接。",
         "name": "Aiko N.",
-        "role": "设计师"
+        "role": "设计师",
+        "duration": "1 year in"
       }
-    }
+    },
+    "pricingTag": "定价",
+    "pricingTitle": "简单如一条新年决心。",
+    "pricingSubtitle": "一个方案,一年承诺。要么投入,要么不。",
+    "priceFree": "探索者",
+    "priceFreeNote": "永久免费",
+    "priceFreeF1": "身份基础(最新版本)",
+    "priceFreeF2": "每日签到、情绪与感恩",
+    "priceFreeF3": "30 分钟迷你重置(每季度)",
+    "priceFreeF4": "有限的愿景层级卡 · 4 周历史",
+    "priceBest": "认真投入之选",
+    "priceAnnual": "ManifestHub 年度版",
+    "priceYear": "年",
+    "priceAnnualNote": "≈ $8.33 / 月,按年付费",
+    "priceAnnualF1": "完整 1 天重置协议",
+    "priceAnnualF2": "年/月/周/日层级卡片无限量",
+    "priceAnnualF3": "无限历史与跨年对比",
+    "priceAnnualF4": "身份基石进化时间线",
+    "priceAnnualF5": "模式中断(每日 6 个时段)",
+    "priceAnnualCta": "获取 ManifestHub 年度版",
+    "navAriaLabel": "Primary navigation",
+    "launchPrice": "launch price",
+    "guarantee": "14-day money-back guarantee · Cancel anytime",
+    "footerPrivacy": "Privacy",
+    "footerTerms": "Terms",
+    "footerContact": "Contact"
   },
   "notFound": {
     "title": "页面未找到",

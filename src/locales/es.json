@@ -32,13 +32,13 @@
     "namePlaceholder": "Juan García",
     "emailPlaceholder": "tu@email.com",
     "passwordPlaceholder": "Ingresa tu contraseña",
-    "passwordMinHint": "Mínimo 6 caracteres",
+    "passwordMinHint": "Mínimo 8 caracteres",
     "repeatPassword": "Repite tu contraseña",
     "createFreeAccount": "Crear Cuenta Gratuita",
     "bySigningUp": "Al registrarte, aceptas nuestros Términos de Servicio y Política de Privacidad.",
     "fillAllFields": "Por favor completa todos los campos",
     "passwordMismatch": "Las contraseñas no coinciden",
-    "passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
     "sendResetLink": "Enviar Enlace de Restablecimiento",
     "backToSignIn": "← Volver a iniciar sesión",
     "resetPasswordSubtitle": "Ingresa tu correo y te enviaremos un enlace",
@@ -89,10 +89,22 @@
     "quotaExceeded": "El plan gratuito alcanzó su límite en este lente. Actualiza para añadir más.",
     "identityLinkLabel": "¿Cómo sirve esto a tu identidad?",
     "identityLinkPlaceholder": "Conecta esta tarjeta con quien te estás convirtiendo…",
-    "year":  { "label": "Año",  "help": "La única verdad anual: lo que hace que los últimos 12 meses se sientan reales." },
-    "month": { "label": "Mes", "help": "La batalla jefe: el proyecto o habilidad que mueve el lente anual hacia adelante." },
-    "week":  { "label": "Semana",  "help": "La misión: un resultado enfocado a alcanzar antes del próximo domingo." },
-    "day":   { "label": "Día",   "help": "La palanca: la acción transformadora que haces hoy, en piloto automático." }
+    "year": {
+      "label": "Año",
+      "help": "La única verdad anual: lo que hace que los últimos 12 meses se sientan reales."
+    },
+    "month": {
+      "label": "Mes",
+      "help": "La batalla jefe: el proyecto o habilidad que mueve el lente anual hacia adelante."
+    },
+    "week": {
+      "label": "Semana",
+      "help": "La misión: un resultado enfocado a alcanzar antes del próximo domingo."
+    },
+    "day": {
+      "label": "Día",
+      "help": "La palanca: la acción transformadora que haces hoy, en piloto automático."
+    }
   },
   "foundation": {
     "title": "Fundamento",
@@ -117,12 +129,36 @@
       "fiveMin": "5 minutos en total",
       "lockIn": "Fijarlo"
     },
-    "antiVision":        { "label": "Anti-Visión",         "help": "Si absolutamente nada cambia en los próximos 5 años — describe un martes promedio en esa vida. Con detalles brutales.",                "placeholder": "Me niego a que mi vida se convierta en…" },
-    "vision":            { "label": "Visión",              "help": "Olvida lo práctico. Si pudieras chasquear los dedos y vivir diferente en 3 años — ¿cómo es un martes promedio?",                "placeholder": "Hacia lo que estoy construyendo…" },
-    "identityStatement": { "label": "Declaración de Identidad",  "help": "¿Qué tendrías que creer sobre ti mismo para que esa vida se sienta natural en lugar de forzada?",                                       "placeholder": "Soy el tipo de persona que…" },
-    "oneYearLens":       { "label": "Lente Anual",       "help": "¿Qué única cosa tendría que ser verdad en 12 meses para que sepas que el viejo patrón se rompió?",                                            "placeholder": "Para [fecha], una cosa concreta es verdad:…" },
-    "oneMonthProject":   { "label": "Proyecto Mensual",   "help": "¿Cuál es la batalla jefe este mes — la habilidad / artefacto / sistema que tiene que existir para que el lente anual siga siendo posible?",            "placeholder": "Este mes estoy construyendo / aprendiendo / entregando…" },
-    "constraints":       { "label": "Restricciones",         "help": "¿Qué NO estás dispuesto a sacrificar para perseguir tu visión? 3–5 líneas. Estas son las reglas de tu juego.",                              "placeholder": "No sacrificaré…" }
+    "antiVision": {
+      "label": "Anti-Visión",
+      "help": "Si absolutamente nada cambia en los próximos 5 años — describe un martes promedio en esa vida. Con detalles brutales.",
+      "placeholder": "Me niego a que mi vida se convierta en…"
+    },
+    "vision": {
+      "label": "Visión",
+      "help": "Olvida lo práctico. Si pudieras chasquear los dedos y vivir diferente en 3 años — ¿cómo es un martes promedio?",
+      "placeholder": "Hacia lo que estoy construyendo…"
+    },
+    "identityStatement": {
+      "label": "Declaración de Identidad",
+      "help": "¿Qué tendrías que creer sobre ti mismo para que esa vida se sienta natural en lugar de forzada?",
+      "placeholder": "Soy el tipo de persona que…"
+    },
+    "oneYearLens": {
+      "label": "Lente Anual",
+      "help": "¿Qué única cosa tendría que ser verdad en 12 meses para que sepas que el viejo patrón se rompió?",
+      "placeholder": "Para [fecha], una cosa concreta es verdad:…"
+    },
+    "oneMonthProject": {
+      "label": "Proyecto Mensual",
+      "help": "¿Cuál es la batalla jefe este mes — la habilidad / artefacto / sistema que tiene que existir para que el lente anual siga siendo posible?",
+      "placeholder": "Este mes estoy construyendo / aprendiendo / entregando…"
+    },
+    "constraints": {
+      "label": "Restricciones",
+      "help": "¿Qué NO estás dispuesto a sacrificar para perseguir tu visión? 3–5 líneas. Estas son las reglas de tu juego.",
+      "placeholder": "No sacrificaré…"
+    }
   },
   "reset": {
     "indexTag": "Protocolo de Reinicio",
@@ -149,7 +185,10 @@
     "completed": "Completado {{date}}",
     "draft": "Borrador · {{date}}",
     "continue": "Continuar",
-    "stage": { "morning": "Mañana", "evening": "Noche" },
+    "stage": {
+      "morning": "Mañana",
+      "evening": "Noche"
+    },
     "saving": "Guardando…",
     "autosaved": "Auto-guardado",
     "completing": "Completando…",
@@ -164,28 +203,94 @@
       "dashboard": "Volver al Panel"
     },
     "q": {
-      "q1_dullDissatisfaction": { "prompt": "¿Cuál es la insatisfacción sorda y persistente con la que has aprendido a vivir?",                              "help": "No es sufrimiento profundo — es lo que has tolerado en silencio. Si no lo odias, seguirás tolerándolo." },
-      "q2_repeatedComplaints":   { "prompt": "¿De qué te quejas repetidamente pero nunca cambias?",                                       "help": "Escribe las tres quejas que más has expresado este último año." },
-      "q3_behaviorVsWords":      { "prompt": "Para cada queja — ¿qué concluiría alguien que observa tu comportamiento que realmente quieres?",             "help": "El comportamiento revela metas más honestamente que las palabras." },
-      "q4_unbearableTruth":      { "prompt": "¿Qué verdad sobre tu vida actual sería insoportable admitir ante alguien que respetas profundamente?",          "help": "Escríbela de todos modos. Nombrarla es aflojarla." },
-      "q5_fiveYearTuesday":      { "prompt": "Si absolutamente nada cambia durante 5 años — describe un martes promedio.",                                "help": "¿Dónde te despiertas? ¿Cómo se siente tu cuerpo? ¿Qué haces entre las 9 y las 18? ¿Cómo te sientes a las 22h?" },
-      "q6_tenYearMissed":        { "prompt": "Ahora hazlo para 10 años — ¿qué has perdido? ¿Qué oportunidades se cerraron? ¿Quién se rindió contigo?",      "help": "¿Qué dice la gente de ti cuando no estás presente?" },
-      "q7_endOfLife":            { "prompt": "Perspectiva de final de vida — viviste la versión segura. ¿Cuál fue el costo?",                                "help": "¿Qué nunca te permitiste sentir, intentar o llegar a ser?" },
-      "q8_alreadyLivingFuture":  { "prompt": "¿Quién en tu vida ya está viviendo el futuro que acabas de describir?",                                       "help": "Alguien 5, 10, 20 años por delante en la misma trayectoria. ¿Qué sientes cuando te imaginas convirtiéndote en ellos?" },
-      "q9_identityToGiveUp":     { "prompt": "¿Qué identidad tendrías que abandonar para cambiar realmente?",                                            "help": "Completa: 'Soy el tipo de persona que…' — y nota lo que te costaría socialmente dejar de ser eso." },
-      "q10_embarrassingReason":  { "prompt": "¿Cuál es la razón más embarazosa por la que no has cambiado?",                                                "help": "La que te hace sonar débil, asustado o perezoso — no razonable." },
-      "q11_protectionCost":      { "prompt": "Si tu comportamiento actual es autoprotección — ¿qué exactamente estás protegiendo? ¿Qué te está costando?","help": "Ambas preguntas necesitan una respuesta honesta." },
-      "q12_idealTuesday":        { "prompt": "Chasquea los dedos — vives tu vida ideal en 3 años. Describe un martes promedio.",                   "help": "Mismo nivel de detalle que Q5. Olvida lo práctico." },
-      "q13_identityToHave":      { "prompt": "¿Qué tendrías que creer sobre ti mismo para que esa vida se sienta natural en lugar de forzada?",        "help": "Escribe la declaración de identidad: 'Soy el tipo de persona que…'" },
-      "q14_oneActionThisWeek":   { "prompt": "Nombra una cosa que harías esta semana si ya fueras esa persona.",                                  "help": "Sé específico. Prográmalo." },
-      "e1_whyStuck":             { "prompt": "Después de hoy — ¿qué se siente más verdadero sobre por qué has estado estancado?",                                         "help": "Sintetiza lo que surgió esta mañana." },
-      "e2_actualEnemy":          { "prompt": "Nombra al enemigo real. No circunstancias, no personas — el patrón interno o creencia que ha estado dirigiendo el espectáculo.", "help": "Sé despiadadamente específico." },
-      "e3_antiVisionSentence":   { "prompt": "Escribe una sola frase: en qué te niegas a que se convierta tu vida.",                                       "help": "Esta es tu anti-visión comprimida. Debería hacerte sentir algo al leerla." },
-      "e4_visionSentence":       { "prompt": "Escribe una sola frase: hacia lo que estás construyendo — sabiendo que evolucionará.",                          "help": "Este es tu MVP de visión. La brevedad está bien; la profundidad viene de los meses de acción que siguen." },
-      "e5_oneYearLens":          { "prompt": "Lente anual: ¿qué única cosa tiene que ser verdad en 12 meses para que el viejo patrón esté roto?",         "help": "Concreto, observable, binario. No 'sentirse mejor' — 'lancé X' / 'perdí Y' / 'entregué Z'." },
-      "e6_oneMonthLens":         { "prompt": "Proyecto mensual: ¿cómo es la batalla jefe de este mes?",                                         "help": "¿Qué necesitas aprender / construir / adquirir para que el lente anual siga siendo posible?" },
-      "e7_dailyLevers":          { "prompt": "Dos o tres palancas diarias: acciones que el futuro-tú simplemente haría, sin negociación.",                      "help": "Bloquéalas en tu calendario mañana." },
-      "e8_constraints":          { "prompt": "Restricciones: ¿qué NO estás dispuesto a sacrificar para llegar allí?",                                        "help": "Estas son las reglas de tu juego. Sin reglas, no hay juego." }
+      "q1_dullDissatisfaction": {
+        "prompt": "¿Cuál es la insatisfacción sorda y persistente con la que has aprendido a vivir?",
+        "help": "No es sufrimiento profundo — es lo que has tolerado en silencio. Si no lo odias, seguirás tolerándolo."
+      },
+      "q2_repeatedComplaints": {
+        "prompt": "¿De qué te quejas repetidamente pero nunca cambias?",
+        "help": "Escribe las tres quejas que más has expresado este último año."
+      },
+      "q3_behaviorVsWords": {
+        "prompt": "Para cada queja — ¿qué concluiría alguien que observa tu comportamiento que realmente quieres?",
+        "help": "El comportamiento revela metas más honestamente que las palabras."
+      },
+      "q4_unbearableTruth": {
+        "prompt": "¿Qué verdad sobre tu vida actual sería insoportable admitir ante alguien que respetas profundamente?",
+        "help": "Escríbela de todos modos. Nombrarla es aflojarla."
+      },
+      "q5_fiveYearTuesday": {
+        "prompt": "Si absolutamente nada cambia durante 5 años — describe un martes promedio.",
+        "help": "¿Dónde te despiertas? ¿Cómo se siente tu cuerpo? ¿Qué haces entre las 9 y las 18? ¿Cómo te sientes a las 22h?"
+      },
+      "q6_tenYearMissed": {
+        "prompt": "Ahora hazlo para 10 años — ¿qué has perdido? ¿Qué oportunidades se cerraron? ¿Quién se rindió contigo?",
+        "help": "¿Qué dice la gente de ti cuando no estás presente?"
+      },
+      "q7_endOfLife": {
+        "prompt": "Perspectiva de final de vida — viviste la versión segura. ¿Cuál fue el costo?",
+        "help": "¿Qué nunca te permitiste sentir, intentar o llegar a ser?"
+      },
+      "q8_alreadyLivingFuture": {
+        "prompt": "¿Quién en tu vida ya está viviendo el futuro que acabas de describir?",
+        "help": "Alguien 5, 10, 20 años por delante en la misma trayectoria. ¿Qué sientes cuando te imaginas convirtiéndote en ellos?"
+      },
+      "q9_identityToGiveUp": {
+        "prompt": "¿Qué identidad tendrías que abandonar para cambiar realmente?",
+        "help": "Completa: 'Soy el tipo de persona que…' — y nota lo que te costaría socialmente dejar de ser eso."
+      },
+      "q10_embarrassingReason": {
+        "prompt": "¿Cuál es la razón más embarazosa por la que no has cambiado?",
+        "help": "La que te hace sonar débil, asustado o perezoso — no razonable."
+      },
+      "q11_protectionCost": {
+        "prompt": "Si tu comportamiento actual es autoprotección — ¿qué exactamente estás protegiendo? ¿Qué te está costando?",
+        "help": "Ambas preguntas necesitan una respuesta honesta."
+      },
+      "q12_idealTuesday": {
+        "prompt": "Chasquea los dedos — vives tu vida ideal en 3 años. Describe un martes promedio.",
+        "help": "Mismo nivel de detalle que Q5. Olvida lo práctico."
+      },
+      "q13_identityToHave": {
+        "prompt": "¿Qué tendrías que creer sobre ti mismo para que esa vida se sienta natural en lugar de forzada?",
+        "help": "Escribe la declaración de identidad: 'Soy el tipo de persona que…'"
+      },
+      "q14_oneActionThisWeek": {
+        "prompt": "Nombra una cosa que harías esta semana si ya fueras esa persona.",
+        "help": "Sé específico. Prográmalo."
+      },
+      "e1_whyStuck": {
+        "prompt": "Después de hoy — ¿qué se siente más verdadero sobre por qué has estado estancado?",
+        "help": "Sintetiza lo que surgió esta mañana."
+      },
+      "e2_actualEnemy": {
+        "prompt": "Nombra al enemigo real. No circunstancias, no personas — el patrón interno o creencia que ha estado dirigiendo el espectáculo.",
+        "help": "Sé despiadadamente específico."
+      },
+      "e3_antiVisionSentence": {
+        "prompt": "Escribe una sola frase: en qué te niegas a que se convierta tu vida.",
+        "help": "Esta es tu anti-visión comprimida. Debería hacerte sentir algo al leerla."
+      },
+      "e4_visionSentence": {
+        "prompt": "Escribe una sola frase: hacia lo que estás construyendo — sabiendo que evolucionará.",
+        "help": "Este es tu MVP de visión. La brevedad está bien; la profundidad viene de los meses de acción que siguen."
+      },
+      "e5_oneYearLens": {
+        "prompt": "Lente anual: ¿qué única cosa tiene que ser verdad en 12 meses para que el viejo patrón esté roto?",
+        "help": "Concreto, observable, binario. No 'sentirse mejor' — 'lancé X' / 'perdí Y' / 'entregué Z'."
+      },
+      "e6_oneMonthLens": {
+        "prompt": "Proyecto mensual: ¿cómo es la batalla jefe de este mes?",
+        "help": "¿Qué necesitas aprender / construir / adquirir para que el lente anual siga siendo posible?"
+      },
+      "e7_dailyLevers": {
+        "prompt": "Dos o tres palancas diarias: acciones que el futuro-tú simplemente haría, sin negociación.",
+        "help": "Bloquéalas en tu calendario mañana."
+      },
+      "e8_constraints": {
+        "prompt": "Restricciones: ¿qué NO estás dispuesto a sacrificar para llegar allí?",
+        "help": "Estas son las reglas de tu juego. Sin reglas, no hay juego."
+      }
     }
   },
   "interrupts": {
@@ -206,17 +311,47 @@
     "update": "Actualizar respuesta",
     "placeholder": "Primer pensamiento — no filtres. 60 segundos es suficiente.",
     "softTimer": "Temporizador suave de 60 segundos. Tómate más tiempo si lo necesitas.",
-    "banner": { "title": "{{count}} interrupción(es) esperando", "answer": "Responder" },
+    "banner": {
+      "title": "{{count}} interrupción(es) esperando",
+      "answer": "Responder"
+    },
     "q": {
-      "i1_avoiding":               { "short": "¿Qué estoy evitando ahora?",     "prompt": "¿Qué estoy evitando ahora mismo al hacer lo que estoy haciendo?" },
-      "i2_filmedBehavior":         { "short": "¿Qué diría el comportamiento filmado?",    "prompt": "Si alguien filmara las últimas dos horas, ¿qué concluiría que quiero de la vida?" },
-      "i3_lifeIHate":              { "short": "¿Hacia la vida que quiero o la que odio?",        "prompt": "¿Me estoy moviendo hacia la vida que odio o la vida que quiero?" },
-      "i4_pretendingNotImportant": { "short": "¿Fingiendo que no es importante?",   "prompt": "¿Qué es lo más importante que estoy fingiendo que no es importante?" },
-      "i5_identityProtection":     { "short": "¿Protección de identidad vs deseo?",     "prompt": "¿Qué hice hoy por protección de identidad en lugar de deseo genuino?" },
-      "i6_aliveVsDead":            { "short": "¿Más vivo vs más muerto?",                "prompt": "¿Cuándo me sentí más vivo hoy? ¿Cuándo me sentí más muerto?" },
-      "i7_stoppedNeeding":         { "short": "¿Si dejara de necesitar aprobación?",     "prompt": "¿Qué cambiaría si dejara de necesitar que la gente me vea de cierta manera?" },
-      "i8_aliveVsSafety":          { "short": "¿Vitalidad vs seguridad?",               "prompt": "¿En qué área de mi vida estoy cambiando vitalidad por seguridad?" },
-      "i9_smallestVersion":        { "short": "¿La versión más pequeña mañana?",         "prompt": "¿Cuál es la versión más pequeña de la persona que quiero ser que podría ser mañana?" }
+      "i1_avoiding": {
+        "short": "¿Qué estoy evitando ahora?",
+        "prompt": "¿Qué estoy evitando ahora mismo al hacer lo que estoy haciendo?"
+      },
+      "i2_filmedBehavior": {
+        "short": "¿Qué diría el comportamiento filmado?",
+        "prompt": "Si alguien filmara las últimas dos horas, ¿qué concluiría que quiero de la vida?"
+      },
+      "i3_lifeIHate": {
+        "short": "¿Hacia la vida que quiero o la que odio?",
+        "prompt": "¿Me estoy moviendo hacia la vida que odio o la vida que quiero?"
+      },
+      "i4_pretendingNotImportant": {
+        "short": "¿Fingiendo que no es importante?",
+        "prompt": "¿Qué es lo más importante que estoy fingiendo que no es importante?"
+      },
+      "i5_identityProtection": {
+        "short": "¿Protección de identidad vs deseo?",
+        "prompt": "¿Qué hice hoy por protección de identidad en lugar de deseo genuino?"
+      },
+      "i6_aliveVsDead": {
+        "short": "¿Más vivo vs más muerto?",
+        "prompt": "¿Cuándo me sentí más vivo hoy? ¿Cuándo me sentí más muerto?"
+      },
+      "i7_stoppedNeeding": {
+        "short": "¿Si dejara de necesitar aprobación?",
+        "prompt": "¿Qué cambiaría si dejara de necesitar que la gente me vea de cierta manera?"
+      },
+      "i8_aliveVsSafety": {
+        "short": "¿Vitalidad vs seguridad?",
+        "prompt": "¿En qué área de mi vida estoy cambiando vitalidad por seguridad?"
+      },
+      "i9_smallestVersion": {
+        "short": "¿La versión más pequeña mañana?",
+        "prompt": "¿Cuál es la versión más pequeña de la persona que quiero ser que podría ser mañana?"
+      }
     }
   },
   "reflection": {
@@ -232,13 +367,33 @@
     "historyEmpty": "Aún no hay reflexiones — la primera aparecerá aquí.",
     "hiddenCount": "{{count}} semanas más en tu archivo",
     "unlockHint": "Anual desbloquea historial ilimitado + tendencias mensuales/trimestrales.",
-    "statusOpts": { "ahead": "Adelantado", "on": "En camino", "behind": "Atrasado", "adjust": "Necesita ajuste" },
+    "statusOpts": {
+      "ahead": "Adelantado",
+      "on": "En camino",
+      "behind": "Atrasado",
+      "adjust": "Necesita ajuste"
+    },
     "q": {
-      "w1_identityProgress": { "prompt": "¿Cuánto te movió esta semana hacia tu Declaración de Identidad?",      "help": "1 = sin movimiento · 5 = claramente más cerca." },
-      "w2_antiVisionSlips":  { "prompt": "¿Qué comportamientos de anti-visión reaparecieron esta semana?",                       "help": "Nómbralos para que dejen de esconderse." },
-      "w3_futureMomentum":   { "prompt": "¿Qué hiciste que más se parecía al futuro-tú?",                  "help": "De esto quieres más la próxima semana." },
-      "w4_projectStatus":    { "prompt": "¿Cómo va el Proyecto Mensual?",                                 "help": "Elige la etiqueta más honesta, aunque sea incómoda." },
-      "w5_dailyLevers":      { "prompt": "Dos palancas diarias a las que te comprometes la próxima semana.",                            "help": "Específicas. Calendarizables. No negociables." }
+      "w1_identityProgress": {
+        "prompt": "¿Cuánto te movió esta semana hacia tu Declaración de Identidad?",
+        "help": "1 = sin movimiento · 5 = claramente más cerca."
+      },
+      "w2_antiVisionSlips": {
+        "prompt": "¿Qué comportamientos de anti-visión reaparecieron esta semana?",
+        "help": "Nómbralos para que dejen de esconderse."
+      },
+      "w3_futureMomentum": {
+        "prompt": "¿Qué hiciste que más se parecía al futuro-tú?",
+        "help": "De esto quieres más la próxima semana."
+      },
+      "w4_projectStatus": {
+        "prompt": "¿Cómo va el Proyecto Mensual?",
+        "help": "Elige la etiqueta más honesta, aunque sea incómoda."
+      },
+      "w5_dailyLevers": {
+        "prompt": "Dos palancas diarias a las que te comprometes la próxima semana.",
+        "help": "Específicas. Calendarizables. No negociables."
+      }
     }
   },
   "dashboard": {
@@ -315,13 +470,33 @@
     "goodMorning": "Buenos días",
     "goodAfternoon": "Buenas tardes",
     "goodEvening": "Buenas noches",
-    "moods": { "great": "Genial", "good": "Bien", "okay": "Regular", "low": "Bajo" },
+    "moods": {
+      "great": "Genial",
+      "good": "Bien",
+      "okay": "Regular",
+      "low": "Bajo"
+    },
     "affirmations": {
-      "0": { "text": "Merezco mis sueños y metas.", "visualization": "Imagínate logrando tu mayor sueño. ¿Cómo se siente?" },
-      "1": { "text": "Cada día me acerco más a mis objetivos.", "visualization": "Vete tomando acciones pequeñas y significativas hoy." },
-      "2": { "text": "Tengo el poder de crear cambios en mi vida.", "visualization": "Visualiza los cambios positivos que quieres crear." },
-      "3": { "text": "Atraigo éxito y abundancia a mi vida.", "visualization": "Imagina la abundancia fluyendo sin esfuerzo a tu vida." },
-      "4": { "text": "Mi potencial es ilimitado y puedo lograr cualquier cosa.", "visualization": "Vete superando fácilmente cualquier obstáculo." }
+      "0": {
+        "text": "Merezco mis sueños y metas.",
+        "visualization": "Imagínate logrando tu mayor sueño. ¿Cómo se siente?"
+      },
+      "1": {
+        "text": "Cada día me acerco más a mis objetivos.",
+        "visualization": "Vete tomando acciones pequeñas y significativas hoy."
+      },
+      "2": {
+        "text": "Tengo el poder de crear cambios en mi vida.",
+        "visualization": "Visualiza los cambios positivos que quieres crear."
+      },
+      "3": {
+        "text": "Atraigo éxito y abundancia a mi vida.",
+        "visualization": "Imagina la abundancia fluyendo sin esfuerzo a tu vida."
+      },
+      "4": {
+        "text": "Mi potencial es ilimitado y puedo lograr cualquier cosa.",
+        "visualization": "Vete superando fácilmente cualquier obstáculo."
+      }
     },
     "aff": {
       "identityLens": "Lente de Identidad",
@@ -349,8 +524,25 @@
   "goals": {
     "myGoals": "Mis Objetivos",
     "addNew": "Agregar Nuevo Objetivo",
-    "categories": { "all": "Todos los Objetivos", "career": "Carrera", "finance": "Finanzas", "health": "Salud", "relationships": "Relaciones", "personal": "Personal", "other": "Otro" },
-    "form": { "title": "Título del Objetivo", "category": "Categoría", "description": "Descripción", "targetDate": "Fecha Objetivo", "tags": "Etiquetas", "addTag": "Agregar Etiqueta", "save": "Guardar Objetivo", "cancel": "Cancelar" }
+    "categories": {
+      "all": "Todos los Objetivos",
+      "career": "Carrera",
+      "finance": "Finanzas",
+      "health": "Salud",
+      "relationships": "Relaciones",
+      "personal": "Personal",
+      "other": "Otro"
+    },
+    "form": {
+      "title": "Título del Objetivo",
+      "category": "Categoría",
+      "description": "Descripción",
+      "targetDate": "Fecha Objetivo",
+      "tags": "Etiquetas",
+      "addTag": "Agregar Etiqueta",
+      "save": "Guardar Objetivo",
+      "cancel": "Cancelar"
+    }
   },
   "visionboard": {
     "title": "Tablero de Visión",
@@ -381,10 +573,24 @@
     "manifested": "🏆 {{count}} manifestadas",
     "visionsTotal": "{{count}} visiones en total",
     "avgProgress": "promedio {{pct}}% progreso",
-    "highPriority": "Alta", "mediumPriority": "Media", "lowPriority": "Baja",
-    "overdue": "Atrasado", "done": "Hecho", "progress": "Progreso", "dueDate": "Fecha Límite", "priority": "Prioridad", "actions": "Acciones", "vision": "Visión",
-    "newestFirst": "Más Reciente", "oldestFirst": "Más Antiguo", "titleAZ": "Título A-Z", "titleZA": "Título Z-A", "highestProgress": "Mayor Progreso", "dueSoon": "Próximo a Vencer",
-    "clearAll": "Limpiar todo", "filters": "Filtros:",
+    "highPriority": "Alta",
+    "mediumPriority": "Media",
+    "lowPriority": "Baja",
+    "overdue": "Atrasado",
+    "done": "Hecho",
+    "progress": "Progreso",
+    "dueDate": "Fecha Límite",
+    "priority": "Prioridad",
+    "actions": "Acciones",
+    "vision": "Visión",
+    "newestFirst": "Más Reciente",
+    "oldestFirst": "Más Antiguo",
+    "titleAZ": "Título A-Z",
+    "titleZA": "Título Z-A",
+    "highestProgress": "Mayor Progreso",
+    "dueSoon": "Próximo a Vencer",
+    "clearAll": "Limpiar todo",
+    "filters": "Filtros:",
     "deleteConfirm": "¿Estás seguro de que quieres eliminar esta visión?",
     "visionDeleted": "Visión eliminada",
     "failedDelete": "Error al eliminar la visión",
@@ -398,118 +604,328 @@
     "visionCreated": "✨ ¡Nueva visión creada!",
     "failedUpdate": "Error al actualizar visión",
     "failedCreate": "Error al crear visión",
-    "cardTypes": { "image": "Imagen", "text": "Texto", "quote": "Cita", "affirmation": "Afirmación" },
-    "categories": { "general": "General", "career": "Carrera", "health": "Salud", "relationships": "Relaciones", "finances": "Finanzas", "personal": "Personal", "travel": "Viaje", "home": "Hogar", "education": "Educación", "spirituality": "Espiritualidad" },
+    "cardTypes": {
+      "image": "Imagen",
+      "text": "Texto",
+      "quote": "Cita",
+      "affirmation": "Afirmación"
+    },
+    "categories": {
+      "general": "General",
+      "career": "Carrera",
+      "health": "Salud",
+      "relationships": "Relaciones",
+      "finances": "Finanzas",
+      "personal": "Personal",
+      "travel": "Viaje",
+      "home": "Hogar",
+      "education": "Educación",
+      "spirituality": "Espiritualidad"
+    },
     "form": {
-      "title": "Título de la Visión", "titlePlaceholder": "¿Qué quieres manifestar?", "titleRequired": "El título es obligatorio", "contentRequired": "La descripción es obligatoria",
-      "category": "Categoría", "description": "Descripción", "visionDescription": "Descripción de la visión", "descriptionPlaceholder": "Describe tu visión con detalle vívido…",
-      "feelings": "Sentimientos y Emociones", "feelingsPlaceholder": "¿Cómo te sentirás cuando lo logres?",
-      "visualization": "Guía de Visualización", "visualizationPrompt": "Guía de Visualización", "visualizationPlaceholder": "Describe la escena cuando tu visión se realice...",
-      "imageUpload": "Imagen de Visión", "uploadHint": "Haz clic para subir · PNG, JPG, WebP (máx. 10MB)", "imageUploadError": "Error al subir la imagen", "removeImage": "Eliminar",
-      "imageHint": "PNG, JPG hasta 2MB", "imageSizeError": "El tamaño de la imagen debe ser menor a 2MB",
-      "progress": "Progreso", "goalSection": "Configuración de Objetivo", "addGoalDetails": "Detalles del objetivo",
-      "dueDate": "Fecha Límite", "priority": "Prioridad", "low": "Baja", "medium": "Media", "high": "Alta",
-      "steps": "Pasos de Acción", "actionSteps": "Pasos de Acción", "addStep": "Agregar paso…", "addStepBtn": "Agregar Paso",
-      "submit": "Guardar Visión", "update": "Actualizar Visión", "saving": "Guardando…", "cancel": "Cancelar"
+      "title": "Título de la Visión",
+      "titlePlaceholder": "¿Qué quieres manifestar?",
+      "titleRequired": "El título es obligatorio",
+      "contentRequired": "La descripción es obligatoria",
+      "category": "Categoría",
+      "description": "Descripción",
+      "visionDescription": "Descripción de la visión",
+      "descriptionPlaceholder": "Describe tu visión con detalle vívido…",
+      "feelings": "Sentimientos y Emociones",
+      "feelingsPlaceholder": "¿Cómo te sentirás cuando lo logres?",
+      "visualization": "Guía de Visualización",
+      "visualizationPrompt": "Guía de Visualización",
+      "visualizationPlaceholder": "Describe la escena cuando tu visión se realice...",
+      "imageUpload": "Imagen de Visión",
+      "uploadHint": "Haz clic para subir · PNG, JPG, WebP (máx. 10MB)",
+      "imageUploadError": "Error al subir la imagen",
+      "removeImage": "Eliminar",
+      "imageHint": "PNG, JPG hasta 2MB",
+      "imageSizeError": "El tamaño de la imagen debe ser menor a 2MB",
+      "progress": "Progreso",
+      "goalSection": "Configuración de Objetivo",
+      "addGoalDetails": "Detalles del objetivo",
+      "dueDate": "Fecha Límite",
+      "priority": "Prioridad",
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta",
+      "steps": "Pasos de Acción",
+      "actionSteps": "Pasos de Acción",
+      "addStep": "Agregar paso…",
+      "addStepBtn": "Agregar Paso",
+      "submit": "Guardar Visión",
+      "update": "Actualizar Visión",
+      "saving": "Guardando…",
+      "cancel": "Cancelar"
     },
     "editVisionSubtitle": "Actualiza los detalles de tu visión",
     "newVisionSubtitle": "Haz realidad tu sueño",
     "detail": {
-      "back": "Volver", "edit": "Editar", "delete": "Eliminar", "deleteConfirm": "¿Estás seguro de que quieres eliminar esta visión?",
-      "created": "Creado", "updated": "Actualizado", "status": "Estado", "overdue": "Atrasado", "completedStatus": "Completado", "active": "Activo",
-      "description": "Descripción", "feelings": "Sentimientos", "visualization": "Visualización",
-      "goalDetails": "Detalles del Objetivo", "progress": "Progreso", "dueDate": "Fecha Límite", "priority": "Prioridad", "actionSteps": "Pasos de Acción",
-      "noContent": "Sin descripción aún.", "notFound": "Visión No Encontrada", "notFoundDesc": "La visión que buscas no existe o fue eliminada.",
-      "backToBoard": "Volver al Tablero", "failedLoad": "Error al cargar los detalles.", "failedDelete": "Error al eliminar. Inténtalo de nuevo.", "failedUpdate": "Error al actualizar. Inténtalo de nuevo."
+      "back": "Volver",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "deleteConfirm": "¿Estás seguro de que quieres eliminar esta visión?",
+      "created": "Creado",
+      "updated": "Actualizado",
+      "status": "Estado",
+      "overdue": "Atrasado",
+      "completedStatus": "Completado",
+      "active": "Activo",
+      "description": "Descripción",
+      "feelings": "Sentimientos",
+      "visualization": "Visualización",
+      "goalDetails": "Detalles del Objetivo",
+      "progress": "Progreso",
+      "dueDate": "Fecha Límite",
+      "priority": "Prioridad",
+      "actionSteps": "Pasos de Acción",
+      "noContent": "Sin descripción aún.",
+      "notFound": "Visión No Encontrada",
+      "notFoundDesc": "La visión que buscas no existe o fue eliminada.",
+      "backToBoard": "Volver al Tablero",
+      "failedLoad": "Error al cargar los detalles.",
+      "failedDelete": "Error al eliminar. Inténtalo de nuevo.",
+      "failedUpdate": "Error al actualizar. Inténtalo de nuevo."
     }
   },
   "profile": {
-    "personalInfo": "Información Personal", "name": "Nombre", "email": "Correo Electrónico", "changePassword": "Cambiar Contraseña",
-    "preferences": "Preferencias", "language": "Idioma", "theme": "Tema", "notifications": "Notificaciones",
-    "saveChanges": "Guardar Cambios", "notificationsHint": "Recibe notificaciones sobre tus objetivos y progreso",
-    "profileUpdated": "¡Perfil actualizado con éxito!", "failedUpdate": "Error al actualizar el perfil. Inténtalo de nuevo.",
-    "accountSettings": "Configuración de Cuenta", "dangerZone": "Zona de Peligro", "deleteAccount": "Eliminar Cuenta",
+    "personalInfo": "Información Personal",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "changePassword": "Cambiar Contraseña",
+    "preferences": "Preferencias",
+    "language": "Idioma",
+    "theme": "Tema",
+    "notifications": "Notificaciones",
+    "saveChanges": "Guardar Cambios",
+    "notificationsHint": "Recibe notificaciones sobre tus objetivos y progreso",
+    "profileUpdated": "¡Perfil actualizado con éxito!",
+    "failedUpdate": "Error al actualizar el perfil. Inténtalo de nuevo.",
+    "accountSettings": "Configuración de Cuenta",
+    "dangerZone": "Zona de Peligro",
+    "deleteAccount": "Eliminar Cuenta",
     "deleteAccountHint": "Una vez eliminada, tu cuenta y todos los datos no se pueden recuperar.",
-    "themeLight": "Claro", "themeDark": "Oscuro", "themeSystem": "Sistema"
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema"
   },
   "common": {
-    "loading": "Cargando...", "save": "Guardar", "cancel": "Cancelar", "delete": "Eliminar", "edit": "Editar",
-    "search": "Buscar", "filters": "Filtros", "sortBy": "Ordenar Por", "darkMode": "Modo Oscuro", "lightMode": "Modo Claro",
-    "dismiss": "Cerrar", "back": "Volver", "next": "Siguiente", "close": "Cerrar", "confirm": "Confirmar",
-    "yes": "Sí", "no": "No", "or": "o", "noDataYet": "Sin datos aún",
-    "openSidebar": "Abrir barra lateral", "closeSidebar": "Cerrar barra lateral"
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Buscar",
+    "filters": "Filtros",
+    "sortBy": "Ordenar Por",
+    "darkMode": "Modo Oscuro",
+    "lightMode": "Modo Claro",
+    "dismiss": "Cerrar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "or": "o",
+    "noDataYet": "Sin datos aún",
+    "openSidebar": "Abrir barra lateral",
+    "closeSidebar": "Cerrar barra lateral"
   },
-  "theme": { "light": "Claro", "dark": "Oscuro", "system": "Sistema" },
-  "language": { "en": "English", "zh": "中文", "es": "Español", "ja": "日本語", "de": "Deutsch", "fr": "Français", "ko": "한국어", "pt": "Português", "ru": "Русский", "changeLanguage": "Cambiar idioma", "selectLanguage": "Seleccionar idioma" },
-  "indexNotification": { "title": "Índice de Base de Datos Requerido", "needsIndex": "El sistema necesita crear un índice para {{collection}} para mostrar datos completos", "createNow": "Crear Índice Ahora" },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ko": "한국어",
+    "pt": "Português",
+    "ru": "Русский",
+    "changeLanguage": "Cambiar idioma",
+    "selectLanguage": "Seleccionar idioma"
+  },
+  "indexNotification": {
+    "title": "Índice de Base de Datos Requerido",
+    "needsIndex": "El sistema necesita crear un índice para {{collection}} para mostrar datos completos",
+    "createNow": "Crear Índice Ahora"
+  },
   "landing": {
     "badge": "Ley de Atracción · Plataforma de Manifestación",
-    "headline1": "Manifiesta Tus Sueños", "headline2": "En Realidad",
+    "headline1": "Manifiesta Tus Sueños",
+    "headline2": "En Realidad",
     "subheadline": "Tus pensamientos crean tu realidad. Visualiza tus metas, construye hábitos poderosos y observa cómo tus sueños se transforman en logros — una intención a la vez.",
-    "ctaStart": "Comienza Tu Viaje — Gratis", "ctaAlreadyHave": "Ya tengo una cuenta", "noCreditCard": "Sin tarjeta de crédito", "freePlan": "Plan gratuito para siempre", "setup": "2 min de configuración",
-    "startJourneyFree": "Comienza Tu Viaje Hoy", "dashboardArrow": "Panel →", "getStartedFree": "Comenzar Gratis",
-    "whyManifestHub": "Por qué ManifestHub", "everythingYouNeed": "Todo lo que necesitas para manifestar",
+    "ctaStart": "Comienza Tu Viaje — Gratis",
+    "ctaAlreadyHave": "Ya tengo una cuenta",
+    "noCreditCard": "Sin tarjeta de crédito",
+    "freePlan": "Plan gratuito para siempre",
+    "setup": "2 min de configuración",
+    "startJourneyFree": "Comienza Tu Viaje Hoy",
+    "dashboardArrow": "Panel →",
+    "getStartedFree": "Comenzar Gratis",
+    "whyManifestHub": "Por qué ManifestHub",
+    "everythingYouNeed": "Todo lo que necesitas para manifestar",
     "everythingSubtitle": "Un sistema completo para convertir tus intenciones en realidad, construido sobre principios probados de la Ley de Atracción.",
-    "theProcess": "El Proceso", "threeSteps": "3 pasos para manifestar tu realidad", "testimonials": "Testimonios", "manifestingWithUs": "Personas manifestando con nosotros",
-    "bestLife": "Tu mejor vida está", "oneDecisionAway": "a una decisión de distancia",
+    "theProcess": "El Proceso",
+    "threeSteps": "3 pasos para manifestar tu realidad",
+    "testimonials": "Testimonios",
+    "manifestingWithUs": "Personas manifestando con nosotros",
+    "bestLife": "Tu mejor vida está",
+    "oneDecisionAway": "a una decisión de distancia",
     "joinThousands": "Únete a miles que ya están manifestando sus sueños con ManifestHub. Comienza gratis, sin tarjeta de crédito.",
     "allRightsReserved": "Todos los derechos reservados.",
     "features": {
-      "visualDreamBoard": "Tablero de Sueños Visual", "visualDreamBoardDesc": "Crea tableros de visión impresionantes con imágenes, citas y metas. Trae tus sueños a la vida en un lienzo visual.",
-      "dailyHabits": "Gratitud y Hábitos Diarios", "dailyHabitsDesc": "Construye una práctica diaria poderosa con registros, diario de gratitud y seguimiento de rachas.",
-      "trackProgress": "Rastrea Tu Progreso", "trackProgressDesc": "Monitorea cada objetivo con barras de progreso, hitos y un calendario interactivo para mantenerte en camino."
+      "visualDreamBoard": "Tablero de Sueños Visual",
+      "visualDreamBoardDesc": "Crea tableros de visión impresionantes con imágenes, citas y metas. Trae tus sueños a la vida en un lienzo visual.",
+      "dailyHabits": "Gratitud y Hábitos Diarios",
+      "dailyHabitsDesc": "Construye una práctica diaria poderosa con registros, diario de gratitud y seguimiento de rachas.",
+      "trackProgress": "Rastrea Tu Progreso",
+      "trackProgressDesc": "Monitorea cada objetivo con barras de progreso, hitos y un calendario interactivo para mantenerte en camino."
     },
     "steps": {
-      "01": { "title": "Crea Tu Visión", "desc": "Agrega tus sueños como tarjetas de visión con imágenes, descripciones y anclas emocionales." },
-      "02": { "title": "Construye Rituales Diarios", "desc": "Regístrate cada día, escribe gratitud y recita tus afirmaciones personalizadas." },
-      "03": { "title": "Manifiesta y Celebra", "desc": "Rastrea tu progreso, completa metas y celebra cada victoria en tu viaje." }
+      "01": {
+        "title": "Crea Tu Visión",
+        "desc": "Agrega tus sueños como tarjetas de visión con imágenes, descripciones y anclas emocionales."
+      },
+      "02": {
+        "title": "Construye Rituales Diarios",
+        "desc": "Regístrate cada día, escribe gratitud y recita tus afirmaciones personalizadas."
+      },
+      "03": {
+        "title": "Manifiesta y Celebra",
+        "desc": "Rastrea tu progreso, completa metas y celebra cada victoria en tu viaje."
+      }
     },
-    "mockProgress": "Progreso", "mockAffirmation": "✓ Afirmación", "mockGratitude": "✓ Gratitud",
+    "mockProgress": "Progreso",
+    "mockAffirmation": "✓ Afirmación",
+    "mockGratitude": "✓ Gratitud",
     "testimonialData": {
-      "sarah": { "quote": "ManifestHub transformó cómo abordo mis metas. Tener todo visual y organizado me mantiene enfocada y motivada cada día.", "name": "Sarah L.", "role": "Empresaria" },
-      "marcus": { "quote": "El registro diario y el diario de gratitud son revolucionarios. ¡Mi racha es de 60 días y manifesté 3 grandes metas este año!", "name": "Marcus T.", "role": "Coach de Vida" },
-      "aiko": { "quote": "Bonito, minimalista y poderoso. Adoro cómo el tablero de visión me mantiene conectada a lo que realmente importa en mi vida.", "name": "Aiko N.", "role": "Diseñadora" }
+      "sarah": {
+        "quote": "ManifestHub transformó cómo abordo mis metas. Tener todo visual y organizado me mantiene enfocada y motivada cada día.",
+        "name": "Sarah L.",
+        "role": "Empresaria"
+      },
+      "marcus": {
+        "quote": "El registro diario y el diario de gratitud son revolucionarios. ¡Mi racha es de 60 días y manifesté 3 grandes metas este año!",
+        "name": "Marcus T.",
+        "role": "Coach de Vida"
+      },
+      "aiko": {
+        "quote": "Bonito, minimalista y poderoso. Adoro cómo el tablero de visión me mantiene conectada a lo que realmente importa en mi vida.",
+        "name": "Aiko N.",
+        "role": "Diseñadora"
+      }
     }
   },
-  "notFound": { "title": "Página No Encontrada", "subtitle": "¡Ups! La página que buscas no existe.", "backHome": "Volver al Inicio" },
-  "footer": { "privacyPolicy": "Política de Privacidad", "termsOfService": "Términos de Servicio", "contact": "Contacto" },
+  "notFound": {
+    "title": "Página No Encontrada",
+    "subtitle": "¡Ups! La página que buscas no existe.",
+    "backHome": "Volver al Inicio"
+  },
+  "footer": {
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "contact": "Contacto"
+  },
   "legal": {
-    "lastUpdated": "Última actualización: Abril 2026", "back": "Volver",
+    "lastUpdated": "Última actualización: Abril 2026",
+    "back": "Volver",
     "privacy": {
       "title": "Política de Privacidad",
       "s1Title": "1. Información que Recopilamos",
       "s1": "Recopilamos la información que nos proporcionas directamente al crear una cuenta, incluyendo tu nombre, correo electrónico y cualquier contenido que añadas a tu tablero de visión, objetivos y diario de gratitud. También recopilamos datos de uso para mejorar la experiencia del producto.",
-      "s2Title": "2. Cómo Usamos Tu Información", "s2Intro": "Usamos tu información para:",
-      "s2Items": ["Proporcionar, mantener y mejorar ManifestHub", "Personalizar tu experiencia y afirmaciones", "Enviarte actualizaciones del producto si lo aceptas", "Responder a tus solicitudes de soporte"],
+      "s2Title": "2. Cómo Usamos Tu Información",
+      "s2Intro": "Usamos tu información para:",
+      "s2Items": [
+        "Proporcionar, mantener y mejorar ManifestHub",
+        "Personalizar tu experiencia y afirmaciones",
+        "Enviarte actualizaciones del producto si lo aceptas",
+        "Responder a tus solicitudes de soporte"
+      ],
       "s2Outro": "No vendemos tus datos personales a terceros.",
-      "s3Title": "3. Almacenamiento de Datos", "s3": "Tus datos se almacenan de forma segura usando Google Firebase (Firestore), alojado en Estados Unidos. Firebase emplea cifrado estándar de la industria en reposo y en tránsito.",
-      "s4Title": "4. Autenticación", "s4": "Usamos Firebase Authentication para gestionar el inicio de sesión. Nunca almacenamos tus contraseñas sin procesar.",
-      "s5Title": "5. Cookies y Almacenamiento Local", "s5": "Usamos localStorage del navegador para recordar tu preferencia de tema, idioma y estado de sesión. No usamos cookies de rastreo ni redes publicitarias de terceros.",
-      "s6Title": "6. Tus Derechos", "s6": "Puedes solicitar la eliminación de tu cuenta y todos los datos asociados en cualquier momento contactándonos. Procesaremos la solicitud en un plazo de 30 días.",
-      "s7Title": "7. Cambios en Esta Política", "s7": "Podemos actualizar esta política ocasionalmente. Te notificaremos los cambios significativos por correo electrónico o mediante un aviso en la aplicación.",
-      "s8Title": "8. Contacto", "s8": "¿Preguntas sobre esta política? Escríbenos a"
+      "s3Title": "3. Almacenamiento de Datos",
+      "s3": "Tus datos se almacenan de forma segura usando Google Firebase (Firestore), alojado en Estados Unidos. Firebase emplea cifrado estándar de la industria en reposo y en tránsito.",
+      "s4Title": "4. Autenticación",
+      "s4": "Usamos Firebase Authentication para gestionar el inicio de sesión. Nunca almacenamos tus contraseñas sin procesar.",
+      "s5Title": "5. Cookies y Almacenamiento Local",
+      "s5": "Usamos localStorage del navegador para recordar tu preferencia de tema, idioma y estado de sesión. No usamos cookies de rastreo ni redes publicitarias de terceros.",
+      "s6Title": "6. Tus Derechos",
+      "s6": "Puedes solicitar la eliminación de tu cuenta y todos los datos asociados en cualquier momento contactándonos. Procesaremos la solicitud en un plazo de 30 días.",
+      "s7Title": "7. Cambios en Esta Política",
+      "s7": "Podemos actualizar esta política ocasionalmente. Te notificaremos los cambios significativos por correo electrónico o mediante un aviso en la aplicación.",
+      "s8Title": "8. Contacto",
+      "s8": "¿Preguntas sobre esta política? Escríbenos a"
     },
     "terms": {
       "title": "Términos de Servicio",
-      "s1Title": "1. Aceptación de Términos", "s1": "Al acceder o usar ManifestHub, aceptas estar sujeto a estos Términos de Servicio. Si no estás de acuerdo, por favor no uses el servicio.",
-      "s2Title": "2. Descripción del Servicio", "s2": "ManifestHub es una herramienta personal de visualización de objetivos y manifestación. El servicio se proporciona tal cual para uso personal y no comercial.",
-      "s3Title": "3. Responsabilidades de la Cuenta", "s3Intro": "Eres responsable de:", "s3Items": ["Mantener la confidencialidad de tus credenciales", "Todas las actividades que ocurran bajo tu cuenta", "Asegurar que tu información de cuenta se mantenga precisa y actualizada"],
-      "s4Title": "4. Uso Aceptable", "s4Intro": "Aceptas no usar ManifestHub para:", "s4Items": ["Subir contenido ilegal, dañino o que viole los derechos de otros", "Intentar obtener acceso no autorizado a cualquier parte del servicio", "Usar medios automatizados (bots, scrapers) para interactuar con el servicio", "Interferir con el rendimiento o la integridad del servicio"],
-      "s5Title": "5. Tu Contenido", "s5a": "Conservas la propiedad total de todo el contenido que creas en ManifestHub. Al usar el servicio, nos otorgas una licencia limitada para almacenar y mostrar ese contenido únicamente para proporcionarte el servicio.", "s5b": "Nunca usaremos tu contenido personal para publicidad, entrenamiento de IA o compartir con terceros sin tu consentimiento explícito.",
-      "s6Title": "6. Disponibilidad", "s6": "Nos esforzamos por mantener una alta disponibilidad pero no garantizamos acceso ininterrumpido.",
-      "s7Title": "7. Limitación de Responsabilidad", "s7": "En la máxima medida permitida por la ley, ManifestHub no será responsable de daños indirectos, incidentales o consecuentes derivados de tu uso del servicio.",
-      "s8Title": "8. Cambios en los Términos", "s8": "El uso continuado del servicio después de la publicación de cambios constituye tu aceptación de los términos actualizados.",
-      "s9Title": "9. Contacto", "s9": "¿Preguntas sobre estos términos? Contáctanos en"
+      "s1Title": "1. Aceptación de Términos",
+      "s1": "Al acceder o usar ManifestHub, aceptas estar sujeto a estos Términos de Servicio. Si no estás de acuerdo, por favor no uses el servicio.",
+      "s2Title": "2. Descripción del Servicio",
+      "s2": "ManifestHub es una herramienta personal de visualización de objetivos y manifestación. El servicio se proporciona tal cual para uso personal y no comercial.",
+      "s3Title": "3. Responsabilidades de la Cuenta",
+      "s3Intro": "Eres responsable de:",
+      "s3Items": [
+        "Mantener la confidencialidad de tus credenciales",
+        "Todas las actividades que ocurran bajo tu cuenta",
+        "Asegurar que tu información de cuenta se mantenga precisa y actualizada"
+      ],
+      "s4Title": "4. Uso Aceptable",
+      "s4Intro": "Aceptas no usar ManifestHub para:",
+      "s4Items": [
+        "Subir contenido ilegal, dañino o que viole los derechos de otros",
+        "Intentar obtener acceso no autorizado a cualquier parte del servicio",
+        "Usar medios automatizados (bots, scrapers) para interactuar con el servicio",
+        "Interferir con el rendimiento o la integridad del servicio"
+      ],
+      "s5Title": "5. Tu Contenido",
+      "s5a": "Conservas la propiedad total de todo el contenido que creas en ManifestHub. Al usar el servicio, nos otorgas una licencia limitada para almacenar y mostrar ese contenido únicamente para proporcionarte el servicio.",
+      "s5b": "Nunca usaremos tu contenido personal para publicidad, entrenamiento de IA o compartir con terceros sin tu consentimiento explícito.",
+      "s6Title": "6. Disponibilidad",
+      "s6": "Nos esforzamos por mantener una alta disponibilidad pero no garantizamos acceso ininterrumpido.",
+      "s7Title": "7. Limitación de Responsabilidad",
+      "s7": "En la máxima medida permitida por la ley, ManifestHub no será responsable de daños indirectos, incidentales o consecuentes derivados de tu uso del servicio.",
+      "s8Title": "8. Cambios en los Términos",
+      "s8": "El uso continuado del servicio después de la publicación de cambios constituye tu aceptación de los términos actualizados.",
+      "s9Title": "9. Contacto",
+      "s9": "¿Preguntas sobre estos términos? Contáctanos en"
     }
   },
   "contact": {
-    "title": "Contáctanos", "subtitle": "Respondemos en 1-2 días hábiles", "getInTouch": "Ponte en contacto",
-    "emailLabel": "Correo", "responseTime": "Tiempo de respuesta", "responseTimeValue": "1-2 días hábiles",
-    "privacyAndLegal": "Privacidad y Legal", "privacyLink": "Política de Privacidad →", "termsLink": "Términos de Servicio →",
-    "name": "Nombre", "namePlaceholder": "Tu nombre", "email": "Correo", "emailPlaceholder": "tu@email.com",
-    "subject": "Asunto", "subjectPlaceholder": "Selecciona un tema…", "message": "Mensaje", "messagePlaceholder": "Cuéntanos cómo podemos ayudarte…",
-    "send": "Enviar Mensaje", "sending": "Enviando…", "successTitle": "¡Mensaje enviado!", "successDesc": "Gracias por contactarnos. Te responderemos pronto.",
+    "title": "Contáctanos",
+    "subtitle": "Respondemos en 1-2 días hábiles",
+    "getInTouch": "Ponte en contacto",
+    "emailLabel": "Correo",
+    "responseTime": "Tiempo de respuesta",
+    "responseTimeValue": "1-2 días hábiles",
+    "privacyAndLegal": "Privacidad y Legal",
+    "privacyLink": "Política de Privacidad →",
+    "termsLink": "Términos de Servicio →",
+    "name": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo",
+    "emailPlaceholder": "tu@email.com",
+    "subject": "Asunto",
+    "subjectPlaceholder": "Selecciona un tema…",
+    "message": "Mensaje",
+    "messagePlaceholder": "Cuéntanos cómo podemos ayudarte…",
+    "send": "Enviar Mensaje",
+    "sending": "Enviando…",
+    "successTitle": "¡Mensaje enviado!",
+    "successDesc": "Gracias por contactarnos. Te responderemos pronto.",
     "sendAnother": "Enviar otro mensaje",
-    "subjects": ["Pregunta general", "Reporte de error", "Solicitud de función", "Cuenta y facturación", "Consulta de privacidad", "Otro"]
+    "subjects": [
+      "Pregunta general",
+      "Reporte de error",
+      "Solicitud de función",
+      "Cuenta y facturación",
+      "Consulta de privacidad",
+      "Otro"
+    ]
   }
 }

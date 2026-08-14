@@ -32,13 +32,13 @@
     "namePlaceholder": "Alex Johnson",
     "emailPlaceholder": "you@example.com",
     "passwordPlaceholder": "Enter your password",
-    "passwordMinHint": "Min 6 characters",
+    "passwordMinHint": "Min 8 characters",
     "repeatPassword": "Repeat your password",
     "createFreeAccount": "Create Free Account",
     "bySigningUp": "By signing up, you agree to our Terms of Service and Privacy Policy.",
     "fillAllFields": "Please fill in all fields",
     "passwordMismatch": "Passwords do not match",
-    "passwordTooShort": "Password must be at least 6 characters",
+    "passwordTooShort": "Password must be at least 8 characters",
     "sendResetLink": "Send Reset Link",
     "backToSignIn": "← Back to sign in",
     "resetPasswordSubtitle": "Enter your email and we'll send a reset link",
@@ -89,10 +89,22 @@
     "quotaExceeded": "Free plan reached its limit at this lens. Upgrade to add more.",
     "identityLinkLabel": "How does this serve your identity?",
     "identityLinkPlaceholder": "Connect this card to who you're becoming…",
-    "year":  { "label": "Year",  "help": "The single one-year truth: what makes the past 12 months feel real." },
-    "month": { "label": "Month", "help": "The boss fight: the project or skill that moves the year-lens forward." },
-    "week":  { "label": "Week",  "help": "The quest: a focused outcome to hit before next Sunday." },
-    "day":   { "label": "Day",   "help": "The lever: the needle-moving action you do today, on auto-pilot." }
+    "year": {
+      "label": "Year",
+      "help": "The single one-year truth: what makes the past 12 months feel real."
+    },
+    "month": {
+      "label": "Month",
+      "help": "The boss fight: the project or skill that moves the year-lens forward."
+    },
+    "week": {
+      "label": "Week",
+      "help": "The quest: a focused outcome to hit before next Sunday."
+    },
+    "day": {
+      "label": "Day",
+      "help": "The lever: the needle-moving action you do today, on auto-pilot."
+    }
   },
   "foundation": {
     "title": "Foundation",
@@ -117,12 +129,36 @@
       "fiveMin": "5 minutes total",
       "lockIn": "Lock it in"
     },
-    "antiVision":        { "label": "Anti-Vision",         "help": "If absolutely nothing changes for the next 5 years — describe an average Tuesday in that life. Use brutal specifics.",                "placeholder": "I refuse to let my life become…" },
-    "vision":            { "label": "Vision",              "help": "Forget practicality. If you could snap your fingers and live differently in 3 years — what's an average Tuesday like?",                "placeholder": "What I'm building toward…" },
-    "identityStatement": { "label": "Identity Statement",  "help": "What would you have to believe about yourself for that life to feel natural rather than forced?",                                       "placeholder": "I am the type of person who…" },
-    "oneYearLens":       { "label": "One-Year Lens",       "help": "What single thing would have to be true in 12 months for you to know the old pattern broke?",                                            "placeholder": "By [date], one concrete thing is true…" },
-    "oneMonthProject":   { "label": "One-Month Project",   "help": "What is the boss fight this month — the skill / artifact / system that has to exist for the year-lens to remain possible?",            "placeholder": "This month I'm building / learning / shipping…" },
-    "constraints":       { "label": "Constraints",         "help": "What are you NOT willing to sacrifice to chase your vision? 3–5 lines. These are the rules of your game.",                              "placeholder": "I will not sacrifice…" }
+    "antiVision": {
+      "label": "Anti-Vision",
+      "help": "If absolutely nothing changes for the next 5 years — describe an average Tuesday in that life. Use brutal specifics.",
+      "placeholder": "I refuse to let my life become…"
+    },
+    "vision": {
+      "label": "Vision",
+      "help": "Forget practicality. If you could snap your fingers and live differently in 3 years — what's an average Tuesday like?",
+      "placeholder": "What I'm building toward…"
+    },
+    "identityStatement": {
+      "label": "Identity Statement",
+      "help": "What would you have to believe about yourself for that life to feel natural rather than forced?",
+      "placeholder": "I am the type of person who…"
+    },
+    "oneYearLens": {
+      "label": "One-Year Lens",
+      "help": "What single thing would have to be true in 12 months for you to know the old pattern broke?",
+      "placeholder": "By [date], one concrete thing is true…"
+    },
+    "oneMonthProject": {
+      "label": "One-Month Project",
+      "help": "What is the boss fight this month — the skill / artifact / system that has to exist for the year-lens to remain possible?",
+      "placeholder": "This month I'm building / learning / shipping…"
+    },
+    "constraints": {
+      "label": "Constraints",
+      "help": "What are you NOT willing to sacrifice to chase your vision? 3–5 lines. These are the rules of your game.",
+      "placeholder": "I will not sacrifice…"
+    }
   },
   "reset": {
     "indexTag": "Reset Protocol",
@@ -149,7 +185,10 @@
     "completed": "Completed {{date}}",
     "draft": "Draft · {{date}}",
     "continue": "Continue",
-    "stage": { "morning": "Morning", "evening": "Evening" },
+    "stage": {
+      "morning": "Morning",
+      "evening": "Evening"
+    },
     "saving": "Saving…",
     "autosaved": "Auto-saved",
     "completing": "Completing…",
@@ -164,28 +203,94 @@
       "dashboard": "Back to Dashboard"
     },
     "q": {
-      "q1_dullDissatisfaction": { "prompt": "What is the dull, persistent dissatisfaction you've learned to live with?",                              "help": "Not deep suffering — the thing you've quietly tolerated. If you don't hate it, you'll keep tolerating it." },
-      "q2_repeatedComplaints":   { "prompt": "What do you complain about repeatedly but never actually change?",                                       "help": "Write the three complaints you've voiced most often this past year." },
-      "q3_behaviorVsWords":      { "prompt": "For each complaint — what would someone watching your behavior conclude you actually want?",             "help": "Behavior reveals goals more honestly than words." },
-      "q4_unbearableTruth":      { "prompt": "What truth about your current life would be unbearable to admit to someone you deeply respect?",          "help": "Write it anyway. The naming is the loosening." },
-      "q5_fiveYearTuesday":      { "prompt": "If absolutely nothing changes for 5 years — describe an average Tuesday.",                                "help": "Where do you wake up? What does your body feel like? What do you do between 9 and 6? How do you feel at 10pm?" },
-      "q6_tenYearMissed":        { "prompt": "Now do it for 10 years out — what have you missed? Which opportunities closed? Who gave up on you?",      "help": "What do people say about you when you're not in the room?" },
-      "q7_endOfLife":            { "prompt": "End-of-life perspective — you lived the safe version. What was the cost?",                                "help": "What did you never let yourself feel, try, or become?" },
-      "q8_alreadyLivingFuture":  { "prompt": "Who in your life is already living the future you just described?",                                       "help": "Someone 5, 10, 20 years ahead on the same trajectory. What do you feel when you imagine becoming them?" },
-      "q9_identityToGiveUp":     { "prompt": "What identity would you have to give up to actually change?",                                            "help": "Complete: 'I am the type of person who…' — and notice what would cost you socially to no longer be that." },
-      "q10_embarrassingReason":  { "prompt": "What's the most embarrassing reason you haven't changed?",                                                "help": "The one that makes you sound weak, scared, or lazy — not reasonable." },
-      "q11_protectionCost":      { "prompt": "If your current behavior is self-protection — what exactly are you protecting? What is that costing you?","help": "Both questions need an honest answer." },
-      "q12_idealTuesday":        { "prompt": "Snap your fingers — you live your ideal life in 3 years. Describe an average Tuesday.",                   "help": "Same level of detail as Q5. Forget practicality." },
-      "q13_identityToHave":      { "prompt": "What would you have to believe about yourself for that life to feel natural rather than forced?",        "help": "Write the identity statement: 'I am the type of person who…'" },
-      "q14_oneActionThisWeek":   { "prompt": "Name one thing you would do this week if you were already that person.",                                  "help": "Be specific. Schedule it." },
-      "e1_whyStuck":             { "prompt": "After today — what feels most true about why you've been stuck?",                                         "help": "Synthesize what surfaced this morning." },
-      "e2_actualEnemy":          { "prompt": "Name the actual enemy. Not circumstances, not people — the internal pattern or belief that has been running the show.", "help": "Be ruthlessly specific." },
-      "e3_antiVisionSentence":   { "prompt": "Write a single sentence: what you refuse to let your life become.",                                       "help": "This is your anti-vision compressed. It should make you feel something when you read it." },
-      "e4_visionSentence":       { "prompt": "Write a single sentence: what you're building toward — knowing it will evolve.",                          "help": "This is your vision MVP. Brevity is fine; depth comes from the months of action that follow." },
-      "e5_oneYearLens":          { "prompt": "One-year lens: what single thing has to be true in 12 months for the old pattern to be broken?",         "help": "Concrete, observable, binary. Not 'feel better' — 'launched X' / 'lost Y' / 'shipped Z'." },
-      "e6_oneMonthLens":         { "prompt": "One-month project: what does this month's boss fight look like?",                                         "help": "What do you need to learn / build / acquire so the one-year lens stays possible?" },
-      "e7_dailyLevers":          { "prompt": "Two or three daily levers: actions the future-you would simply do, no negotiation.",                      "help": "Block them in your calendar tomorrow." },
-      "e8_constraints":          { "prompt": "Constraints: what are you NOT willing to sacrifice to get there?",                                        "help": "These are the rules of your game. Without rules, there's no game." }
+      "q1_dullDissatisfaction": {
+        "prompt": "What is the dull, persistent dissatisfaction you've learned to live with?",
+        "help": "Not deep suffering — the thing you've quietly tolerated. If you don't hate it, you'll keep tolerating it."
+      },
+      "q2_repeatedComplaints": {
+        "prompt": "What do you complain about repeatedly but never actually change?",
+        "help": "Write the three complaints you've voiced most often this past year."
+      },
+      "q3_behaviorVsWords": {
+        "prompt": "For each complaint — what would someone watching your behavior conclude you actually want?",
+        "help": "Behavior reveals goals more honestly than words."
+      },
+      "q4_unbearableTruth": {
+        "prompt": "What truth about your current life would be unbearable to admit to someone you deeply respect?",
+        "help": "Write it anyway. The naming is the loosening."
+      },
+      "q5_fiveYearTuesday": {
+        "prompt": "If absolutely nothing changes for 5 years — describe an average Tuesday.",
+        "help": "Where do you wake up? What does your body feel like? What do you do between 9 and 6? How do you feel at 10pm?"
+      },
+      "q6_tenYearMissed": {
+        "prompt": "Now do it for 10 years out — what have you missed? Which opportunities closed? Who gave up on you?",
+        "help": "What do people say about you when you're not in the room?"
+      },
+      "q7_endOfLife": {
+        "prompt": "End-of-life perspective — you lived the safe version. What was the cost?",
+        "help": "What did you never let yourself feel, try, or become?"
+      },
+      "q8_alreadyLivingFuture": {
+        "prompt": "Who in your life is already living the future you just described?",
+        "help": "Someone 5, 10, 20 years ahead on the same trajectory. What do you feel when you imagine becoming them?"
+      },
+      "q9_identityToGiveUp": {
+        "prompt": "What identity would you have to give up to actually change?",
+        "help": "Complete: 'I am the type of person who…' — and notice what would cost you socially to no longer be that."
+      },
+      "q10_embarrassingReason": {
+        "prompt": "What's the most embarrassing reason you haven't changed?",
+        "help": "The one that makes you sound weak, scared, or lazy — not reasonable."
+      },
+      "q11_protectionCost": {
+        "prompt": "If your current behavior is self-protection — what exactly are you protecting? What is that costing you?",
+        "help": "Both questions need an honest answer."
+      },
+      "q12_idealTuesday": {
+        "prompt": "Snap your fingers — you live your ideal life in 3 years. Describe an average Tuesday.",
+        "help": "Same level of detail as Q5. Forget practicality."
+      },
+      "q13_identityToHave": {
+        "prompt": "What would you have to believe about yourself for that life to feel natural rather than forced?",
+        "help": "Write the identity statement: 'I am the type of person who…'"
+      },
+      "q14_oneActionThisWeek": {
+        "prompt": "Name one thing you would do this week if you were already that person.",
+        "help": "Be specific. Schedule it."
+      },
+      "e1_whyStuck": {
+        "prompt": "After today — what feels most true about why you've been stuck?",
+        "help": "Synthesize what surfaced this morning."
+      },
+      "e2_actualEnemy": {
+        "prompt": "Name the actual enemy. Not circumstances, not people — the internal pattern or belief that has been running the show.",
+        "help": "Be ruthlessly specific."
+      },
+      "e3_antiVisionSentence": {
+        "prompt": "Write a single sentence: what you refuse to let your life become.",
+        "help": "This is your anti-vision compressed. It should make you feel something when you read it."
+      },
+      "e4_visionSentence": {
+        "prompt": "Write a single sentence: what you're building toward — knowing it will evolve.",
+        "help": "This is your vision MVP. Brevity is fine; depth comes from the months of action that follow."
+      },
+      "e5_oneYearLens": {
+        "prompt": "One-year lens: what single thing has to be true in 12 months for the old pattern to be broken?",
+        "help": "Concrete, observable, binary. Not 'feel better' — 'launched X' / 'lost Y' / 'shipped Z'."
+      },
+      "e6_oneMonthLens": {
+        "prompt": "One-month project: what does this month's boss fight look like?",
+        "help": "What do you need to learn / build / acquire so the one-year lens stays possible?"
+      },
+      "e7_dailyLevers": {
+        "prompt": "Two or three daily levers: actions the future-you would simply do, no negotiation.",
+        "help": "Block them in your calendar tomorrow."
+      },
+      "e8_constraints": {
+        "prompt": "Constraints: what are you NOT willing to sacrifice to get there?",
+        "help": "These are the rules of your game. Without rules, there's no game."
+      }
     }
   },
   "interrupts": {
@@ -206,17 +311,47 @@
     "update": "Update answer",
     "placeholder": "First thought — don't filter. 60 seconds is enough.",
     "softTimer": "Soft 60-second timer. Spend longer if you need.",
-    "banner": { "title": "{{count}} interrupt(s) waiting", "answer": "Answer" },
+    "banner": {
+      "title": "{{count}} interrupt(s) waiting",
+      "answer": "Answer"
+    },
     "q": {
-      "i1_avoiding":               { "short": "What am I avoiding right now?",     "prompt": "What am I avoiding right now by doing what I'm doing?" },
-      "i2_filmedBehavior":         { "short": "Filmed behavior would say what?",    "prompt": "If someone filmed the last two hours, what would they conclude I want from my life?" },
-      "i3_lifeIHate":              { "short": "Toward life I want or hate?",        "prompt": "Am I moving toward the life I hate or the life I want?" },
-      "i4_pretendingNotImportant": { "short": "Pretending this isn't important?",   "prompt": "What's the most important thing I'm pretending isn't important?" },
-      "i5_identityProtection":     { "short": "Identity protection vs desire?",     "prompt": "What did I do today out of identity protection rather than genuine desire?" },
-      "i6_aliveVsDead":            { "short": "Most alive vs dead?",                "prompt": "When did I feel most alive today? When did I feel most dead?" },
-      "i7_stoppedNeeding":         { "short": "If I stopped needing approval?",     "prompt": "What would change if I stopped needing people to see me a certain way?" },
-      "i8_aliveVsSafety":          { "short": "Aliveness vs safety?",               "prompt": "Where in my life am I trading aliveness for safety?" },
-      "i9_smallestVersion":        { "short": "Smallest version tomorrow?",         "prompt": "What's the smallest version of the person I want to become that I could be tomorrow?" }
+      "i1_avoiding": {
+        "short": "What am I avoiding right now?",
+        "prompt": "What am I avoiding right now by doing what I'm doing?"
+      },
+      "i2_filmedBehavior": {
+        "short": "Filmed behavior would say what?",
+        "prompt": "If someone filmed the last two hours, what would they conclude I want from my life?"
+      },
+      "i3_lifeIHate": {
+        "short": "Toward life I want or hate?",
+        "prompt": "Am I moving toward the life I hate or the life I want?"
+      },
+      "i4_pretendingNotImportant": {
+        "short": "Pretending this isn't important?",
+        "prompt": "What's the most important thing I'm pretending isn't important?"
+      },
+      "i5_identityProtection": {
+        "short": "Identity protection vs desire?",
+        "prompt": "What did I do today out of identity protection rather than genuine desire?"
+      },
+      "i6_aliveVsDead": {
+        "short": "Most alive vs dead?",
+        "prompt": "When did I feel most alive today? When did I feel most dead?"
+      },
+      "i7_stoppedNeeding": {
+        "short": "If I stopped needing approval?",
+        "prompt": "What would change if I stopped needing people to see me a certain way?"
+      },
+      "i8_aliveVsSafety": {
+        "short": "Aliveness vs safety?",
+        "prompt": "Where in my life am I trading aliveness for safety?"
+      },
+      "i9_smallestVersion": {
+        "short": "Smallest version tomorrow?",
+        "prompt": "What's the smallest version of the person I want to become that I could be tomorrow?"
+      }
     }
   },
   "reflection": {
@@ -232,13 +367,33 @@
     "historyEmpty": "No reflections yet — your first will appear here.",
     "hiddenCount": "{{count}} more weeks in your archive",
     "unlockHint": "Annual unlocks unlimited history + month/quarter trends.",
-    "statusOpts": { "ahead": "Ahead", "on": "On track", "behind": "Behind", "adjust": "Need to adjust" },
+    "statusOpts": {
+      "ahead": "Ahead",
+      "on": "On track",
+      "behind": "Behind",
+      "adjust": "Need to adjust"
+    },
     "q": {
-      "w1_identityProgress": { "prompt": "How much did this week move you toward your Identity Statement?",      "help": "1 = no movement · 5 = clearly closer." },
-      "w2_antiVisionSlips":  { "prompt": "What anti-vision behaviors recurred this week?",                       "help": "Name them so they stop hiding." },
-      "w3_futureMomentum":   { "prompt": "What did you do that most resembled the future-you?",                  "help": "What you want more of next week." },
-      "w4_projectStatus":    { "prompt": "How is the 1-Month Project tracking?",                                 "help": "Pick the most honest label, even if uncomfortable." },
-      "w5_dailyLevers":      { "prompt": "Two daily levers you commit to next week.",                            "help": "Specific. Calendarable. Non-negotiable." }
+      "w1_identityProgress": {
+        "prompt": "How much did this week move you toward your Identity Statement?",
+        "help": "1 = no movement · 5 = clearly closer."
+      },
+      "w2_antiVisionSlips": {
+        "prompt": "What anti-vision behaviors recurred this week?",
+        "help": "Name them so they stop hiding."
+      },
+      "w3_futureMomentum": {
+        "prompt": "What did you do that most resembled the future-you?",
+        "help": "What you want more of next week."
+      },
+      "w4_projectStatus": {
+        "prompt": "How is the 1-Month Project tracking?",
+        "help": "Pick the most honest label, even if uncomfortable."
+      },
+      "w5_dailyLevers": {
+        "prompt": "Two daily levers you commit to next week.",
+        "help": "Specific. Calendarable. Non-negotiable."
+      }
     }
   },
   "dashboard": {
@@ -306,11 +461,9 @@
     "setIntention": "Set Intention",
     "intentionPlaceholder": "I intend to…",
     "intentionFromIdentity": "What would the identity-version of me do today?",
-    "intentionFromIdentity": "What would the identity-version of me do today?",
     "intentionSaved": "Today's intention saved! 🎯",
     "failedSaveIntention": "Failed to save intention",
     "overallProgress": "Overall progress",
-    "visionsManiifested": "{{count}} of {{total}} visions manifested",
     "visionBoardEmpty": "Your vision board is empty",
     "gratefulFor": "Grateful for on {{date}}",
     "goodMorning": "Good morning",
@@ -323,11 +476,26 @@
       "low": "Low"
     },
     "affirmations": {
-      "0": { "text": "I am worthy of my dreams and goals.", "visualization": "Imagine yourself achieving your biggest dream. How does it feel?" },
-      "1": { "text": "Every day, I am moving closer to my goals.", "visualization": "See yourself taking small, meaningful actions today." },
-      "2": { "text": "I have the power to create change in my life.", "visualization": "Visualize the positive changes you want to create." },
-      "3": { "text": "I attract success and abundance into my life.", "visualization": "Imagine abundance flowing effortlessly into your life." },
-      "4": { "text": "My potential is unlimited, and I can achieve anything.", "visualization": "See yourself easily overcoming any obstacle." }
+      "0": {
+        "text": "I am worthy of my dreams and goals.",
+        "visualization": "Imagine yourself achieving your biggest dream. How does it feel?"
+      },
+      "1": {
+        "text": "Every day, I am moving closer to my goals.",
+        "visualization": "See yourself taking small, meaningful actions today."
+      },
+      "2": {
+        "text": "I have the power to create change in my life.",
+        "visualization": "Visualize the positive changes you want to create."
+      },
+      "3": {
+        "text": "I attract success and abundance into my life.",
+        "visualization": "Imagine abundance flowing effortlessly into your life."
+      },
+      "4": {
+        "text": "My potential is unlimited, and I can achieve anything.",
+        "visualization": "See yourself easily overcoming any obstacle."
+      }
     },
     "aff": {
       "identityLens": "Identity Lens",
@@ -350,7 +518,8 @@
       "lens": "Lens Hierarchy",
       "reflect": "Weekly Reflect",
       "foundation": "Foundation"
-    }
+    },
+    "visionsManifested": "{{count}} of {{total}} visions manifested"
   },
   "goals": {
     "myGoals": "My Goals",
@@ -609,7 +778,7 @@
     "manifestingWithUs": "People are manifesting with us",
     "bestLife": "Your best life is",
     "oneDecisionAway": "one decision away",
-    "joinThousands": "Join thousands of people who are already manifesting their dreams with ManifestHub. Start for free, no credit card needed.",
+    "joinThousands": "Join people turning identity into action",
     "allRightsReserved": "All rights reserved.",
     "features": {
       "visualDreamBoard": "Visual Dream Board",
@@ -617,12 +786,27 @@
       "dailyHabits": "Daily Gratitude & Habits",
       "dailyHabitsDesc": "Build a powerful daily practice with check-ins, gratitude journaling, and streak tracking.",
       "trackProgress": "Track Your Progress",
-      "trackProgressDesc": "Monitor every goal with progress bars, milestones, and an interactive calendar to stay on track."
+      "trackProgressDesc": "Monitor every goal with progress bars, milestones, and an interactive calendar to stay on track.",
+      "identityFoundation": "Identity Foundation",
+      "identityFoundationDesc": "Anchor a 6-element identity blueprint — anti-vision, vision, monthly project, daily levers, constraints — that reframes who you become, not just what you do.",
+      "resetProtocol": "1-Day Reset Protocol",
+      "resetProtocolDesc": "A guided ritual to excavate what you actually want, surface what is silently stopping you, and lock in a year-long lens.",
+      "weeklyReflection": "Weekly Reflection",
+      "weeklyReflectionDesc": "Five Sunday questions that close the loop between who you say you are and what your actions reveal."
     },
     "steps": {
-      "01": { "title": "Create Your Vision", "desc": "Add your dreams as vision cards with images, descriptions, and emotional anchors." },
-      "02": { "title": "Build Daily Rituals", "desc": "Check in every day, write gratitude, and recite your personalized affirmations." },
-      "03": { "title": "Manifest & Celebrate", "desc": "Track your progress, complete goals, and celebrate every win on your journey." }
+      "01": {
+        "title": "Create Your Vision",
+        "desc": "Add your dreams as vision cards with images, descriptions, and emotional anchors."
+      },
+      "02": {
+        "title": "Build Daily Rituals",
+        "desc": "Check in every day, write gratitude, and recite your personalized affirmations."
+      },
+      "03": {
+        "title": "Manifest & Celebrate",
+        "desc": "Track your progress, complete goals, and celebrate every win on your journey."
+      }
     },
     "mockProgress": "Progress",
     "mockAffirmation": "✓ Affirmation",
@@ -631,19 +815,47 @@
       "sarah": {
         "quote": "ManifestHub transformed how I approach my goals. Having everything visual and organized keeps me focused and motivated every single day.",
         "name": "Sarah L.",
-        "role": "Entrepreneur"
+        "role": "Entrepreneur",
+        "duration": "6 months in"
       },
       "marcus": {
         "quote": "The daily check-in and gratitude journal are game changers. My streak is at 60 days and I've manifested 3 major goals this year!",
         "name": "Marcus T.",
-        "role": "Life Coach"
+        "role": "Life Coach",
+        "duration": "3 months in"
       },
       "aiko": {
         "quote": "Beautiful, minimal, and powerful. I love how the vision board keeps me connected to what really matters in my life.",
         "name": "Aiko N.",
-        "role": "Designer"
+        "role": "Designer",
+        "duration": "1 year in"
       }
-    }
+    },
+    "pricingTag": "Pricing",
+    "pricingTitle": "Simple as a New-Year resolution.",
+    "pricingSubtitle": "One plan. One year. Either you commit, or you don't.",
+    "priceFree": "Seeker",
+    "priceFreeNote": "Forever free",
+    "priceFreeF1": "Identity Foundation (latest version)",
+    "priceFreeF2": "Daily check-ins, mood, gratitude",
+    "priceFreeF3": "30-min Mini Reset (quarterly)",
+    "priceFreeF4": "Limited lens cards · 4 weeks of history",
+    "priceBest": "Best for serious work",
+    "priceAnnual": "ManifestHub Annual",
+    "priceYear": "year",
+    "priceAnnualNote": "≈ $8.33 / month, billed yearly",
+    "priceAnnualF1": "Full 1-day Reset Protocol",
+    "priceAnnualF2": "Unlimited lens cards across year/month/week/day",
+    "priceAnnualF3": "Unlimited history + year-over-year compare",
+    "priceAnnualF4": "Foundation evolution timeline",
+    "priceAnnualF5": "Pattern interrupts (6 daily slots)",
+    "priceAnnualCta": "Get ManifestHub Annual",
+    "navAriaLabel": "Primary navigation",
+    "launchPrice": "launch price",
+    "guarantee": "14-day money-back guarantee · Cancel anytime",
+    "footerPrivacy": "Privacy",
+    "footerTerms": "Terms",
+    "footerContact": "Contact"
   },
   "notFound": {
     "title": "Page Not Found",
@@ -664,7 +876,12 @@
       "s1": "We collect information you provide directly to us when you create an account, including your name, email address, and any content you add to your vision board, goals, and gratitude journal. We also collect usage data such as the features you use and how often you check in, to help us improve the product experience.",
       "s2Title": "2. How We Use Your Information",
       "s2Intro": "We use your information to:",
-      "s2Items": ["Provide, maintain, and improve ManifestHub", "Personalize your experience and affirmations", "Send you product updates if you opt in", "Respond to your support requests"],
+      "s2Items": [
+        "Provide, maintain, and improve ManifestHub",
+        "Personalize your experience and affirmations",
+        "Send you product updates if you opt in",
+        "Respond to your support requests"
+      ],
       "s2Outro": "We do not sell your personal data to third parties.",
       "s3Title": "3. Data Storage",
       "s3": "Your data is securely stored using Google Firebase (Firestore), hosted in the United States. Firebase employs industry-standard encryption at rest and in transit. Vision board images are stored as compressed base64 data within your Firestore documents and are never shared with other users.",
@@ -687,10 +904,19 @@
       "s2": "ManifestHub is a personal goal visualization and manifestation tool that allows users to create vision boards, set goals, track daily check-ins, and maintain a gratitude journal. The service is provided \"as is\" for personal, non-commercial use.",
       "s3Title": "3. Account Responsibilities",
       "s3Intro": "You are responsible for:",
-      "s3Items": ["Maintaining the confidentiality of your account credentials", "All activity that occurs under your account", "Ensuring your account information remains accurate and up to date"],
+      "s3Items": [
+        "Maintaining the confidentiality of your account credentials",
+        "All activity that occurs under your account",
+        "Ensuring your account information remains accurate and up to date"
+      ],
       "s4Title": "4. Acceptable Use",
       "s4Intro": "You agree not to use ManifestHub to:",
-      "s4Items": ["Upload content that is illegal, harmful, or violates the rights of others", "Attempt to gain unauthorized access to any part of the service", "Use automated means (bots, scrapers) to interact with the service", "Interfere with the performance or integrity of the service"],
+      "s4Items": [
+        "Upload content that is illegal, harmful, or violates the rights of others",
+        "Attempt to gain unauthorized access to any part of the service",
+        "Use automated means (bots, scrapers) to interact with the service",
+        "Interfere with the performance or integrity of the service"
+      ],
       "s5Title": "5. Your Content",
       "s5a": "You retain full ownership of all content you create in ManifestHub — including vision board items, goals, journal entries, and uploaded images. By using the service, you grant us a limited license to store and display that content solely to provide the service to you.",
       "s5b": "We will never use your personal content for advertising, training AI models, or sharing with third parties without your explicit consent.",
@@ -727,11 +953,13 @@
     "successTitle": "Message sent!",
     "successDesc": "Thanks for reaching out. We'll get back to you soon.",
     "sendAnother": "Send another message",
-    "subjects": ["General question", "Bug report", "Feature request", "Account & billing", "Privacy inquiry", "Other"]
-  },
-  "sidebar": {
-    "dayStreak": "day streak",
-    "annualMember": "Annual Member",
-    "upgrade": "Upgrade to Annual"
+    "subjects": [
+      "General question",
+      "Bug report",
+      "Feature request",
+      "Account & billing",
+      "Privacy inquiry",
+      "Other"
+    ]
   }
 }

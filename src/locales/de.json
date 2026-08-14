@@ -32,13 +32,13 @@
     "namePlaceholder": "Max Mustermann",
     "emailPlaceholder": "deine@email.de",
     "passwordPlaceholder": "Passwort eingeben",
-    "passwordMinHint": "Mind. 6 Zeichen",
+    "passwordMinHint": "Mind. 8 Zeichen",
     "repeatPassword": "Passwort wiederholen",
     "createFreeAccount": "Kostenloses Konto erstellen",
     "bySigningUp": "Mit der Registrierung stimmst du den Nutzungsbedingungen und der Datenschutzrichtlinie zu.",
     "fillAllFields": "Bitte alle Felder ausfüllen",
     "passwordMismatch": "Passwörter stimmen nicht überein",
-    "passwordTooShort": "Passwort muss mindestens 6 Zeichen lang sein",
+    "passwordTooShort": "Passwort muss mindestens 8 Zeichen lang sein",
     "sendResetLink": "Link zum Zurücksetzen senden",
     "backToSignIn": "← Zurück zur Anmeldung",
     "resetPasswordSubtitle": "E-Mail eingeben, wir senden dir einen Link",
@@ -89,10 +89,22 @@
     "quotaExceeded": "Kostenlos-Kontingent auf dieser Ebene erreicht. Upgrade für mehr.",
     "identityLinkLabel": "Wie dient dies deiner Identität?",
     "identityLinkPlaceholder": "Verbinde diese Karte mit dem, der du wirst…",
-    "year":  { "label": "Jahr",  "help": "Die eine Jahreswahrheit: was die letzten 12 Monate real erscheinen lässt." },
-    "month": { "label": "Monat", "help": "Der Bosskampf: das Projekt oder die Fähigkeit, die die Jahreslinse voranbringt." },
-    "week":  { "label": "Woche",  "help": "Die Quest: ein fokussiertes Ergebnis, das vor nächstem Sonntag erreicht werden soll." },
-    "day":   { "label": "Tag",   "help": "Der Hebel: die nadelbewegende Aktion, die du heute wie auf Autopilot ausführst." }
+    "year": {
+      "label": "Jahr",
+      "help": "Die eine Jahreswahrheit: was die letzten 12 Monate real erscheinen lässt."
+    },
+    "month": {
+      "label": "Monat",
+      "help": "Der Bosskampf: das Projekt oder die Fähigkeit, die die Jahreslinse voranbringt."
+    },
+    "week": {
+      "label": "Woche",
+      "help": "Die Quest: ein fokussiertes Ergebnis, das vor nächstem Sonntag erreicht werden soll."
+    },
+    "day": {
+      "label": "Tag",
+      "help": "Der Hebel: die nadelbewegende Aktion, die du heute wie auf Autopilot ausführst."
+    }
   },
   "foundation": {
     "title": "Fundament",
@@ -117,12 +129,36 @@
       "fiveMin": "Insgesamt 5 Minuten",
       "lockIn": "Fixieren"
     },
-    "antiVision":        { "label": "Anti-Vision",         "help": "Wenn sich in den nächsten 5 Jahren absolut nichts ändert — beschreibe einen durchschnittlichen Dienstag in diesem Leben. Brutal konkret.",                "placeholder": "Ich weigere mich, dass mein Leben zu… wird" },
-    "vision":            { "label": "Vision",              "help": "Vergiss Praktikabilität. Wenn du mit den Fingern schnippen und in 3 Jahren anders leben könntest — wie sieht ein durchschnittlicher Dienstag aus?",                "placeholder": "Worauf ich hinarbeite…" },
-    "identityStatement": { "label": "Identitätsaussage",  "help": "Was müsstest du über dich glauben, damit dieses Leben sich natürlich anfühlt statt erzwungen?",                                       "placeholder": "Ich bin die Art von Mensch, die…" },
-    "oneYearLens":       { "label": "Jahreslinse",       "help": "Welche eine Sache müsste in 12 Monaten wahr sein, damit du weißt, dass das alte Muster durchbrochen ist?",                                            "placeholder": "Bis [Datum] ist eine Sache konkret wahr:…" },
-    "oneMonthProject":   { "label": "Monatsprojekt",   "help": "Was ist der Bosskampf diesen Monat — die Fähigkeit / das Artefakt / das System, das existieren muss, damit die Jahreslinse möglich bleibt?",            "placeholder": "Diesen Monat baue / lerne / liefere ich…" },
-    "constraints":       { "label": "Einschränkungen",         "help": "Was bist du NICHT bereit zu opfern, um deiner Vision nachzujagen? 3–5 Zeilen. Das sind die Regeln deines Spiels.",                              "placeholder": "Ich werde nicht opfern…" }
+    "antiVision": {
+      "label": "Anti-Vision",
+      "help": "Wenn sich in den nächsten 5 Jahren absolut nichts ändert — beschreibe einen durchschnittlichen Dienstag in diesem Leben. Brutal konkret.",
+      "placeholder": "Ich weigere mich, dass mein Leben zu… wird"
+    },
+    "vision": {
+      "label": "Vision",
+      "help": "Vergiss Praktikabilität. Wenn du mit den Fingern schnippen und in 3 Jahren anders leben könntest — wie sieht ein durchschnittlicher Dienstag aus?",
+      "placeholder": "Worauf ich hinarbeite…"
+    },
+    "identityStatement": {
+      "label": "Identitätsaussage",
+      "help": "Was müsstest du über dich glauben, damit dieses Leben sich natürlich anfühlt statt erzwungen?",
+      "placeholder": "Ich bin die Art von Mensch, die…"
+    },
+    "oneYearLens": {
+      "label": "Jahreslinse",
+      "help": "Welche eine Sache müsste in 12 Monaten wahr sein, damit du weißt, dass das alte Muster durchbrochen ist?",
+      "placeholder": "Bis [Datum] ist eine Sache konkret wahr:…"
+    },
+    "oneMonthProject": {
+      "label": "Monatsprojekt",
+      "help": "Was ist der Bosskampf diesen Monat — die Fähigkeit / das Artefakt / das System, das existieren muss, damit die Jahreslinse möglich bleibt?",
+      "placeholder": "Diesen Monat baue / lerne / liefere ich…"
+    },
+    "constraints": {
+      "label": "Einschränkungen",
+      "help": "Was bist du NICHT bereit zu opfern, um deiner Vision nachzujagen? 3–5 Zeilen. Das sind die Regeln deines Spiels.",
+      "placeholder": "Ich werde nicht opfern…"
+    }
   },
   "reset": {
     "indexTag": "Reset-Protokoll",
@@ -149,7 +185,10 @@
     "completed": "Abgeschlossen {{date}}",
     "draft": "Entwurf · {{date}}",
     "continue": "Fortsetzen",
-    "stage": { "morning": "Morgen", "evening": "Abend" },
+    "stage": {
+      "morning": "Morgen",
+      "evening": "Abend"
+    },
     "saving": "Speichern…",
     "autosaved": "Automatisch gespeichert",
     "completing": "Abschließen…",
@@ -164,28 +203,94 @@
       "dashboard": "Zurück zur Übersicht"
     },
     "q": {
-      "q1_dullDissatisfaction": { "prompt": "Was ist die dumpfe, anhaltende Unzufriedenheit, mit der du zu leben gelernt hast?",                              "help": "Kein tiefes Leid — das, was du still erträgst. Wenn du es nicht hasst, wirst du es weiter ertragen." },
-      "q2_repeatedComplaints":   { "prompt": "Worüber beschwerst du dich immer wieder, änderst aber nie etwas?",                                       "help": "Schreibe die drei Beschwerden auf, die du im letzten Jahr am häufigsten geäußert hast." },
-      "q3_behaviorVsWords":      { "prompt": "Für jede Beschwerde — was würde jemand, der dein Verhalten beobachtet, schlussfolgern, was du eigentlich willst?",             "help": "Verhalten offenbart Ziele ehrlicher als Worte." },
-      "q4_unbearableTruth":      { "prompt": "Welche Wahrheit über dein aktuelles Leben wäre unerträglich, jemandem zu gestehen, den du zutiefst respektierst?",          "help": "Schreib es trotzdem. Das Benennen ist das Lösen." },
-      "q5_fiveYearTuesday":      { "prompt": "Wenn sich absolut nichts für 5 Jahre ändert — beschreibe einen durchschnittlichen Dienstag.",                                "help": "Wo wachst du auf? Wie fühlt sich dein Körper an? Was tust du zwischen 9 und 18 Uhr? Wie fühlst du dich um 22 Uhr?" },
-      "q6_tenYearMissed":        { "prompt": "Jetzt für 10 Jahre — was hast du verpasst? Welche Chancen haben sich verschlossen? Wer hat dich aufgegeben?",      "help": "Was sagen die Leute über dich, wenn du nicht im Raum bist?" },
-      "q7_endOfLife":            { "prompt": "Lebensendperspektive — du hast die sichere Version gelebt. Was waren die Kosten?",                                "help": "Was hast du dich nie fühlen, versuchen oder werden lassen?" },
-      "q8_alreadyLivingFuture":  { "prompt": "Wer in deinem Leben lebt bereits die Zukunft, die du gerade beschrieben hast?",                                       "help": "Jemand 5, 10, 20 Jahre voraus auf derselben Bahn. Was fühlst du, wenn du dir vorstellst, sie zu werden?" },
-      "q9_identityToGiveUp":     { "prompt": "Welche Identität müsstest du aufgeben, um dich wirklich zu verändern?",                                            "help": "Vervollständige: 'Ich bin die Art von Mensch, die…' — und bemerke, was es dich sozial kosten würde, das nicht mehr zu sein." },
-      "q10_embarrassingReason":  { "prompt": "Was ist der peinlichste Grund, warum du dich nicht verändert hast?",                                                "help": "Der, der dich schwach, ängstlich oder faul klingen lässt — nicht vernünftig." },
-      "q11_protectionCost":      { "prompt": "Wenn dein aktuelles Verhalten Selbstschutz ist — was genau schützt du? Was kostet dich das?","help": "Beide Fragen brauchen eine ehrliche Antwort." },
-      "q12_idealTuesday":        { "prompt": "Schnipp mit den Fingern — du lebst dein ideales Leben in 3 Jahren. Beschreibe einen durchschnittlichen Dienstag.",                   "help": "Gleicher Detailgrad wie Q5. Vergiss Praktikabilität." },
-      "q13_identityToHave":      { "prompt": "Was müsstest du über dich glauben, damit dieses Leben sich natürlich anfühlt statt erzwungen?",        "help": "Schreibe die Identitätsaussage: 'Ich bin die Art von Mensch, die…'" },
-      "q14_oneActionThisWeek":   { "prompt": "Nenne eine Sache, die du diese Woche tun würdest, wenn du bereits diese Person wärst.",                                  "help": "Sei konkret. Plane es ein." },
-      "e1_whyStuck":             { "prompt": "Nach heute — was fühlt sich am wahrsten an, warum du feststeckst?",                                         "help": "Synthetisiere, was heute Morgen aufgetaucht ist." },
-      "e2_actualEnemy":          { "prompt": "Benenne den eigentlichen Feind. Nicht Umstände, nicht Menschen — das innere Muster oder der Glaube, der die Show leitet.", "help": "Sei schonungslos konkret." },
-      "e3_antiVisionSentence":   { "prompt": "Schreibe einen einzigen Satz: was du nicht zulassen wirst, dass dein Leben wird.",                                       "help": "Das ist deine komprimierte Anti-Vision. Es sollte dich beim Lesen berühren." },
-      "e4_visionSentence":       { "prompt": "Schreibe einen einzigen Satz: worauf du hinarbeitest — wissend, dass es sich entwickeln wird.",                          "help": "Das ist deine Vision-MVP. Kürze ist in Ordnung; Tiefe kommt von den folgenden Monaten der Aktion." },
-      "e5_oneYearLens":          { "prompt": "Jahreslinse: Welche eine Sache muss in 12 Monaten wahr sein, damit das alte Muster gebrochen ist?",         "help": "Konkret, beobachtbar, binär. Nicht 'sich besser fühlen' — 'X gelauncht' / 'Y verloren' / 'Z geliefert'." },
-      "e6_oneMonthLens":         { "prompt": "Monatsprojekt: Wie sieht der Bosskampf dieses Monats aus?",                                         "help": "Was musst du lernen / bauen / erwerben, damit die Jahreslinse möglich bleibt?" },
-      "e7_dailyLevers":          { "prompt": "Zwei oder drei tägliche Hebel: Aktionen, die das zukünftige Ich einfach tun würde, ohne Verhandlung.",                      "help": "Blockiere sie morgen in deinem Kalender." },
-      "e8_constraints":          { "prompt": "Einschränkungen: Was bist du NICHT bereit zu opfern, um dorthin zu gelangen?",                                        "help": "Das sind die Regeln deines Spiels. Ohne Regeln gibt es kein Spiel." }
+      "q1_dullDissatisfaction": {
+        "prompt": "Was ist die dumpfe, anhaltende Unzufriedenheit, mit der du zu leben gelernt hast?",
+        "help": "Kein tiefes Leid — das, was du still erträgst. Wenn du es nicht hasst, wirst du es weiter ertragen."
+      },
+      "q2_repeatedComplaints": {
+        "prompt": "Worüber beschwerst du dich immer wieder, änderst aber nie etwas?",
+        "help": "Schreibe die drei Beschwerden auf, die du im letzten Jahr am häufigsten geäußert hast."
+      },
+      "q3_behaviorVsWords": {
+        "prompt": "Für jede Beschwerde — was würde jemand, der dein Verhalten beobachtet, schlussfolgern, was du eigentlich willst?",
+        "help": "Verhalten offenbart Ziele ehrlicher als Worte."
+      },
+      "q4_unbearableTruth": {
+        "prompt": "Welche Wahrheit über dein aktuelles Leben wäre unerträglich, jemandem zu gestehen, den du zutiefst respektierst?",
+        "help": "Schreib es trotzdem. Das Benennen ist das Lösen."
+      },
+      "q5_fiveYearTuesday": {
+        "prompt": "Wenn sich absolut nichts für 5 Jahre ändert — beschreibe einen durchschnittlichen Dienstag.",
+        "help": "Wo wachst du auf? Wie fühlt sich dein Körper an? Was tust du zwischen 9 und 18 Uhr? Wie fühlst du dich um 22 Uhr?"
+      },
+      "q6_tenYearMissed": {
+        "prompt": "Jetzt für 10 Jahre — was hast du verpasst? Welche Chancen haben sich verschlossen? Wer hat dich aufgegeben?",
+        "help": "Was sagen die Leute über dich, wenn du nicht im Raum bist?"
+      },
+      "q7_endOfLife": {
+        "prompt": "Lebensendperspektive — du hast die sichere Version gelebt. Was waren die Kosten?",
+        "help": "Was hast du dich nie fühlen, versuchen oder werden lassen?"
+      },
+      "q8_alreadyLivingFuture": {
+        "prompt": "Wer in deinem Leben lebt bereits die Zukunft, die du gerade beschrieben hast?",
+        "help": "Jemand 5, 10, 20 Jahre voraus auf derselben Bahn. Was fühlst du, wenn du dir vorstellst, sie zu werden?"
+      },
+      "q9_identityToGiveUp": {
+        "prompt": "Welche Identität müsstest du aufgeben, um dich wirklich zu verändern?",
+        "help": "Vervollständige: 'Ich bin die Art von Mensch, die…' — und bemerke, was es dich sozial kosten würde, das nicht mehr zu sein."
+      },
+      "q10_embarrassingReason": {
+        "prompt": "Was ist der peinlichste Grund, warum du dich nicht verändert hast?",
+        "help": "Der, der dich schwach, ängstlich oder faul klingen lässt — nicht vernünftig."
+      },
+      "q11_protectionCost": {
+        "prompt": "Wenn dein aktuelles Verhalten Selbstschutz ist — was genau schützt du? Was kostet dich das?",
+        "help": "Beide Fragen brauchen eine ehrliche Antwort."
+      },
+      "q12_idealTuesday": {
+        "prompt": "Schnipp mit den Fingern — du lebst dein ideales Leben in 3 Jahren. Beschreibe einen durchschnittlichen Dienstag.",
+        "help": "Gleicher Detailgrad wie Q5. Vergiss Praktikabilität."
+      },
+      "q13_identityToHave": {
+        "prompt": "Was müsstest du über dich glauben, damit dieses Leben sich natürlich anfühlt statt erzwungen?",
+        "help": "Schreibe die Identitätsaussage: 'Ich bin die Art von Mensch, die…'"
+      },
+      "q14_oneActionThisWeek": {
+        "prompt": "Nenne eine Sache, die du diese Woche tun würdest, wenn du bereits diese Person wärst.",
+        "help": "Sei konkret. Plane es ein."
+      },
+      "e1_whyStuck": {
+        "prompt": "Nach heute — was fühlt sich am wahrsten an, warum du feststeckst?",
+        "help": "Synthetisiere, was heute Morgen aufgetaucht ist."
+      },
+      "e2_actualEnemy": {
+        "prompt": "Benenne den eigentlichen Feind. Nicht Umstände, nicht Menschen — das innere Muster oder der Glaube, der die Show leitet.",
+        "help": "Sei schonungslos konkret."
+      },
+      "e3_antiVisionSentence": {
+        "prompt": "Schreibe einen einzigen Satz: was du nicht zulassen wirst, dass dein Leben wird.",
+        "help": "Das ist deine komprimierte Anti-Vision. Es sollte dich beim Lesen berühren."
+      },
+      "e4_visionSentence": {
+        "prompt": "Schreibe einen einzigen Satz: worauf du hinarbeitest — wissend, dass es sich entwickeln wird.",
+        "help": "Das ist deine Vision-MVP. Kürze ist in Ordnung; Tiefe kommt von den folgenden Monaten der Aktion."
+      },
+      "e5_oneYearLens": {
+        "prompt": "Jahreslinse: Welche eine Sache muss in 12 Monaten wahr sein, damit das alte Muster gebrochen ist?",
+        "help": "Konkret, beobachtbar, binär. Nicht 'sich besser fühlen' — 'X gelauncht' / 'Y verloren' / 'Z geliefert'."
+      },
+      "e6_oneMonthLens": {
+        "prompt": "Monatsprojekt: Wie sieht der Bosskampf dieses Monats aus?",
+        "help": "Was musst du lernen / bauen / erwerben, damit die Jahreslinse möglich bleibt?"
+      },
+      "e7_dailyLevers": {
+        "prompt": "Zwei oder drei tägliche Hebel: Aktionen, die das zukünftige Ich einfach tun würde, ohne Verhandlung.",
+        "help": "Blockiere sie morgen in deinem Kalender."
+      },
+      "e8_constraints": {
+        "prompt": "Einschränkungen: Was bist du NICHT bereit zu opfern, um dorthin zu gelangen?",
+        "help": "Das sind die Regeln deines Spiels. Ohne Regeln gibt es kein Spiel."
+      }
     }
   },
   "interrupts": {
@@ -206,17 +311,47 @@
     "update": "Antwort aktualisieren",
     "placeholder": "Erster Gedanke — nicht filtern. 60 Sekunden reichen.",
     "softTimer": "Sanfter 60-Sekunden-Timer. Nimm dir mehr Zeit, wenn nötig.",
-    "banner": { "title": "{{count}} Unterbrechung(en) warten", "answer": "Beantworten" },
+    "banner": {
+      "title": "{{count}} Unterbrechung(en) warten",
+      "answer": "Beantworten"
+    },
     "q": {
-      "i1_avoiding":               { "short": "Was vermeide ich gerade?",     "prompt": "Was vermeide ich gerade, indem ich tue, was ich tue?" },
-      "i2_filmedBehavior":         { "short": "Gefilmtes Verhalten würde was sagen?",    "prompt": "Wenn jemand die letzten zwei Stunden gefilmt hätte, was würde er schlussfolgern, was ich vom Leben will?" },
-      "i3_lifeIHate":              { "short": "In Richtung Leben, das ich will oder hasse?",        "prompt": "Bewege ich mich auf das Leben zu, das ich hasse, oder das Leben, das ich will?" },
-      "i4_pretendingNotImportant": { "short": "Tue so, als wäre es nicht wichtig?",   "prompt": "Was ist das Wichtigste, bei dem ich so tue, als wäre es nicht wichtig?" },
-      "i5_identityProtection":     { "short": "Identitätsschutz vs. Verlangen?",     "prompt": "Was habe ich heute aus Identitätsschutz getan, statt aus echtem Verlangen?" },
-      "i6_aliveVsDead":            { "short": "Am lebendigsten vs. tot?",                "prompt": "Wann habe ich mich heute am lebendigsten gefühlt? Wann am totesten?" },
-      "i7_stoppedNeeding":         { "short": "Wenn ich keine Anerkennung mehr bräuchte?",     "prompt": "Was würde sich ändern, wenn ich nicht mehr bräuchte, dass Leute mich auf eine bestimmte Weise sehen?" },
-      "i8_aliveVsSafety":          { "short": "Lebendigkeit vs. Sicherheit?",               "prompt": "Wo in meinem Leben tausche ich Lebendigkeit gegen Sicherheit?" },
-      "i9_smallestVersion":        { "short": "Kleinste Version morgen?",         "prompt": "Was ist die kleinste Version der Person, die ich werden will, die ich morgen sein könnte?" }
+      "i1_avoiding": {
+        "short": "Was vermeide ich gerade?",
+        "prompt": "Was vermeide ich gerade, indem ich tue, was ich tue?"
+      },
+      "i2_filmedBehavior": {
+        "short": "Gefilmtes Verhalten würde was sagen?",
+        "prompt": "Wenn jemand die letzten zwei Stunden gefilmt hätte, was würde er schlussfolgern, was ich vom Leben will?"
+      },
+      "i3_lifeIHate": {
+        "short": "In Richtung Leben, das ich will oder hasse?",
+        "prompt": "Bewege ich mich auf das Leben zu, das ich hasse, oder das Leben, das ich will?"
+      },
+      "i4_pretendingNotImportant": {
+        "short": "Tue so, als wäre es nicht wichtig?",
+        "prompt": "Was ist das Wichtigste, bei dem ich so tue, als wäre es nicht wichtig?"
+      },
+      "i5_identityProtection": {
+        "short": "Identitätsschutz vs. Verlangen?",
+        "prompt": "Was habe ich heute aus Identitätsschutz getan, statt aus echtem Verlangen?"
+      },
+      "i6_aliveVsDead": {
+        "short": "Am lebendigsten vs. tot?",
+        "prompt": "Wann habe ich mich heute am lebendigsten gefühlt? Wann am totesten?"
+      },
+      "i7_stoppedNeeding": {
+        "short": "Wenn ich keine Anerkennung mehr bräuchte?",
+        "prompt": "Was würde sich ändern, wenn ich nicht mehr bräuchte, dass Leute mich auf eine bestimmte Weise sehen?"
+      },
+      "i8_aliveVsSafety": {
+        "short": "Lebendigkeit vs. Sicherheit?",
+        "prompt": "Wo in meinem Leben tausche ich Lebendigkeit gegen Sicherheit?"
+      },
+      "i9_smallestVersion": {
+        "short": "Kleinste Version morgen?",
+        "prompt": "Was ist die kleinste Version der Person, die ich werden will, die ich morgen sein könnte?"
+      }
     }
   },
   "reflection": {
@@ -232,13 +367,33 @@
     "historyEmpty": "Noch keine Reflexionen — deine erste erscheint hier.",
     "hiddenCount": "{{count}} weitere Wochen in deinem Archiv",
     "unlockHint": "Annual schaltet unbegrenzten Verlauf + Monats-/Quartalstrends frei.",
-    "statusOpts": { "ahead": "Voraus", "on": "Im Plan", "behind": "Hintendran", "adjust": "Anpassung nötig" },
+    "statusOpts": {
+      "ahead": "Voraus",
+      "on": "Im Plan",
+      "behind": "Hintendran",
+      "adjust": "Anpassung nötig"
+    },
     "q": {
-      "w1_identityProgress": { "prompt": "Wie sehr hat dich diese Woche deiner Identitätsaussage näher gebracht?",      "help": "1 = keine Bewegung · 5 = deutlich näher." },
-      "w2_antiVisionSlips":  { "prompt": "Welche Anti-Vision-Verhaltensweisen sind diese Woche wieder aufgetaucht?",                       "help": "Benenne sie, damit sie aufhören, sich zu verstecken." },
-      "w3_futureMomentum":   { "prompt": "Was hast du getan, das dem zukünftigen Ich am meisten ähnelte?",                  "help": "Davon willst du nächste Woche mehr." },
-      "w4_projectStatus":    { "prompt": "Wie läuft das Monatsprojekt?",                                 "help": "Wähle das ehrlichste Label, auch wenn es unbequem ist." },
-      "w5_dailyLevers":      { "prompt": "Zwei tägliche Hebel, zu denen du dich nächste Woche verpflichtest.",                            "help": "Konkret. Kalenderbar. Nicht verhandelbar." }
+      "w1_identityProgress": {
+        "prompt": "Wie sehr hat dich diese Woche deiner Identitätsaussage näher gebracht?",
+        "help": "1 = keine Bewegung · 5 = deutlich näher."
+      },
+      "w2_antiVisionSlips": {
+        "prompt": "Welche Anti-Vision-Verhaltensweisen sind diese Woche wieder aufgetaucht?",
+        "help": "Benenne sie, damit sie aufhören, sich zu verstecken."
+      },
+      "w3_futureMomentum": {
+        "prompt": "Was hast du getan, das dem zukünftigen Ich am meisten ähnelte?",
+        "help": "Davon willst du nächste Woche mehr."
+      },
+      "w4_projectStatus": {
+        "prompt": "Wie läuft das Monatsprojekt?",
+        "help": "Wähle das ehrlichste Label, auch wenn es unbequem ist."
+      },
+      "w5_dailyLevers": {
+        "prompt": "Zwei tägliche Hebel, zu denen du dich nächste Woche verpflichtest.",
+        "help": "Konkret. Kalenderbar. Nicht verhandelbar."
+      }
     }
   },
   "dashboard": {
@@ -322,11 +477,26 @@
       "low": "Niedrig"
     },
     "affirmations": {
-      "0": { "text": "Ich bin meiner Träume und Ziele würdig.", "visualization": "Stell dir vor, wie du deinen größten Traum erreichst. Wie fühlt es sich an?" },
-      "1": { "text": "Jeden Tag komme ich meinen Zielen näher.", "visualization": "Sieh, wie du heute kleine, bedeutungsvolle Schritte unternimmst." },
-      "2": { "text": "Ich habe die Kraft, Veränderungen in meinem Leben zu schaffen.", "visualization": "Visualisiere die positiven Veränderungen, die du schaffen möchtest." },
-      "3": { "text": "Ich ziehe Erfolg und Überfluss in mein Leben.", "visualization": "Stell dir vor, wie Überfluss mühelos in dein Leben fließt." },
-      "4": { "text": "Mein Potenzial ist grenzenlos und ich kann alles erreichen.", "visualization": "Sieh dich, wie du Hindernisse leicht überwindest." }
+      "0": {
+        "text": "Ich bin meiner Träume und Ziele würdig.",
+        "visualization": "Stell dir vor, wie du deinen größten Traum erreichst. Wie fühlt es sich an?"
+      },
+      "1": {
+        "text": "Jeden Tag komme ich meinen Zielen näher.",
+        "visualization": "Sieh, wie du heute kleine, bedeutungsvolle Schritte unternimmst."
+      },
+      "2": {
+        "text": "Ich habe die Kraft, Veränderungen in meinem Leben zu schaffen.",
+        "visualization": "Visualisiere die positiven Veränderungen, die du schaffen möchtest."
+      },
+      "3": {
+        "text": "Ich ziehe Erfolg und Überfluss in mein Leben.",
+        "visualization": "Stell dir vor, wie Überfluss mühelos in dein Leben fließt."
+      },
+      "4": {
+        "text": "Mein Potenzial ist grenzenlos und ich kann alles erreichen.",
+        "visualization": "Sieh dich, wie du Hindernisse leicht überwindest."
+      }
     },
     "aff": {
       "identityLens": "Identitätslinse",
@@ -619,17 +789,38 @@
       "trackProgressDesc": "Überwache jedes Ziel mit Fortschrittsbalken, Meilensteinen und einem interaktiven Kalender, um auf Kurs zu bleiben."
     },
     "steps": {
-      "01": { "title": "Erstelle deine Vision", "desc": "Füge deine Träume als Visionskarten mit Bildern, Beschreibungen und emotionalen Ankern hinzu." },
-      "02": { "title": "Baue tägliche Rituale auf", "desc": "Checke täglich ein, schreibe Dankbarkeit und rezitiere deine personalisierten Affirmationen." },
-      "03": { "title": "Manifestiere und feiere", "desc": "Verfolge deinen Fortschritt, erreiche Ziele und feiere jeden Sieg auf deiner Reise." }
+      "01": {
+        "title": "Erstelle deine Vision",
+        "desc": "Füge deine Träume als Visionskarten mit Bildern, Beschreibungen und emotionalen Ankern hinzu."
+      },
+      "02": {
+        "title": "Baue tägliche Rituale auf",
+        "desc": "Checke täglich ein, schreibe Dankbarkeit und rezitiere deine personalisierten Affirmationen."
+      },
+      "03": {
+        "title": "Manifestiere und feiere",
+        "desc": "Verfolge deinen Fortschritt, erreiche Ziele und feiere jeden Sieg auf deiner Reise."
+      }
     },
     "mockProgress": "Fortschritt",
     "mockAffirmation": "✓ Affirmation",
     "mockGratitude": "✓ Dankbarkeit",
     "testimonialData": {
-      "sarah": { "quote": "ManifestHub hat verändert, wie ich mit meinen Zielen umgehe. Alles visuell und organisiert zu haben hält mich jeden Tag fokussiert und motiviert.", "name": "Sarah L.", "role": "Unternehmerin" },
-      "marcus": { "quote": "Das tägliche Check-in und das Dankbarkeitsjournal sind bahnbrechend. Meine Serie ist bei 60 Tagen und ich habe dieses Jahr 3 große Ziele manifestiert!", "name": "Marcus T.", "role": "Life Coach" },
-      "aiko": { "quote": "Schön, minimalistisch und kraftvoll. Ich liebe es, wie das Visionboard mich mit dem verbindet, was wirklich wichtig ist in meinem Leben.", "name": "Aiko N.", "role": "Designerin" }
+      "sarah": {
+        "quote": "ManifestHub hat verändert, wie ich mit meinen Zielen umgehe. Alles visuell und organisiert zu haben hält mich jeden Tag fokussiert und motiviert.",
+        "name": "Sarah L.",
+        "role": "Unternehmerin"
+      },
+      "marcus": {
+        "quote": "Das tägliche Check-in und das Dankbarkeitsjournal sind bahnbrechend. Meine Serie ist bei 60 Tagen und ich habe dieses Jahr 3 große Ziele manifestiert!",
+        "name": "Marcus T.",
+        "role": "Life Coach"
+      },
+      "aiko": {
+        "quote": "Schön, minimalistisch und kraftvoll. Ich liebe es, wie das Visionboard mich mit dem verbindet, was wirklich wichtig ist in meinem Leben.",
+        "name": "Aiko N.",
+        "role": "Designerin"
+      }
     }
   },
   "notFound": {
@@ -651,7 +842,12 @@
       "s1": "Wir sammeln Informationen, die du uns bei der Kontoerstellung direkt mitteilst, einschließlich Name, E-Mail-Adresse und aller Inhalte, die du deinem Visionboard, deinen Zielen und deinem Dankbarkeitsjournal hinzufügst. Wir sammeln auch Nutzungsdaten wie genutzte Funktionen und Check-in-Häufigkeit, um die Produkterfahrung zu verbessern.",
       "s2Title": "2. Verwendung deiner Informationen",
       "s2Intro": "Wir verwenden deine Informationen um:",
-      "s2Items": ["ManifestHub bereitzustellen, zu warten und zu verbessern", "Deine Erfahrung und Affirmationen zu personalisieren", "Dir Produkt-Updates zu senden, wenn du zustimmst", "Auf deine Support-Anfragen zu antworten"],
+      "s2Items": [
+        "ManifestHub bereitzustellen, zu warten und zu verbessern",
+        "Deine Erfahrung und Affirmationen zu personalisieren",
+        "Dir Produkt-Updates zu senden, wenn du zustimmst",
+        "Auf deine Support-Anfragen zu antworten"
+      ],
       "s2Outro": "Wir verkaufen deine persönlichen Daten nicht an Dritte.",
       "s3Title": "3. Datenspeicherung",
       "s3": "Deine Daten werden sicher mit Google Firebase (Firestore) gespeichert, gehostet in den USA. Firebase verwendet branchenübliche Verschlüsselung im Ruhezustand und bei der Übertragung. Visionboard-Bilder werden als komprimierte Base64-Daten in deinen Firestore-Dokumenten gespeichert.",
@@ -674,10 +870,19 @@
       "s2": "ManifestHub ist ein persönliches Zielvisualisierungs- und Manifestationstool, das Nutzern ermöglicht, Visionboards zu erstellen, Ziele zu setzen, tägliche Check-ins zu verfolgen und ein Dankbarkeitsjournal zu führen. Der Dienst wird wie besehen für den persönlichen, nicht-kommerziellen Gebrauch bereitgestellt.",
       "s3Title": "3. Kontoverantwortung",
       "s3Intro": "Du bist verantwortlich für:",
-      "s3Items": ["Die Vertraulichkeit deiner Anmeldedaten", "Alle Aktivitäten, die unter deinem Konto stattfinden", "Die Richtigkeit und Aktualität deiner Kontoinformationen"],
+      "s3Items": [
+        "Die Vertraulichkeit deiner Anmeldedaten",
+        "Alle Aktivitäten, die unter deinem Konto stattfinden",
+        "Die Richtigkeit und Aktualität deiner Kontoinformationen"
+      ],
       "s4Title": "4. Akzeptable Nutzung",
       "s4Intro": "Du stimmst zu, ManifestHub nicht zu verwenden um:",
-      "s4Items": ["Illegale, schädliche oder die Rechte anderer verletzende Inhalte hochzuladen", "Unbefugten Zugriff auf Teile des Dienstes zu versuchen", "Automatisierte Mittel (Bots, Scraper) zur Interaktion mit dem Dienst zu nutzen", "Die Leistung oder Integrität des Dienstes zu beeinträchtigen"],
+      "s4Items": [
+        "Illegale, schädliche oder die Rechte anderer verletzende Inhalte hochzuladen",
+        "Unbefugten Zugriff auf Teile des Dienstes zu versuchen",
+        "Automatisierte Mittel (Bots, Scraper) zur Interaktion mit dem Dienst zu nutzen",
+        "Die Leistung oder Integrität des Dienstes zu beeinträchtigen"
+      ],
       "s5Title": "5. Deine Inhalte",
       "s5a": "Du behältst das vollständige Eigentum an allen Inhalten, die du in ManifestHub erstellst — einschließlich Visionboard-Elementen, Zielen, Journaleinträgen und hochgeladenen Bildern. Durch die Nutzung des Dienstes gewährst du uns eine begrenzte Lizenz, diese Inhalte ausschließlich zur Bereitstellung des Dienstes zu speichern und anzuzeigen.",
       "s5b": "Wir werden deine persönlichen Inhalte niemals ohne deine ausdrückliche Zustimmung für Werbung, KI-Training oder die Weitergabe an Dritte verwenden.",
@@ -714,6 +919,13 @@
     "successTitle": "Nachricht gesendet!",
     "successDesc": "Danke für deine Nachricht. Wir melden uns bald.",
     "sendAnother": "Weitere Nachricht senden",
-    "subjects": ["Allgemeine Frage", "Fehlerbericht", "Funktionsanfrage", "Konto & Abrechnung", "Datenschutzanfrage", "Sonstiges"]
+    "subjects": [
+      "Allgemeine Frage",
+      "Fehlerbericht",
+      "Funktionsanfrage",
+      "Konto & Abrechnung",
+      "Datenschutzanfrage",
+      "Sonstiges"
+    ]
   }
 }
